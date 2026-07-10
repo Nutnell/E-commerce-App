@@ -21,6 +21,7 @@ export class ProductsService implements OnModuleInit {
     }
 
     const mockProducts: Partial<Product>[] = [
+      // ---- Sale / Summer Sale Products ----
       {
         name: 'Evening Dress',
         brand: 'Dorothy Perkins',
@@ -48,6 +49,59 @@ export class ProductsService implements OnModuleInit {
         category: 'dresses',
       },
       {
+        name: 'Denim Jacket',
+        brand: 'Mango',
+        price: 29.0,
+        originalPrice: 45.0,
+        discountPercent: 35,
+        rating: 4.5,
+        ratingCount: 18,
+        imageUrl: '/assets/product_denim_jacket.png',
+        isNew: false,
+        isSale: true,
+        category: 'jackets',
+      },
+      {
+        name: 'Wrap Dress',
+        brand: 'H&M',
+        price: 24.0,
+        originalPrice: 38.0,
+        discountPercent: 37,
+        rating: 4.0,
+        ratingCount: 22,
+        imageUrl: '/assets/product_wrap_dress.png',
+        isNew: false,
+        isSale: true,
+        category: 'dresses',
+      },
+      {
+        name: 'Leather Bag',
+        brand: 'Zara',
+        price: 35.0,
+        originalPrice: 55.0,
+        discountPercent: 36,
+        rating: 4.5,
+        ratingCount: 31,
+        imageUrl: '/assets/product_leather_bag.png',
+        isNew: false,
+        isSale: true,
+        category: 'accessories',
+      },
+      {
+        name: 'Platform Sneakers',
+        brand: 'Nike',
+        price: 59.0,
+        originalPrice: 89.0,
+        discountPercent: 34,
+        rating: 5.0,
+        ratingCount: 45,
+        imageUrl: '/assets/product_sneakers.png',
+        isNew: false,
+        isSale: true,
+        category: 'shoes',
+      },
+      // ---- New / Trending Products ----
+      {
         name: 'Striped Top',
         brand: 'Dorothy Perkins',
         price: 15.0,
@@ -69,10 +123,54 @@ export class ProductsService implements OnModuleInit {
         isSale: false,
         category: 'tops',
       },
+      {
+        name: 'Summer Blouse',
+        brand: 'Zara',
+        price: 22.0,
+        rating: 4.5,
+        ratingCount: 14,
+        imageUrl: '/assets/product_summer_blouse.png',
+        isNew: true,
+        isSale: false,
+        category: 'tops',
+      },
+      {
+        name: 'Maxi Skirt',
+        brand: 'Mango',
+        price: 28.0,
+        rating: 4.0,
+        ratingCount: 8,
+        imageUrl: '/assets/product_maxi_skirt.png',
+        isNew: true,
+        isSale: false,
+        category: 'skirts',
+      },
+      {
+        name: 'Linen Pants',
+        brand: 'H&M',
+        price: 32.0,
+        rating: 4.5,
+        ratingCount: 19,
+        imageUrl: '/assets/product_linen_pants.png',
+        isNew: true,
+        isSale: false,
+        category: 'pants',
+      },
+      {
+        name: 'Knit Sweater',
+        brand: 'Dorothy Perkins',
+        price: 26.0,
+        rating: 5.0,
+        ratingCount: 12,
+        imageUrl: '/assets/product_knit_sweater.png',
+        isNew: true,
+        isSale: false,
+        category: 'sweaters',
+      },
     ];
 
     await this.productRepository.save(mockProducts);
-    console.log('Successfully seeded database with 4 initial products.');
+    console.log('Successfully seeded database with 12 initial products.');
   }
 
   async getNewProducts(): Promise<Product[]> {

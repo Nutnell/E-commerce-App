@@ -6,8 +6,9 @@ import {
   Heart, 
   User, 
   Star,
-  Wifi,
-  Battery
+  Menu,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 interface Product {
@@ -26,6 +27,7 @@ interface Product {
 }
 
 const MOCK_PRODUCTS: Product[] = [
+  // ---- Sale / Summer Sale Products ----
   {
     id: 1,
     name: 'Evening Dress',
@@ -55,6 +57,63 @@ const MOCK_PRODUCTS: Product[] = [
     category: 'dresses',
   },
   {
+    id: 5,
+    name: 'Denim Jacket',
+    brand: 'Mango',
+    price: 29.0,
+    originalPrice: 45.0,
+    discountPercent: 35,
+    rating: 4.5,
+    ratingCount: 18,
+    imageUrl: '/assets/product_denim_jacket.png',
+    isNew: false,
+    isSale: true,
+    category: 'jackets',
+  },
+  {
+    id: 6,
+    name: 'Wrap Dress',
+    brand: 'H&M',
+    price: 24.0,
+    originalPrice: 38.0,
+    discountPercent: 37,
+    rating: 4.0,
+    ratingCount: 22,
+    imageUrl: '/assets/product_wrap_dress.png',
+    isNew: false,
+    isSale: true,
+    category: 'dresses',
+  },
+  {
+    id: 7,
+    name: 'Leather Bag',
+    brand: 'Zara',
+    price: 35.0,
+    originalPrice: 55.0,
+    discountPercent: 36,
+    rating: 4.5,
+    ratingCount: 31,
+    imageUrl: '/assets/product_leather_bag.png',
+    isNew: false,
+    isSale: true,
+    category: 'accessories',
+  },
+  {
+    id: 8,
+    name: 'Platform Sneakers',
+    brand: 'Nike',
+    price: 59.0,
+    originalPrice: 89.0,
+    discountPercent: 34,
+    rating: 5.0,
+    ratingCount: 45,
+    imageUrl: '/assets/product_sneakers.png',
+    isNew: false,
+    isSale: true,
+    category: 'shoes',
+  },
+  // ---- New / Trending Products ----
+  {
     id: 3,
     name: 'Striped Top',
     brand: 'Dorothy Perkins',
@@ -78,19 +137,79 @@ const MOCK_PRODUCTS: Product[] = [
     isSale: false,
     category: 'tops',
   },
+  {
+    id: 9,
+    name: 'Summer Blouse',
+    brand: 'Zara',
+    price: 22.0,
+    rating: 4.5,
+    ratingCount: 14,
+    imageUrl: '/assets/product_summer_blouse.png',
+    isNew: true,
+    isSale: false,
+    category: 'tops',
+  },
+  {
+    id: 10,
+    name: 'Maxi Skirt',
+    brand: 'Mango',
+    price: 28.0,
+    rating: 4.0,
+    ratingCount: 8,
+    imageUrl: '/assets/product_maxi_skirt.png',
+    isNew: true,
+    isSale: false,
+    category: 'skirts',
+  },
+  {
+    id: 11,
+    name: 'Linen Pants',
+    brand: 'H&M',
+    price: 32.0,
+    rating: 4.5,
+    ratingCount: 19,
+    imageUrl: '/assets/product_linen_pants.png',
+    isNew: true,
+    isSale: false,
+    category: 'pants',
+  },
+  {
+    id: 12,
+    name: 'Knit Sweater',
+    brand: 'Dorothy Perkins',
+    price: 26.0,
+    rating: 5.0,
+    ratingCount: 12,
+    imageUrl: '/assets/product_knit_sweater.png',
+    isNew: true,
+    isSale: false,
+    category: 'sweaters',
+  },
 ];
+
+const SLIDE_LABELS = ['Trending', 'Summer Sale', 'New Collection'];
 
 export default function App() {
   const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS);
   const [activeTab, setActiveTab] = useState<'home' | 'shop' | 'bag' | 'favorites' | 'profile'>('home');
   const [currentSlide, setCurrentSlide] = useState(0);
   const [favorites, setFavorites] = useState<number[]>([]);
+  const [isDesktop, setIsDesktop] = useState(false);
   
   // Custom Drag/Swipe State
   const [dragStartX, setDragStartX] = useState<number | null>(null);
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
+
+  // Track viewport for conditional rendering
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 769px)');
+    const handler = (e: MediaQueryListEvent | MediaQueryList) => setIsDesktop(e.matches);
+    handler(mq);
+    mq.addEventListener('change', handler as (e: MediaQueryListEvent) => void);
+    return () => mq.removeEventListener('change', handler as (e: MediaQueryListEvent) => void);
+  }, []);
 
   // Fetch products from NestJS
   useEffect(() => {
@@ -116,31 +235,31 @@ export default function App() {
     }
   };
 
-  // Touch handlers for swipe
+  // Touch handlers for swipe (mobile only)
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (isDesktop) return; // No swipe on desktop
     setDragStartX(e.touches[0].clientX);
     setIsDragging(true);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (dragStartX === null) return;
+    if (isDesktop || dragStartX === null) return;
     const currentX = e.touches[0].clientX;
     const diff = currentX - dragStartX;
     
-    // Prevent dragging out of bounds too easily
     if ((currentSlide === 0 && diff > 0) || (currentSlide === 2 && diff < 0)) {
-      setDragOffset(diff * 0.3); // add resistance
+      setDragOffset(diff * 0.3);
     } else {
       setDragOffset(diff);
     }
   };
 
   const handleTouchEnd = () => {
-    if (dragStartX === null) return;
+    if (isDesktop || dragStartX === null) return;
     setIsDragging(false);
     
     const sliderWidth = sliderRef.current?.clientWidth || 388;
-    const threshold = sliderWidth * 0.2; // 20% swipe threshold
+    const threshold = sliderWidth * 0.2;
 
     if (dragOffset < -threshold && currentSlide < 2) {
       setCurrentSlide(currentSlide + 1);
@@ -152,14 +271,15 @@ export default function App() {
     setDragStartX(null);
   };
 
-  // Mouse handlers for swipe (Desktop testing)
+  // Mouse handlers for swipe (mobile testing)
   const handleMouseDown = (e: React.MouseEvent) => {
+    if (isDesktop) return;
     setDragStartX(e.clientX);
     setIsDragging(true);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (dragStartX === null || !isDragging) return;
+    if (isDesktop || dragStartX === null || !isDragging) return;
     const currentX = e.clientX;
     const diff = currentX - dragStartX;
     
@@ -171,7 +291,7 @@ export default function App() {
   };
 
   const handleMouseUpOrLeave = () => {
-    if (dragStartX === null) return;
+    if (isDesktop || dragStartX === null) return;
     setIsDragging(false);
     
     const sliderWidth = sliderRef.current?.clientWidth || 388;
@@ -216,19 +336,81 @@ export default function App() {
   };
 
   return (
-    <div className="device-shell">
-      <div className="device-notch"></div>
-      
-      {/* Dynamic Status Bar Colors depending on hero backgrounds */}
-      <div className={`device-status-bar ${currentSlide === 1 ? '' : 'white-text'}`}>
-        <span>9:41</span>
-        <div className="status-bar-icons">
-          <Wifi size={14} style={{ marginRight: 2 }} />
-          <Battery size={18} />
-        </div>
-      </div>
+    <div className="app-layout">
 
-      {/* Swipeable View Indicators */}
+      {/* ========= TOP HEADER (Desktop / Tablet) ========= */}
+      <header className="top-header">
+        <a href="/" className="header-brand" onClick={(e) => { e.preventDefault(); setActiveTab('home'); }}>
+          E-Shop
+        </a>
+
+        <nav className="header-nav">
+          <button 
+            className={`header-nav-item ${activeTab === 'home' ? 'active' : ''}`}
+            onClick={() => setActiveTab('home')}
+          >
+            <HomeIcon className="header-nav-icon" />
+            Home
+          </button>
+          <button 
+            className={`header-nav-item ${activeTab === 'shop' ? 'active' : ''}`}
+            onClick={() => setActiveTab('shop')}
+          >
+            <Search className="header-nav-icon" />
+            Shop
+          </button>
+          <button 
+            className={`header-nav-item ${activeTab === 'favorites' ? 'active' : ''}`}
+            onClick={() => setActiveTab('favorites')}
+          >
+            <Heart className="header-nav-icon" />
+            Favorites
+          </button>
+        </nav>
+
+        <div className="header-search-box">
+          <Search className="header-search-icon" />
+          <input 
+            className="header-search-input" 
+            type="text" 
+            placeholder="Search products..." 
+          />
+        </div>
+
+        <div className="header-actions">
+          <button 
+            className={`header-action-btn ${activeTab === 'bag' ? 'active' : ''}`}
+            onClick={() => setActiveTab('bag')}
+            title="Shopping Bag"
+          >
+            <ShoppingBag className="header-action-icon" />
+          </button>
+          <button 
+            className={`header-action-btn ${activeTab === 'profile' ? 'active' : ''}`}
+            onClick={() => setActiveTab('profile')}
+            title="My Profile"
+          >
+            <User className="header-action-icon" />
+          </button>
+        </div>
+      </header>
+
+      {/* ========= DESKTOP SLIDE TABS (Home view only) ========= */}
+      {activeTab === 'home' && (
+        <div className="desktop-slide-tabs">
+          {SLIDE_LABELS.map((label, idx) => (
+            <button
+              key={idx}
+              className={`slide-tab ${currentSlide === idx ? 'active' : ''}`}
+              onClick={() => jumpToSlide(idx)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* ========= MOBILE SWIPE INDICATORS ========= */}
       {activeTab === 'home' && (
         <div className="slider-indicator">
           {[0, 1, 2].map((idx) => (
@@ -241,13 +423,13 @@ export default function App() {
         </div>
       )}
 
-      {/* Main Content Area */}
+      {/* ========= MAIN CONTENT AREA ========= */}
       <div className="app-content">
         {activeTab === 'home' ? (
           <div 
             ref={sliderRef}
             className="home-slider" 
-            style={transformStyle}
+            style={isDesktop ? undefined : transformStyle}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
@@ -256,8 +438,8 @@ export default function App() {
             onMouseUp={handleMouseUpOrLeave}
             onMouseLeave={handleMouseUpOrLeave}
           >
-            {/* ================= SLIDE 1 (Main page.png) ================= */}
-            <div className="home-slide">
+            {/* ================= SLIDE 1 (Trending) ================= */}
+            <div className="home-slide" style={isDesktop ? { display: currentSlide === 0 ? 'flex' : 'none', width: '100%' } : undefined}>
               <div 
                 className="hero-banner"
                 style={{ backgroundImage: `url('/assets/fashion_sale_banner.png')` }}
@@ -304,14 +486,14 @@ export default function App() {
               </div>
             </div>
 
-            {/* ================= SLIDE 2 (Main 2.png) ================= */}
-            <div className="home-slide">
+            {/* ================= SLIDE 2 (Summer Sale) ================= */}
+            <div className="home-slide" style={isDesktop ? { display: currentSlide === 1 ? 'flex' : 'none', width: '100%' } : undefined}>
               <div 
                 className="hero-banner"
                 style={{ backgroundImage: `url('/assets/street_clothes_banner.png')` }}
               >
                 <div className="hero-content">
-                  <h1 className="hero-title" style={{ fontSize: '38px' }}>Street clothes</h1>
+                  <h1 className="hero-title" style={{ fontSize: isDesktop ? '54px' : '38px' }}>Street clothes</h1>
                 </div>
               </div>
 
@@ -385,8 +567,8 @@ export default function App() {
               </div>
             </div>
 
-            {/* ================= SLIDE 3 (Main 3.png) ================= */}
-            <div className="home-slide">
+            {/* ================= SLIDE 3 (New Collection) ================= */}
+            <div className="home-slide" style={isDesktop ? { display: currentSlide === 2 ? 'flex' : 'none', width: '100%' } : undefined}>
               <div className="grid-container">
                 <div 
                   className="grid-top-banner"
@@ -420,15 +602,15 @@ export default function App() {
             </div>
           </div>
         ) : (
-          /* Mockup details for other tabs */
-          <div style={{ padding: '80px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', textAlign: 'center', height: '100%' }}>
-            <div style={{ fontSize: '72px', opacity: 0.1, fontWeight: 800, textTransform: 'uppercase' }}>
+          /* Placeholder for other tabs */
+          <div className="placeholder-tab">
+            <div className="placeholder-tab-icon">
               {activeTab}
             </div>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', fontWeight: 700, color: 'var(--primary)' }}>
+            <h2 className="placeholder-tab-title">
               {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Screen
             </h2>
-            <p style={{ color: 'var(--gray)', fontSize: '14px', maxWidth: '280px' }}>
+            <p className="placeholder-tab-desc">
               This tab is interactive! It will be fully populated and implemented in its respective milestone.
             </p>
             <button 
@@ -442,7 +624,7 @@ export default function App() {
         )}
       </div>
 
-      {/* Persistent Bottom Navigation Bar */}
+      {/* ========= BOTTOM NAVIGATION (Mobile Only) ========= */}
       <nav className="bottom-nav">
         <button 
           className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
