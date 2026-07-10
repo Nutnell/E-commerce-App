@@ -8,7 +8,9 @@ import {
   Star,
   Menu,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 interface Product {
@@ -196,6 +198,50 @@ export default function App() {
   const [favorites, setFavorites] = useState<number[]>([]);
   const [isDesktop, setIsDesktop] = useState(false);
   
+  // Viewport width tracking for responsive slider (3-2-1 layout)
+  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setViewportWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = viewportWidth < 769;
+  const isTablet = viewportWidth >= 769 && viewportWidth < 1024;
+  const isDesktopView = viewportWidth >= 1024;
+  
+  // Theme state: defaults to system preference, falls back to localStorage if set
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'light' || saved === 'dark') return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+
+  // Apply theme attribute to document element
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  // Sync theme with system changes if no manual override is stored
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const handler = (e: MediaQueryListEvent) => {
+      const saved = localStorage.getItem('theme');
+      if (!saved) {
+        setTheme(e.matches ? 'dark' : 'light');
+      }
+    };
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(nextTheme);
+    localStorage.setItem('theme', nextTheme);
+  };
+  
   // Custom Drag/Swipe State
   const [dragStartX, setDragStartX] = useState<number | null>(null);
   const [dragOffset, setDragOffset] = useState(0);
@@ -235,19 +281,20 @@ export default function App() {
     }
   };
 
-  // Touch handlers for swipe (mobile only)
+  // Touch handlers for swipe (mobile/tablet only)
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (isDesktop) return; // No swipe on desktop
+    if (isDesktopView) return; // No swipe on wide desktop
     setDragStartX(e.touches[0].clientX);
     setIsDragging(true);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (isDesktop || dragStartX === null) return;
+    if (isDesktopView || dragStartX === null) return;
     const currentX = e.touches[0].clientX;
     const diff = currentX - dragStartX;
     
-    if ((currentSlide === 0 && diff > 0) || (currentSlide === 2 && diff < 0)) {
+    const maxIdx = isMobile ? 2 : isTablet ? 1 : 0;
+    if ((currentSlide === 0 && diff > 0) || (currentSlide === maxIdx && diff < 0)) {
       setDragOffset(diff * 0.3);
     } else {
       setDragOffset(diff);
@@ -255,13 +302,14 @@ export default function App() {
   };
 
   const handleTouchEnd = () => {
-    if (isDesktop || dragStartX === null) return;
+    if (isDesktopView || dragStartX === null) return;
     setIsDragging(false);
     
     const sliderWidth = sliderRef.current?.clientWidth || 388;
-    const threshold = sliderWidth * 0.2;
+    const threshold = sliderWidth * 0.15;
+    const maxIdx = isMobile ? 2 : isTablet ? 1 : 0;
 
-    if (dragOffset < -threshold && currentSlide < 2) {
+    if (dragOffset < -threshold && currentSlide < maxIdx) {
       setCurrentSlide(currentSlide + 1);
     } else if (dragOffset > threshold && currentSlide > 0) {
       setCurrentSlide(currentSlide - 1);
@@ -271,19 +319,20 @@ export default function App() {
     setDragStartX(null);
   };
 
-  // Mouse handlers for swipe (mobile testing)
+  // Mouse handlers for swipe (testing/tablet support)
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (isDesktop) return;
+    if (isDesktopView) return;
     setDragStartX(e.clientX);
     setIsDragging(true);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (isDesktop || dragStartX === null || !isDragging) return;
+    if (isDesktopView || dragStartX === null || !isDragging) return;
     const currentX = e.clientX;
     const diff = currentX - dragStartX;
     
-    if ((currentSlide === 0 && diff > 0) || (currentSlide === 2 && diff < 0)) {
+    const maxIdx = isMobile ? 2 : isTablet ? 1 : 0;
+    if ((currentSlide === 0 && diff > 0) || (currentSlide === maxIdx && diff < 0)) {
       setDragOffset(diff * 0.3);
     } else {
       setDragOffset(diff);
@@ -291,11 +340,11 @@ export default function App() {
   };
 
   const handleMouseUpOrLeave = () => {
-    if (isDesktop || dragStartX === null) return;
+    if (isDesktopView || dragStartX === null) return;
     setIsDragging(false);
     
     const sliderWidth = sliderRef.current?.clientWidth || 388;
-    const threshold = sliderWidth * 0.2;
+    const threshold = sliderWidth * 0.15;
 
     if (dragOffset < -threshold && currentSlide < 2) {
       setCurrentSlide(currentSlide + 1);
@@ -311,7 +360,7 @@ export default function App() {
     setCurrentSlide(idx);
   };
 
-  // Calculate sliding transforms
+  // Calculate sliding transforms (mobile/tablet swipe carousel)
   const sliderWidth = sliderRef.current?.clientWidth || 388;
   const currentTranslateX = -currentSlide * (100 / 3);
   const dragTranslatePercent = sliderWidth > 0 ? (dragOffset / (sliderWidth * 3)) * 100 : 0;
@@ -379,6 +428,13 @@ export default function App() {
 
         <div className="header-actions">
           <button 
+            className="header-action-btn"
+            onClick={toggleTheme}
+            title={theme === 'light' ? "Switch to Dark Mode" : "Switch to Light Mode"}
+          >
+            {theme === 'light' ? <Moon className="header-action-icon" /> : <Sun className="header-action-icon" />}
+          </button>
+          <button 
             className={`header-action-btn ${activeTab === 'bag' ? 'active' : ''}`}
             onClick={() => setActiveTab('bag')}
             title="Shopping Bag"
@@ -439,11 +495,16 @@ export default function App() {
             onMouseLeave={handleMouseUpOrLeave}
           >
             {/* ================= SLIDE 1 (Trending) ================= */}
-            <div className="home-slide" style={isDesktop ? { display: currentSlide === 0 ? 'flex' : 'none', width: '100%' } : undefined}>
-              <div 
-                className="hero-banner"
-                style={{ backgroundImage: `url('/assets/fashion_sale_banner.png')` }}
-              >
+            <div 
+              className="home-slide" 
+              style={isDesktop ? { display: currentSlide === 0 ? 'flex' : 'none', width: '100%' } : undefined}
+            >
+              <div className="hero-banner trending-banner">
+                <div className="banner-images-track">
+                  <div className="banner-image left" style={{ backgroundImage: "url('/assets/trending_banner_left.png')" }} />
+                  <div className="banner-image center" style={{ backgroundImage: "url('/assets/trending_banner_center.png')" }} />
+                  <div className="banner-image right" style={{ backgroundImage: "url('/assets/fashion_sale_banner.png')" }} />
+                </div>
                 <div className="hero-content">
                   <h1 className="hero-title">Fashion<br />sale</h1>
                   <button className="hero-button">Check</button>
@@ -487,13 +548,18 @@ export default function App() {
             </div>
 
             {/* ================= SLIDE 2 (Summer Sale) ================= */}
-            <div className="home-slide" style={isDesktop ? { display: currentSlide === 1 ? 'flex' : 'none', width: '100%' } : undefined}>
-              <div 
-                className="hero-banner"
-                style={{ backgroundImage: `url('/assets/street_clothes_banner.png')` }}
-              >
+            <div 
+              className="home-slide" 
+              style={isDesktop ? { display: currentSlide === 1 ? 'flex' : 'none', width: '100%' } : undefined}
+            >
+              <div className="hero-banner street-clothes">
+                <div className="banner-images-track">
+                  <div className="banner-image left" style={{ backgroundImage: "url('/assets/summer_banner_left.png')" }} />
+                  <div className="banner-image center" style={{ backgroundImage: "url('/assets/summer_banner_center.png')" }} />
+                  <div className="banner-image right" style={{ backgroundImage: "url('/assets/street_clothes_banner.png')" }} />
+                </div>
                 <div className="hero-content">
-                  <h1 className="hero-title" style={{ fontSize: isDesktop ? '54px' : '38px' }}>Street clothes</h1>
+                  <h1 className="hero-title" style={{ fontSize: isDesktopView ? '54px' : '38px' }}>Street clothes</h1>
                 </div>
               </div>
 
@@ -568,12 +634,17 @@ export default function App() {
             </div>
 
             {/* ================= SLIDE 3 (New Collection) ================= */}
-            <div className="home-slide" style={isDesktop ? { display: currentSlide === 2 ? 'flex' : 'none', width: '100%' } : undefined}>
+            <div 
+              className="home-slide" 
+              style={isDesktop ? { display: currentSlide === 2 ? 'flex' : 'none', width: '100%' } : undefined}
+            >
               <div className="grid-container">
-                <div 
-                  className="grid-top-banner"
-                  style={{ backgroundImage: `url('/assets/new_collection_banner.png')` }}
-                >
+                <div className="grid-top-banner new-collection-banner">
+                  <div className="banner-images-track">
+                    <div className="banner-image left" style={{ backgroundImage: "url('/assets/new_collection_banner_left.png')" }} />
+                    <div className="banner-image center" style={{ backgroundImage: "url('/assets/new_collection_banner_center.png')" }} />
+                    <div className="banner-image right" style={{ backgroundImage: "url('/assets/new_collection_banner.png')" }} />
+                  </div>
                   <h2 className="grid-top-title">New collection</h2>
                 </div>
 
@@ -585,6 +656,7 @@ export default function App() {
                     <div 
                       className="grid-block image-block"
                       style={{ backgroundImage: `url('/assets/black_collection_banner.png')` }}
+                      onClick={() => setCurrentSlide(1)}
                     >
                       <h4 className="grid-block-title">Black</h4>
                     </div>
@@ -600,6 +672,115 @@ export default function App() {
                 </div>
               </div>
             </div>
+          </div>
+        ) : activeTab === 'profile' ? (
+          /* Profile Settings Screen with Dark Mode Toggle */
+          <div className="placeholder-tab" style={{ gap: '24px', padding: '40px 24px' }}>
+            <div className="placeholder-tab-icon" style={{ fontSize: '48px', opacity: 0.15 }}>
+              <User size={80} style={{ color: 'var(--primary)' }} />
+            </div>
+            <h2 className="placeholder-tab-title" style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: 700 }}>
+              My Profile
+            </h2>
+            <div style={{
+              width: '100%',
+              maxWidth: '400px',
+              background: 'var(--white)',
+              borderRadius: 'var(--radius-md)',
+              padding: '20px',
+              boxShadow: 'var(--shadow-md)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '16px',
+              textAlign: 'left'
+            }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--primary)', marginBottom: '8px' }}>
+                Settings
+              </h3>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingBottom: '12px',
+                borderBottom: '1px solid var(--light-gray)'
+              }}>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--primary)' }}>Dark Mode</span>
+                  <span style={{ fontSize: '11px', color: 'var(--gray)', marginTop: '2px' }}>
+                    {localStorage.getItem('theme') ? 'Manual override active' : 'Following system default'}
+                  </span>
+                </div>
+                <button 
+                  onClick={toggleTheme}
+                  style={{
+                    background: theme === 'dark' ? 'var(--accent)' : 'var(--light-gray)',
+                    border: 'none',
+                    borderRadius: '24px',
+                    width: '56px',
+                    height: '30px',
+                    padding: '3px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: theme === 'dark' ? 'flex-end' : 'flex-start',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  <div style={{
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '50%',
+                    background: 'white',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    {theme === 'dark' ? <Moon size={14} color="var(--accent)" /> : <Sun size={14} color="#FFBA49" />}
+                  </div>
+                </button>
+              </div>
+              
+              {!localStorage.getItem('theme') ? (
+                <p style={{ fontSize: '11px', color: 'var(--gray)', fontStyle: 'italic' }}>
+                  App is automatically matching your operating system color theme. Toggle above to override manually.
+                </p>
+              ) : (
+                <button
+                  onClick={() => {
+                    localStorage.removeItem('theme');
+                    setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+                  }}
+                  style={{
+                    background: 'transparent',
+                    border: '1px solid var(--accent)',
+                    color: 'var(--accent)',
+                    padding: '8px 12px',
+                    borderRadius: 'var(--radius-sm)',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    alignSelf: 'flex-start',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.background = 'rgba(219, 48, 34, 0.08)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.background = 'transparent';
+                  }}
+                >
+                  Reset to System Default
+                </button>
+              )}
+            </div>
+            <button 
+              className="hero-button" 
+              style={{ marginTop: '12px' }}
+              onClick={() => setActiveTab('home')}
+            >
+              Back to Home
+            </button>
           </div>
         ) : (
           /* Placeholder for other tabs */
