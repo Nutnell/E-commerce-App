@@ -655,7 +655,7 @@ export default function App() {
                     </div>
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: `url('/assets/black_collection_banner.png')` }}
+                      style={{ backgroundImage: "url('/assets/black_collection_banner.png')" }}
                       onClick={() => setCurrentSlide(1)}
                     >
                       <h4 className="grid-block-title">Black</h4>
@@ -664,9 +664,53 @@ export default function App() {
                   <div className="grid-col-right">
                     <div 
                       className="grid-block image-block block-right-full"
-                      style={{ backgroundImage: `url('/assets/mens_hoodies_banner.png')` }}
+                      style={{ backgroundImage: "url('/assets/mens_hoodies_banner.png')" }}
                     >
                       <h4 className="grid-block-title">Men's<br />hoodies</h4>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid-bottom-row" style={{ flexDirection: 'row-reverse' }}>
+                  <div className="grid-col-left">
+                    <div className="grid-block block-text" style={{ backgroundColor: 'var(--accent)', color: 'var(--white)' }}>
+                      <h3 style={{ color: 'var(--white)' }}>Winter<br />knitwear</h3>
+                    </div>
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/product_leather_bag.png')" }}
+                    >
+                      <h4 className="grid-block-title">Accessories</h4>
+                    </div>
+                  </div>
+                  <div className="grid-col-right">
+                    <div 
+                      className="grid-block image-block block-right-full"
+                      style={{ backgroundImage: "url('/assets/product_sneakers.png')" }}
+                    >
+                      <h4 className="grid-block-title">Footwear</h4>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid-bottom-row">
+                  <div className="grid-col-left">
+                    <div className="grid-block block-text">
+                      <h3>Formal<br />wear</h3>
+                    </div>
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/product_denim_jacket.png')" }}
+                    >
+                      <h4 className="grid-block-title">Denim</h4>
+                    </div>
+                  </div>
+                  <div className="grid-col-right">
+                    <div 
+                      className="grid-block image-block block-right-full"
+                      style={{ backgroundImage: "url('/assets/product_wrap_dress.png')" }}
+                    >
+                      <h4 className="grid-block-title">Dresses</h4>
                     </div>
                   </div>
                 </div>

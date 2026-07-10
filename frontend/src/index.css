@@ -882,12 +882,13 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  margin-bottom: 24px;
 }
 
 @media (min-width: 769px) {
   .grid-container {
     max-width: var(--max-width);
-    margin: 24px auto 0;
+    margin: 24px auto 48px;
     width: calc(100% - 64px);
     border-radius: var(--radius-md);
     overflow: hidden;
@@ -940,12 +941,14 @@ body {
 
 .grid-bottom-row {
   display: flex;
-  flex: 1;
+  width: 100%;
+  margin-top: 16px;
 }
 
 @media (min-width: 769px) {
   .grid-bottom-row {
-    min-height: 320px;
+    min-height: 360px;
+    margin-top: 24px;
   }
 }
 
