@@ -650,8 +650,12 @@ export default function App() {
 
                 <div className="grid-bottom-row">
                   <div className="grid-col-left">
-                    <div className="grid-block block-text">
-                      <h3>Summer<br />sale</h3>
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/sport_dress_product.png')" }}
+                      onClick={() => setCurrentSlide(1)}
+                    >
+                      <h4 className="grid-block-title">Summer<br />sale</h4>
                     </div>
                     <div 
                       className="grid-block image-block"
@@ -673,8 +677,11 @@ export default function App() {
 
                 <div className="grid-bottom-row" style={{ flexDirection: 'row-reverse' }}>
                   <div className="grid-col-left">
-                    <div className="grid-block block-text" style={{ backgroundColor: 'var(--accent)', color: 'var(--white)' }}>
-                      <h3 style={{ color: 'var(--white)' }}>Winter<br />knitwear</h3>
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/product_knit_sweater.png')" }}
+                    >
+                      <h4 className="grid-block-title">Winter<br />knitwear</h4>
                     </div>
                     <div 
                       className="grid-block image-block"
@@ -695,8 +702,11 @@ export default function App() {
 
                 <div className="grid-bottom-row">
                   <div className="grid-col-left">
-                    <div className="grid-block block-text">
-                      <h3>Formal<br />wear</h3>
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/evening_dress_product.png')" }}
+                    >
+                      <h4 className="grid-block-title">Formal<br />wear</h4>
                     </div>
                     <div 
                       className="grid-block image-block"
