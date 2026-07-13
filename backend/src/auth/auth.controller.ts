@@ -20,6 +20,11 @@ export class AuthController {
     return this.authService.forgotPassword(body.email);
   }
 
+  @Post('google-login')
+  async googleLogin(@Body() body: any) {
+    return this.authService.loginWithGoogle(body.credential);
+  }
+
   @Get('me')
   async me(@Headers('authorization') authorization: string) {
     if (!authorization || !authorization.startsWith('Bearer ')) {

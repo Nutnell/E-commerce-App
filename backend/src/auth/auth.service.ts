@@ -133,4 +133,49 @@ export class AuthService {
       email: user.email,
     };
   }
+
+  async loginWithGoogle(credential: string) {
+    if (!credential) {
+      throw new BadRequestException('Credential token is required');
+    }
+    try {
+      const parts = credential.split('.');
+      if (parts.length < 2) {
+        throw new BadRequestException('Invalid credential token format');
+      }
+      const decodedBody = Buffer.from(parts[1], 'base64url').toString('utf8');
+      const payload = JSON.parse(decodedBody);
+      
+      const email = payload.email;
+      const name = payload.name || email.split('@')[0];
+      
+      if (!email) {
+        throw new BadRequestException('Email not found in credential payload');
+      }
+
+      let user = await this.usersRepository.findOne({ where: { email } });
+      if (!user) {
+        // Sign up new Google user
+        user = new User();
+        user.name = name;
+        user.email = email;
+        // Placeholder password for Google users
+        user.passwordHash = this.hashPassword(`google-oauth-placeholder-${crypto.randomBytes(8).toString('hex')}`);
+        user = await this.usersRepository.save(user);
+      }
+
+      const token = this.generateToken({ id: user.id, email: user.email });
+
+      return {
+        token,
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        },
+      };
+    } catch (err: any) {
+      throw new BadRequestException(err.message || 'Failed to process Google sign in');
+    }
+  }
 }
