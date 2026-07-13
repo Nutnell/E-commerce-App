@@ -942,13 +942,13 @@ body {
 .grid-bottom-row {
   display: flex;
   width: 100%;
-  margin-top: 16px;
+  margin-top: 0;
 }
 
 @media (min-width: 769px) {
   .grid-bottom-row {
     min-height: 360px;
-    margin-top: 24px;
+    margin-top: 0;
   }
 }
 

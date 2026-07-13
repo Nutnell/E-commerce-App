@@ -650,8 +650,12 @@ export default function App() {
 
                 <div className="grid-bottom-row">
                   <div className="grid-col-left">
-                    <div className="grid-block block-text">
-                      <h3>Summer<br />sale</h3>
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/sport_dress_product.png')" }}
+                      onClick={() => setCurrentSlide(1)}
+                    >
+                      <h4 className="grid-block-title">Summer<br />sale</h4>
                     </div>
                     <div 
                       className="grid-block image-block"
@@ -673,8 +677,11 @@ export default function App() {
 
                 <div className="grid-bottom-row" style={{ flexDirection: 'row-reverse' }}>
                   <div className="grid-col-left">
-                    <div className="grid-block block-text" style={{ backgroundColor: 'var(--accent)', color: 'var(--white)' }}>
-                      <h3 style={{ color: 'var(--white)' }}>Winter<br />knitwear</h3>
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/product_knit_sweater.png')" }}
+                    >
+                      <h4 className="grid-block-title">Winter<br />knitwear</h4>
                     </div>
                     <div 
                       className="grid-block image-block"
@@ -695,8 +702,11 @@ export default function App() {
 
                 <div className="grid-bottom-row">
                   <div className="grid-col-left">
-                    <div className="grid-block block-text">
-                      <h3>Formal<br />wear</h3>
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/evening_dress_product.png')" }}
+                    >
+                      <h4 className="grid-block-title">Formal<br />wear</h4>
                     </div>
                     <div 
                       className="grid-block image-block"
@@ -711,6 +721,136 @@ export default function App() {
                       style={{ backgroundImage: "url('/assets/product_wrap_dress.png')" }}
                     >
                       <h4 className="grid-block-title">Dresses</h4>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Row 4 (Pattern 4 - Inverted) */}
+                <div className="grid-bottom-row" style={{ flexDirection: 'row-reverse' }}>
+                  <div className="grid-col-left">
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/cat_sportswear.png')" }}
+                    >
+                      <h4 className="grid-block-title">Sportswear</h4>
+                    </div>
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/cat_swimwear.png')" }}
+                    >
+                      <h4 className="grid-block-title">Swimwear</h4>
+                    </div>
+                  </div>
+                  <div className="grid-col-right">
+                    <div 
+                      className="grid-block image-block block-right-full"
+                      style={{ backgroundImage: "url('/assets/cat_loungewear.png')" }}
+                    >
+                      <h4 className="grid-block-title">Loungewear</h4>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Row 5 (Pattern 5 - Standard) */}
+                <div className="grid-bottom-row">
+                  <div className="grid-col-left">
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/cat_activewear.png')" }}
+                    >
+                      <h4 className="grid-block-title">Activewear</h4>
+                    </div>
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/cat_outerwear.png')" }}
+                    >
+                      <h4 className="grid-block-title">Outerwear</h4>
+                    </div>
+                  </div>
+                  <div className="grid-col-right">
+                    <div 
+                      className="grid-block image-block block-right-full"
+                      style={{ backgroundImage: "url('/assets/cat_jeanswear.png')" }}
+                    >
+                      <h4 className="grid-block-title">Jeanswear</h4>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Row 6 (Pattern 6 - Inverted) */}
+                <div className="grid-bottom-row" style={{ flexDirection: 'row-reverse' }}>
+                  <div className="grid-col-left">
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/cat_urbanwear.png')" }}
+                    >
+                      <h4 className="grid-block-title">Urban<br />wear</h4>
+                    </div>
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/cat_accessories_hats.png')" }}
+                    >
+                      <h4 className="grid-block-title">Summer<br />hats</h4>
+                    </div>
+                  </div>
+                  <div className="grid-col-right">
+                    <div 
+                      className="grid-block image-block block-right-full"
+                      style={{ backgroundImage: "url('/assets/cat_cargo.png')" }}
+                    >
+                      <h4 className="grid-block-title">Cargo<br />style</h4>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Row 7 (Pattern 7 - Standard) */}
+                <div className="grid-bottom-row">
+                  <div className="grid-col-left">
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/cat_sleepwear.png')" }}
+                    >
+                      <h4 className="grid-block-title">Sleepwear</h4>
+                    </div>
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/cat_beachwear.png')" }}
+                    >
+                      <h4 className="grid-block-title">Beachwear</h4>
+                    </div>
+                  </div>
+                  <div className="grid-col-right">
+                    <div 
+                      className="grid-block image-block block-right-full"
+                      style={{ backgroundImage: "url('/assets/cat_partywear.png')" }}
+                    >
+                      <h4 className="grid-block-title">Party<br />wear</h4>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Row 8 (Pattern 8 - Inverted) */}
+                <div className="grid-bottom-row" style={{ flexDirection: 'row-reverse' }}>
+                  <div className="grid-col-left">
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/cat_cardigans.png')" }}
+                    >
+                      <h4 className="grid-block-title">Cardigans</h4>
+                    </div>
+                    <div 
+                      className="grid-block image-block"
+                      style={{ backgroundImage: "url('/assets/cat_officestyle.png')" }}
+                    >
+                      <h4 className="grid-block-title">Office<br />style</h4>
+                    </div>
+                  </div>
+                  <div className="grid-col-right">
+                    <div 
+                      className="grid-block image-block block-right-full"
+                      style={{ backgroundImage: "url('/assets/cat_vintage.png')" }}
+                    >
+                      <h4 className="grid-block-title">Vintage<br />style</h4>
                     </div>
                   </div>
                 </div>
