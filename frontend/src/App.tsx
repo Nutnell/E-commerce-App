@@ -27,6 +27,8 @@ interface Product {
   isNew: boolean;
   isSale: boolean;
   category: string;
+  subcategory?: string;
+  gender?: string;
   colors?: string;
   sizes?: string;
 }
@@ -1920,12 +1922,27 @@ export default function App() {
                 </div>
 
                 <div className="categories-list-wrapper">
-                  {[
-                    { name: 'New', img: '/assets/cat_cardigans.png' },
-                    { name: 'Clothes', img: '/assets/evening_dress_product.png' },
-                    { name: 'Shoes', img: '/assets/product_sneakers.png' },
-                    { name: 'Accesories', img: '/assets/product_leather_bag.png' },
-                  ].map((cat) => (
+                  {(selectedGenderTab === 'men'
+                    ? [
+                        { name: 'New', img: '/assets/mens_hoodies_banner.png' },
+                        { name: 'Clothes', img: '/assets/cat_cargo.png' },
+                        { name: 'Shoes', img: '/assets/product_sneakers.png' },
+                        { name: 'Accesories', img: '/assets/cat_loungewear.png' },
+                      ]
+                    : selectedGenderTab === 'kids'
+                    ? [
+                        { name: 'New', img: '/assets/new_product_2.png' },
+                        { name: 'Clothes', img: '/assets/cat_jeanswear.png' },
+                        { name: 'Shoes', img: '/assets/product_sneakers.png' },
+                        { name: 'Accesories', img: '/assets/cat_accessories_hats.png' },
+                      ]
+                    : [
+                        { name: 'New', img: '/assets/cat_cardigans.png' },
+                        { name: 'Clothes', img: '/assets/evening_dress_product.png' },
+                        { name: 'Shoes', img: '/assets/product_sneakers.png' },
+                        { name: 'Accesories', img: '/assets/product_leather_bag.png' },
+                      ]
+                  ).map((cat) => (
                     <div 
                       key={cat.name} 
                       className="category-row-card"
@@ -1968,19 +1985,26 @@ export default function App() {
                   <span className="choose-category-title">Choose category</span>
                   
                   <div className="subcategories-vertical-list">
-                    {[
-                      'Tops',
-                      'Shirts & Blouses',
-                      'Cardigans & Sweaters',
-                      'Knitwear',
-                      'Blazers',
-                      'Outerwear',
-                      'Pants',
-                      'Jeans',
-                      'Shorts',
-                      'Skirts',
-                      'Dresses'
-                    ].map((subcat) => (
+                    {(selectedCategory === 'Shoes'
+                      ? ['Sneakers', 'Boots', 'Heels', 'Sandals']
+                      : selectedCategory === 'Accesories' || selectedCategory === 'Accessories'
+                      ? ['Bags', 'Hats', 'Belts', 'Sunglasses', 'Watches']
+                      : selectedCategory === 'New'
+                      ? ['New Arrivals', 'Trending']
+                      : [
+                          'Tops',
+                          'Shirts & Blouses',
+                          'Cardigans & Sweaters',
+                          'Knitwear',
+                          'Blazers',
+                          'Outerwear',
+                          'Pants',
+                          'Jeans',
+                          'Shorts',
+                          'Skirts',
+                          'Dresses'
+                        ]
+                    ).map((subcat) => (
                       <div
                         key={subcat}
                         className="subcategory-item-row"
@@ -2001,27 +2025,26 @@ export default function App() {
             {shopView === 'catalog' && (() => {
               // 1. Get filtered products
               const filtered = products.filter((p) => {
-                // Category/Subcategory filters
+                // Gender check
+                if ((p.gender || 'women') !== selectedGenderTab) return false;
+
+                // Category check (Main Category)
                 if (selectedCategory === 'Clothes') {
-                  const clothCats = ['dresses', 'jackets', 'tops', 'skirts', 'pants', 'sweaters'];
-                  if (!clothCats.includes(p.category)) return false;
-                } else if (selectedCategory === 'Shoes' && p.category !== 'shoes') {
-                  return false;
-                } else if (selectedCategory === 'Accesories' && p.category !== 'accessories') {
-                  return false;
+                  if (p.category !== 'clothes') return false;
+                } else if (selectedCategory === 'Shoes') {
+                  if (p.category !== 'shoes') return false;
+                } else if (selectedCategory === 'Accesories' || selectedCategory === 'Accessories') {
+                  if (p.category !== 'accessories') return false;
+                } else if (selectedCategory === 'New') {
+                  if (!p.isNew) return false;
                 }
 
+                // Subcategory check
                 if (selectedSubcategory && selectedSubcategory !== 'All') {
-                  // Normalize comparison
-                  const normalizedSub = selectedSubcategory.toLowerCase();
-                  if (normalizedSub.includes('tops') && p.category !== 'tops') return false;
-                  if (normalizedSub.includes('dresses') && p.category !== 'dresses') return false;
-                  if (normalizedSub.includes('skirts') && p.category !== 'skirts') return false;
-                  if (normalizedSub.includes('pants') && p.category !== 'pants') return false;
-                  if (normalizedSub.includes('sweaters') && p.category !== 'sweaters') return false;
-                  if (normalizedSub.includes('jackets') && p.category !== 'jackets') return false;
-                  if (normalizedSub.includes('shoes') && p.category !== 'shoes') return false;
-                  if (normalizedSub.includes('accessories') && p.category !== 'accessories') return false;
+                  const s1 = selectedSubcategory.toLowerCase().replace(/&/g, 'and').replace(/\s+/g, '');
+                  const s2 = (p.subcategory || 'other').toLowerCase().replace(/&/g, 'and').replace(/\s+/g, '');
+                  const isMatch = s1.includes(s2) || s2.includes(s1);
+                  if (!isMatch) return false;
                 }
 
                 // Price range filter
@@ -2100,7 +2123,7 @@ export default function App() {
                         All
                       </button>
                       {selectedCategory === 'Clothes' && [
-                        'Tops', 'Dresses', 'Skirts', 'Pants', 'Sweaters', 'Jackets'
+                        'Tops', 'Shirts & Blouses', 'Cardigans & Sweaters', 'Knitwear', 'Outerwear', 'Pants', 'Jeans', 'Shorts', 'Skirts', 'Dresses', 'Hoodies'
                       ].map((pill) => (
                         <button
                           key={pill}
@@ -2121,8 +2144,8 @@ export default function App() {
                           {pill}
                         </button>
                       ))}
-                      {selectedCategory === 'Accesories' && [
-                        'Bags', 'Hats', 'Belts', 'Jewelry'
+                      {(selectedCategory === 'Accesories' || selectedCategory === 'Accessories') && [
+                        'Bags', 'Hats', 'Belts', 'Sunglasses', 'Watches'
                       ].map((pill) => (
                         <button
                           key={pill}

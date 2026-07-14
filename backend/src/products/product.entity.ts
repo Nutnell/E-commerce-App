@@ -38,6 +38,12 @@ export class Product {
   @Column({ default: 'other' })
   category: string;
 
+  @Column({ default: 'other' })
+  subcategory: string;
+
+  @Column({ default: 'women' })
+  gender: string;
+
   @Column({ default: '' })
   colors: string;
 
