@@ -37,4 +37,10 @@ export class Product {
 
   @Column({ default: 'other' })
   category: string;
+
+  @Column({ default: '' })
+  colors: string;
+
+  @Column({ default: '' })
+  sizes: string;
 }

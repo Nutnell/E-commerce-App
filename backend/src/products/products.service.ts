@@ -15,9 +15,16 @@ export class ProductsService implements OnModuleInit {
   }
 
   private async seedProducts() {
-    const count = await this.productRepository.count();
-    if (count > 0) {
-      return; // Already seeded
+    // Clear database if the seeded data is legacy and lacks color details
+    const existingCount = await this.productRepository.count();
+    if (existingCount > 0) {
+      const sample = await this.productRepository.findOne({ where: {} });
+      if (sample && !sample.colors) {
+        console.log('Legacy database detected (no color data). Clearing products for re-seeding...');
+        await this.productRepository.clear();
+      } else {
+        return; // Already seeded with colors
+      }
     }
 
     const mockProducts: Partial<Product>[] = [
@@ -34,6 +41,8 @@ export class ProductsService implements OnModuleInit {
         isNew: false,
         isSale: true,
         category: 'dresses',
+        colors: 'black,red,white',
+        sizes: 'S,M,L',
       },
       {
         name: 'Sport Dress',
@@ -47,6 +56,8 @@ export class ProductsService implements OnModuleInit {
         isNew: false,
         isSale: true,
         category: 'dresses',
+        colors: 'black,blue',
+        sizes: 'XS,S,M',
       },
       {
         name: 'Denim Jacket',
@@ -60,6 +71,8 @@ export class ProductsService implements OnModuleInit {
         isNew: false,
         isSale: true,
         category: 'jackets',
+        colors: 'blue,grey,black',
+        sizes: 'M,L,XL',
       },
       {
         name: 'Wrap Dress',
@@ -73,6 +86,8 @@ export class ProductsService implements OnModuleInit {
         isNew: false,
         isSale: true,
         category: 'dresses',
+        colors: 'red,white,tan',
+        sizes: 'S,M,L,XL',
       },
       {
         name: 'Leather Bag',
@@ -86,6 +101,8 @@ export class ProductsService implements OnModuleInit {
         isNew: false,
         isSale: true,
         category: 'accessories',
+        colors: 'black,tan,grey',
+        sizes: 'M',
       },
       {
         name: 'Platform Sneakers',
@@ -99,6 +116,8 @@ export class ProductsService implements OnModuleInit {
         isNew: false,
         isSale: true,
         category: 'shoes',
+        colors: 'white,black,blue',
+        sizes: 'S,M,L',
       },
       // ---- New / Trending Products ----
       {
@@ -111,6 +130,8 @@ export class ProductsService implements OnModuleInit {
         isNew: true,
         isSale: false,
         category: 'tops',
+        colors: 'black,white,red',
+        sizes: 'XS,S,M,L',
       },
       {
         name: 'White T-Shirt',
@@ -122,6 +143,8 @@ export class ProductsService implements OnModuleInit {
         isNew: true,
         isSale: false,
         category: 'tops',
+        colors: 'white,grey',
+        sizes: 'S,M,L',
       },
       {
         name: 'Summer Blouse',
@@ -133,6 +156,8 @@ export class ProductsService implements OnModuleInit {
         isNew: true,
         isSale: false,
         category: 'tops',
+        colors: 'white,tan,red',
+        sizes: 'XS,S,M',
       },
       {
         name: 'Maxi Skirt',
@@ -144,6 +169,8 @@ export class ProductsService implements OnModuleInit {
         isNew: true,
         isSale: false,
         category: 'skirts',
+        colors: 'black,tan,blue',
+        sizes: 'S,M,L',
       },
       {
         name: 'Linen Pants',
@@ -155,6 +182,8 @@ export class ProductsService implements OnModuleInit {
         isNew: true,
         isSale: false,
         category: 'pants',
+        colors: 'tan,white,grey',
+        sizes: 'M,L,XL',
       },
       {
         name: 'Knit Sweater',
@@ -166,6 +195,8 @@ export class ProductsService implements OnModuleInit {
         isNew: true,
         isSale: false,
         category: 'sweaters',
+        colors: 'grey,black,red',
+        sizes: 'S,M,L,XL',
       },
     ];
 
