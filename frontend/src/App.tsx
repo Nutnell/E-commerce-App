@@ -34,7 +34,9 @@ interface Product {
 }
 
 const MOCK_PRODUCTS: Product[] = [
-  // ---- Sale / Summer Sale Products ----
+  // ==========================================
+  // WOMEN'S PRODUCTS
+  // ==========================================
   {
     id: 1,
     name: 'Evening Dress',
@@ -47,7 +49,11 @@ const MOCK_PRODUCTS: Product[] = [
     imageUrl: '/assets/evening_dress_product.png',
     isNew: false,
     isSale: true,
-    category: 'dresses',
+    category: 'clothes',
+    subcategory: 'dresses',
+    gender: 'women',
+    colors: 'black,red,white',
+    sizes: 'S,M,L',
   },
   {
     id: 2,
@@ -61,7 +67,11 @@ const MOCK_PRODUCTS: Product[] = [
     imageUrl: '/assets/sport_dress_product.png',
     isNew: false,
     isSale: true,
-    category: 'dresses',
+    category: 'clothes',
+    subcategory: 'dresses',
+    gender: 'women',
+    colors: 'black,blue',
+    sizes: 'XS,S,M',
   },
   {
     id: 5,
@@ -75,7 +85,11 @@ const MOCK_PRODUCTS: Product[] = [
     imageUrl: '/assets/product_denim_jacket.png',
     isNew: false,
     isSale: true,
-    category: 'jackets',
+    category: 'clothes',
+    subcategory: 'outerwear',
+    gender: 'women',
+    colors: 'blue,grey,black',
+    sizes: 'M,L,XL',
   },
   {
     id: 6,
@@ -89,37 +103,12 @@ const MOCK_PRODUCTS: Product[] = [
     imageUrl: '/assets/product_wrap_dress.png',
     isNew: false,
     isSale: true,
-    category: 'dresses',
+    category: 'clothes',
+    subcategory: 'dresses',
+    gender: 'women',
+    colors: 'red,white,tan',
+    sizes: 'S,M,L,XL',
   },
-  {
-    id: 7,
-    name: 'Leather Bag',
-    brand: 'Zara',
-    price: 35.0,
-    originalPrice: 55.0,
-    discountPercent: 36,
-    rating: 4.5,
-    ratingCount: 31,
-    imageUrl: '/assets/product_leather_bag.png',
-    isNew: false,
-    isSale: true,
-    category: 'accessories',
-  },
-  {
-    id: 8,
-    name: 'Platform Sneakers',
-    brand: 'Nike',
-    price: 59.0,
-    originalPrice: 89.0,
-    discountPercent: 34,
-    rating: 5.0,
-    ratingCount: 45,
-    imageUrl: '/assets/product_sneakers.png',
-    isNew: false,
-    isSale: true,
-    category: 'shoes',
-  },
-  // ---- New / Trending Products ----
   {
     id: 3,
     name: 'Striped Top',
@@ -130,7 +119,11 @@ const MOCK_PRODUCTS: Product[] = [
     imageUrl: '/assets/new_product_1.png',
     isNew: true,
     isSale: false,
-    category: 'tops',
+    category: 'clothes',
+    subcategory: 'tops',
+    gender: 'women',
+    colors: 'black,white,red',
+    sizes: 'XS,S,M,L',
   },
   {
     id: 4,
@@ -142,31 +135,11 @@ const MOCK_PRODUCTS: Product[] = [
     imageUrl: '/assets/new_product_2.png',
     isNew: true,
     isSale: false,
-    category: 'tops',
-  },
-  {
-    id: 9,
-    name: 'Summer Blouse',
-    brand: 'Zara',
-    price: 22.0,
-    rating: 4.5,
-    ratingCount: 14,
-    imageUrl: '/assets/product_summer_blouse.png',
-    isNew: true,
-    isSale: false,
-    category: 'tops',
-  },
-  {
-    id: 10,
-    name: 'Maxi Skirt',
-    brand: 'Mango',
-    price: 28.0,
-    rating: 4.0,
-    ratingCount: 8,
-    imageUrl: '/assets/product_maxi_skirt.png',
-    isNew: true,
-    isSale: false,
-    category: 'skirts',
+    category: 'clothes',
+    subcategory: 'tops',
+    gender: 'women',
+    colors: 'white,grey',
+    sizes: 'S,M,L',
   },
   {
     id: 11,
@@ -178,7 +151,11 @@ const MOCK_PRODUCTS: Product[] = [
     imageUrl: '/assets/product_linen_pants.png',
     isNew: true,
     isSale: false,
-    category: 'pants',
+    category: 'clothes',
+    subcategory: 'pants',
+    gender: 'women',
+    colors: 'tan,white,grey',
+    sizes: 'M,L,XL',
   },
   {
     id: 12,
@@ -190,8 +167,154 @@ const MOCK_PRODUCTS: Product[] = [
     imageUrl: '/assets/product_knit_sweater.png',
     isNew: true,
     isSale: false,
-    category: 'sweaters',
+    category: 'clothes',
+    subcategory: 'sweaters',
+    gender: 'women',
+    colors: 'grey,black,red',
+    sizes: 'S,M,L,XL',
   },
+  {
+    id: 13,
+    name: 'Platform Sneakers',
+    brand: 'Nike',
+    price: 59.0,
+    originalPrice: 89.0,
+    discountPercent: 34,
+    rating: 5.0,
+    ratingCount: 45,
+    imageUrl: '/assets/product_sneakers.png',
+    isNew: false,
+    isSale: true,
+    category: 'shoes',
+    subcategory: 'sneakers',
+    gender: 'women',
+    colors: 'white,black,blue',
+    sizes: 'S,M,L',
+  },
+  {
+    id: 14,
+    name: 'Leather Handbag',
+    brand: 'Zara',
+    price: 35.0,
+    originalPrice: 55.0,
+    discountPercent: 36,
+    rating: 4.5,
+    ratingCount: 31,
+    imageUrl: '/assets/product_leather_bag.png',
+    isNew: false,
+    isSale: true,
+    category: 'accessories',
+    subcategory: 'bags',
+    gender: 'women',
+    colors: 'black,tan,grey',
+    sizes: 'M',
+  },
+
+  // ==========================================
+  // MEN'S PRODUCTS
+  // ==========================================
+  {
+    id: 20,
+    name: 'Casual Check Shirt',
+    brand: 'Jack & Jones',
+    price: 24.0,
+    rating: 4.5,
+    ratingCount: 16,
+    imageUrl: '/assets/cat_officestyle.png',
+    isNew: true,
+    isSale: false,
+    category: 'clothes',
+    subcategory: 'shirts',
+    gender: 'men',
+    colors: 'blue,white',
+    sizes: 'M,L,XL',
+  },
+  {
+    id: 21,
+    name: 'Premium Red Hoodie',
+    brand: 'adidas Originals',
+    price: 39.0,
+    originalPrice: 49.0,
+    discountPercent: 20,
+    rating: 4.9,
+    ratingCount: 22,
+    imageUrl: '/assets/mens_hoodies_banner.png',
+    isNew: false,
+    isSale: true,
+    category: 'clothes',
+    subcategory: 'hoodies',
+    gender: 'men',
+    colors: 'red,black,grey',
+    sizes: 'M,L,XL',
+  },
+  {
+    id: 22,
+    name: 'Classic Cargo Pants',
+    brand: 's.Oliver',
+    price: 35.0,
+    rating: 4.2,
+    ratingCount: 8,
+    imageUrl: '/assets/cat_cargo.png',
+    isNew: true,
+    isSale: false,
+    category: 'clothes',
+    subcategory: 'pants',
+    gender: 'men',
+    colors: 'black,grey',
+    sizes: 'M,L,XL',
+  },
+  {
+    id: 23,
+    name: 'Slim Fit Denim Jeans',
+    brand: 'Jack & Jones',
+    price: 45.0,
+    rating: 4.4,
+    ratingCount: 19,
+    imageUrl: '/assets/cat_jeanswear.png',
+    isNew: true,
+    isSale: false,
+    category: 'clothes',
+    subcategory: 'jeans',
+    gender: 'men',
+    colors: 'blue,black',
+    sizes: 'M,L,XL',
+  },
+
+  // ==========================================
+  // KIDS' PRODUCTS
+  // ==========================================
+  {
+    id: 30,
+    name: 'Kids Graphic Tee',
+    brand: 'H&M',
+    price: 9.0,
+    rating: 4.5,
+    ratingCount: 6,
+    imageUrl: '/assets/new_product_2.png',
+    isNew: true,
+    isSale: false,
+    category: 'clothes',
+    subcategory: 'tops',
+    gender: 'kids',
+    colors: 'red,blue,white',
+    sizes: 'XS,S',
+  },
+  {
+    id: 31,
+    name: 'Kids Running Sneakers',
+    brand: 'Nike',
+    price: 29.0,
+    rating: 4.9,
+    ratingCount: 15,
+    imageUrl: '/assets/product_sneakers.png',
+    isNew: true,
+    isSale: false,
+    category: 'shoes',
+    subcategory: 'sneakers',
+    gender: 'kids',
+    colors: 'white,red,blue',
+    sizes: 'XS,S',
+  }
 ];
 
 const SLIDE_LABELS = ['Trending', 'Summer Sale', 'New Collection'];
@@ -1985,37 +2108,63 @@ export default function App() {
                   <span className="choose-category-title">Choose category</span>
                   
                   <div className="subcategories-vertical-list">
-                    {(selectedCategory === 'Shoes'
-                      ? ['Sneakers', 'Boots', 'Heels', 'Sandals']
-                      : selectedCategory === 'Accesories' || selectedCategory === 'Accessories'
-                      ? ['Bags', 'Hats', 'Belts', 'Sunglasses', 'Watches']
-                      : selectedCategory === 'New'
-                      ? ['New Arrivals', 'Trending']
-                      : [
-                          'Tops',
-                          'Shirts & Blouses',
-                          'Cardigans & Sweaters',
-                          'Knitwear',
-                          'Blazers',
-                          'Outerwear',
-                          'Pants',
-                          'Jeans',
-                          'Shorts',
-                          'Skirts',
-                          'Dresses'
-                        ]
-                    ).map((subcat) => (
-                      <div
-                        key={subcat}
-                        className="subcategory-item-row"
-                        onClick={() => {
-                          setSelectedSubcategory(subcat);
-                          setShopView('catalog');
-                        }}
-                      >
-                        {subcat}
-                      </div>
-                    ))}
+                    {(() => {
+                      const matchingProducts = products.filter((p) => {
+                        // 1. Gender check
+                        if ((p.gender || 'women') !== selectedGenderTab) return false;
+                        
+                        // 2. Category check
+                        if (selectedCategory === 'Clothes') {
+                          return p.category === 'clothes';
+                        }
+                        if (selectedCategory === 'Shoes') {
+                          return p.category === 'shoes';
+                        }
+                        if (selectedCategory === 'Accesories' || selectedCategory === 'Accessories') {
+                          return p.category === 'accessories';
+                        }
+                        if (selectedCategory === 'New') {
+                          return p.isNew;
+                        }
+                        return true;
+                      });
+
+                      // Extract unique subcategories
+                      const uniqueSubs = Array.from(new Set(
+                        matchingProducts
+                          .map(p => p.subcategory)
+                          .filter((sub): sub is string => !!sub && sub !== 'other')
+                      ));
+
+                      // Helper to capitalize/format subcategory labels for display
+                      const getSubcategoryLabel = (sub: string) => {
+                        if (sub === 'shirts') return 'Shirts & Blouses';
+                        if (sub === 'sweaters') return 'Cardigans & Sweaters';
+                        if (sub === 'outerwear') return 'Outerwear & Jackets';
+                        return sub.charAt(0).toUpperCase() + sub.slice(1);
+                      };
+
+                      if (uniqueSubs.length === 0) {
+                        return (
+                          <div style={{ color: 'var(--gray)', padding: '24px 0', textAlign: 'center', fontSize: '14px' }}>
+                            No subcategories available for this selection
+                          </div>
+                        );
+                      }
+
+                      return uniqueSubs.map((subcat) => (
+                        <div
+                          key={subcat}
+                          className="subcategory-item-row"
+                          onClick={() => {
+                            setSelectedSubcategory(subcat);
+                            setShopView('catalog');
+                          }}
+                        >
+                          {getSubcategoryLabel(subcat)}
+                        </div>
+                      ));
+                    })()}
                   </div>
                 </div>
               </div>
@@ -2041,10 +2190,7 @@ export default function App() {
 
                 // Subcategory check
                 if (selectedSubcategory && selectedSubcategory !== 'All') {
-                  const s1 = selectedSubcategory.toLowerCase().replace(/&/g, 'and').replace(/\s+/g, '');
-                  const s2 = (p.subcategory || 'other').toLowerCase().replace(/&/g, 'and').replace(/\s+/g, '');
-                  const isMatch = s1.includes(s2) || s2.includes(s1);
-                  if (!isMatch) return false;
+                  if ((p.subcategory || 'other') !== selectedSubcategory) return false;
                 }
 
                 // Price range filter
@@ -2102,13 +2248,25 @@ export default function App() {
                 return 'Newest';
               };
 
+              const subName = selectedSubcategory || 'All';
+
               return (
                 <div>
                   <header className="catalog-header">
                     <button className="header-icon-btn" onClick={() => setShopView('subcategories')}>
                       <ChevronLeft size={24} />
                     </button>
-                    <span className="header-title-text">{selectedSubcategory === 'All' ? selectedCategory : selectedSubcategory}</span>
+                    <span className="header-title-text">
+                      {subName === 'All' 
+                        ? selectedCategory 
+                        : (subName === 'shirts' 
+                            ? 'Shirts & Blouses' 
+                            : subName === 'sweaters' 
+                            ? 'Cardigans & Sweaters' 
+                            : subName === 'outerwear' 
+                            ? 'Outerwear & Jackets' 
+                            : subName.charAt(0).toUpperCase() + subName.slice(1))}
+                    </span>
                     <button className="header-icon-btn">
                       <Search size={20} />
                     </button>
@@ -2122,39 +2280,39 @@ export default function App() {
                       >
                         All
                       </button>
-                      {selectedCategory === 'Clothes' && [
-                        'Tops', 'Shirts & Blouses', 'Cardigans & Sweaters', 'Knitwear', 'Outerwear', 'Pants', 'Jeans', 'Shorts', 'Skirts', 'Dresses', 'Hoodies'
-                      ].map((pill) => (
-                        <button
-                          key={pill}
-                          className={`subcategory-pill-btn ${selectedSubcategory === pill ? 'active' : ''}`}
-                          onClick={() => setSelectedSubcategory(pill)}
-                        >
-                          {pill}
-                        </button>
-                      ))}
-                      {selectedCategory === 'Shoes' && [
-                        'Sneakers', 'Boots', 'Heels', 'Sandals'
-                      ].map((pill) => (
-                        <button
-                          key={pill}
-                          className={`subcategory-pill-btn ${selectedSubcategory === pill ? 'active' : ''}`}
-                          onClick={() => setSelectedSubcategory(pill)}
-                        >
-                          {pill}
-                        </button>
-                      ))}
-                      {(selectedCategory === 'Accesories' || selectedCategory === 'Accessories') && [
-                        'Bags', 'Hats', 'Belts', 'Sunglasses', 'Watches'
-                      ].map((pill) => (
-                        <button
-                          key={pill}
-                          className={`subcategory-pill-btn ${selectedSubcategory === pill ? 'active' : ''}`}
-                          onClick={() => setSelectedSubcategory(pill)}
-                        >
-                          {pill}
-                        </button>
-                      ))}
+                      {(() => {
+                        const matchingProducts = products.filter((p) => {
+                          if ((p.gender || 'women') !== selectedGenderTab) return false;
+                          if (selectedCategory === 'Clothes') return p.category === 'clothes';
+                          if (selectedCategory === 'Shoes') return p.category === 'shoes';
+                          if (selectedCategory === 'Accesories' || selectedCategory === 'Accessories') return p.category === 'accessories';
+                          if (selectedCategory === 'New') return p.isNew;
+                          return true;
+                        });
+
+                        const uniqueSubs = Array.from(new Set(
+                          matchingProducts
+                            .map(p => p.subcategory)
+                            .filter((sub): sub is string => !!sub && sub !== 'other')
+                        ));
+
+                        const getSubcategoryLabel = (sub: string) => {
+                          if (sub === 'shirts') return 'Shirts & Blouses';
+                          if (sub === 'sweaters') return 'Cardigans & Sweaters';
+                          if (sub === 'outerwear') return 'Outerwear & Jackets';
+                          return sub.charAt(0).toUpperCase() + sub.slice(1);
+                        };
+
+                        return uniqueSubs.map((subcat) => (
+                          <button
+                            key={subcat}
+                            className={`subcategory-pill-btn ${selectedSubcategory === subcat ? 'active' : ''}`}
+                            onClick={() => setSelectedSubcategory(subcat)}
+                          >
+                            {getSubcategoryLabel(subcat)}
+                          </button>
+                        ));
+                      })()}
                     </div>
 
                     <div className="controls-toolbar-row">

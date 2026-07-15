@@ -15,15 +15,14 @@ export class ProductsService implements OnModuleInit {
   }
 
   private async seedProducts() {
-    // Clear database if the seeded data is legacy and lacks subcategory/gender details
+    // Re-seed if database has fewer than the expected 30 products
     const existingCount = await this.productRepository.count();
     if (existingCount > 0) {
-      const sample = await this.productRepository.findOne({ where: {} });
-      if (sample && (!sample.colors || !sample.subcategory || !sample.gender)) {
-        console.log('Legacy database detected (no subcategory or gender data). Clearing products for re-seeding...');
+      if (existingCount < 30) {
+        console.log('Legacy product count detected. Clearing products for re-seeding...');
         await this.productRepository.clear();
       } else {
-        return; // Already seeded with all fields
+        return; // Already seeded with all 30 products
       }
     }
 
