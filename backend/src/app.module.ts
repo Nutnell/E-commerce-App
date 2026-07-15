@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Product } from './products/product.entity';
+import { Review } from './products/review.entity';
 import { ProductsModule } from './products/products.module';
 import { User } from './auth/user.entity';
 import { AuthModule } from './auth/auth.module';
@@ -21,7 +22,7 @@ dotenv.config({ path: path.join(__dirname, '..', '.env') });
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [Product, User],
+      entities: [Product, User, Review],
       synchronize: true, // Auto-create tables in development
       ssl: {
         rejectUnauthorized: false, // Supabase SSL connection requirement

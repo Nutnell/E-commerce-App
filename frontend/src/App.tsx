@@ -33,6 +33,17 @@ interface Product {
   sizes?: string;
 }
 
+interface Review {
+  id: number;
+  productId: number;
+  userName: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  helpfulCount: number;
+  photos: string;
+}
+
 const MOCK_PRODUCTS: Product[] = [
   // ==========================================
   // WOMEN'S PRODUCTS
@@ -113,6 +124,76 @@ export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [isDesktop, setIsDesktop] = useState(false);
+
+  // Product Details & Engagement State (Milestone 4)
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
+  const [productDetailView, setProductDetailView] = useState<'details' | 'reviews' | 'write_review'>('details');
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [showSizeSheet, setShowSizeSheet] = useState(false);
+  const [productReviews, setProductReviews] = useState<Review[]>([]);
+  const [reviewsFilter, setReviewsFilter] = useState<'all' | 'with_photos' | '5star' | '4star' | '3star'>('all');
+  const [writeReviewRating, setWriteReviewRating] = useState<number>(5);
+  const [writeReviewComment, setWriteReviewComment] = useState<string>('');
+  const [writeReviewPhoto, setWriteReviewPhoto] = useState<string>('');
+  const [helpfulReviews, setHelpfulReviews] = useState<number[]>([]);
+  const [openAccordion, setOpenAccordion] = useState<'description' | 'size' | 'shipping' | null>('description');
+
+  // Fetch product reviews and set config defaults when selectedProductId changes
+  useEffect(() => {
+    if (selectedProductId !== null) {
+      setProductDetailView('details');
+      setReviewsFilter('all');
+      setSelectedSize(null);
+      setSelectedColor(null);
+      
+      const product = products.find(p => p.id === selectedProductId);
+      if (product) {
+        if (product.sizes) {
+          const sizeList = product.sizes.split(',');
+          if (sizeList.length > 0) setSelectedSize(sizeList[0]);
+        }
+        if (product.colors) {
+          const colorList = product.colors.split(',');
+          if (colorList.length > 0) setSelectedColor(colorList[0]);
+        }
+      }
+
+      fetch(`http://localhost:3000/api/products/${selectedProductId}/reviews`)
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            setProductReviews(data);
+          }
+        })
+        .catch(err => {
+          console.warn('Failed to load reviews from server, using local mock reviews:', err);
+          const fallbacks: Review[] = [
+            {
+              id: 9991,
+              productId: selectedProductId,
+              userName: 'Helena P.',
+              rating: 5,
+              comment: 'Absolutely love this! The quality is amazing and fits perfectly.',
+              createdAt: new Date().toISOString(),
+              helpfulCount: 5,
+              photos: product?.imageUrl || ''
+            },
+            {
+              id: 9992,
+              productId: selectedProductId,
+              userName: 'Samuel L.',
+              rating: 4,
+              comment: 'Very nice fit, though the color is slightly darker than the picture.',
+              createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
+              helpfulCount: 2,
+              photos: ''
+            }
+          ];
+          setProductReviews(fallbacks);
+        });
+    }
+  }, [selectedProductId, products]);
   // Authentication State
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
   const [user, setUser] = useState<{ id: string; name: string; email: string } | null>(null);
@@ -955,6 +1036,507 @@ export default function App() {
     );
   }
 
+
+  const renderProductDetailView = () => {
+    const product = products.find(p => p.id === selectedProductId);
+    if (!product) return null;
+
+    if (productDetailView === 'details') {
+      const relatedProducts = products
+        .filter(p => p.category === product.category && p.gender === product.gender && p.id !== product.id)
+        .slice(0, 6);
+
+      const colorList = product.colors ? product.colors.split(',') : [];
+
+      return (
+        <div className="product-details-container">
+          <header className="details-header">
+            <button className="header-icon-btn" onClick={() => setSelectedProductId(null)}>
+              <ChevronLeft size={24} />
+            </button>
+            <span className="header-title-text">{product.name}</span>
+            <button className="header-icon-btn" onClick={() => {
+              alert(`Link to product copied: http://localhost:5173/products/${product.id}`);
+            }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="18" cy="5" r="3" />
+                <circle cx="6" cy="12" r="3" />
+                <circle cx="18" cy="19" r="3" />
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+              </svg>
+            </button>
+          </header>
+
+          <div className="details-image-panel">
+            <img src={product.imageUrl} alt={product.name} className="details-main-image" />
+            <button 
+              className={`details-favorite-circle ${favorites.includes(product.id) ? 'active' : ''}`}
+              onClick={(e) => toggleFavorite(product.id, e)}
+            >
+              <Heart className="heart-icon" />
+            </button>
+          </div>
+
+          <div className="selection-capsules-row">
+            <button className="capsule-select-btn" onClick={() => setShowSizeSheet(true)}>
+              Size: {selectedSize || 'Select'}
+              <span className="arrow-down-icon">▾</span>
+            </button>
+            
+            <div className="colors-selector-group">
+              {colorList.map((col) => (
+                <button
+                  key={col}
+                  className={`color-dot-choice ${selectedColor === col ? 'active' : ''}`}
+                  style={{ backgroundColor: col === 'white' ? '#FFFFFF' : col === 'black' ? '#000000' : col }}
+                  onClick={() => setSelectedColor(col)}
+                  title={col}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="details-metadata-card">
+            <div className="brand-stars-row">
+              <span className="details-brand-name">{product.brand}</span>
+              <div 
+                className="details-stars-link"
+                onClick={() => setProductDetailView('reviews')}
+              >
+                {renderStars(product.rating, product.ratingCount)}
+              </div>
+            </div>
+            <h1 className="details-product-title">{product.name}</h1>
+            <div className="details-price-row">
+              {product.isSale && product.originalPrice ? (
+                <>
+                  <span className="price-discount">${product.price}</span>
+                  <span className="price-old">${product.originalPrice}</span>
+                </>
+              ) : (
+                <span className="price-regular">${product.price}</span>
+              )}
+            </div>
+          </div>
+
+          <div className="accordions-container">
+            <div className="accordion-item">
+              <button 
+                className="accordion-header"
+                onClick={() => setOpenAccordion(openAccordion === 'description' ? null : 'description')}
+              >
+                <span>Product description</span>
+                <span className="accordion-arrow">{openAccordion === 'description' ? '▴' : '▾'}</span>
+              </button>
+              {openAccordion === 'description' && (
+                <div className="accordion-content">
+                  <p>This premium quality {product.name} from {product.brand} is designed with a focus on both comfort and modern aesthetic style. Crafted from soft, breathable materials, it ensures all-day comfort and a perfect silhouette fit.</p>
+                  <ul style={{ paddingLeft: '18px', marginTop: '8px' }}>
+                    <li>Material: 95% cotton, 5% elastane</li>
+                    <li>Sleeve/Length: Standard fit</li>
+                    <li>Care instructions: Machine wash cold, dry flat</li>
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className="accordion-item">
+              <button 
+                className="accordion-header"
+                onClick={() => setOpenAccordion(openAccordion === 'size' ? null : 'size')}
+              >
+                <span>Size guide</span>
+                <span className="accordion-arrow">{openAccordion === 'size' ? '▴' : '▾'}</span>
+              </button>
+              {openAccordion === 'size' && (
+                <div className="accordion-content">
+                  <table className="size-guide-table">
+                    <thead>
+                      <tr>
+                        <th>Size</th>
+                        <th>Chest (in)</th>
+                        <th>Waist (in)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>XS</td><td>32-34</td><td>26-28</td></tr>
+                      <tr><td>S</td><td>34-36</td><td>28-30</td></tr>
+                      <tr><td>M</td><td>38-40</td><td>32-34</td></tr>
+                      <tr><td>L</td><td>42-44</td><td>36-38</td></tr>
+                      <tr><td>XL</td><td>46-48</td><td>40-42</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+
+            <div className="accordion-item">
+              <button 
+                className="accordion-header"
+                onClick={() => setOpenAccordion(openAccordion === 'shipping' ? null : 'shipping')}
+              >
+                <span>Shipping & Returns</span>
+                <span className="accordion-arrow">{openAccordion === 'shipping' ? '▴' : '▾'}</span>
+              </button>
+              {openAccordion === 'shipping' && (
+                <div className="accordion-content">
+                  <p><strong>Standard Shipping:</strong> Free for all orders above $50. Delivered within 3-5 business days.</p>
+                  <p style={{ marginTop: '6px' }}><strong>Easy Returns:</strong> We offer a 30-day free return policy if the product is in its original condition with labels intact.</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {relatedProducts.length > 0 && (
+            <div className="section-container" style={{ marginTop: '24px', paddingBottom: '100px' }}>
+              <div className="section-header">
+                <h2 className="section-title">You can also like this</h2>
+                <span className="section-subtitle">{relatedProducts.length} items found</span>
+              </div>
+              <div className="products-scroll">
+                {relatedProducts.map((p) => (
+                  <div 
+                    key={p.id} 
+                    className="product-card"
+                    onClick={() => setSelectedProductId(p.id)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className="product-img-wrapper">
+                      <img src={p.imageUrl} alt={p.name} className="product-image" draggable="false" />
+                      {p.isSale && p.discountPercent && (
+                        <span className="tag-badge badge-discount">-{p.discountPercent}%</span>
+                      )}
+                      {p.isNew && !p.isSale && (
+                        <span className="tag-badge badge-new">NEW</span>
+                      )}
+                    </div>
+                    <div className="product-meta">
+                      {renderStars(p.rating, p.ratingCount)}
+                      <span className="product-brand">{p.brand}</span>
+                      <h3 className="product-name">{p.name}</h3>
+                      <span className="price-current">${p.price}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="details-bottom-bar">
+            <button 
+              className="add-to-bag-button"
+              onClick={() => {
+                alert(`Added to Shopping Bag: ${product.name} (Size: ${selectedSize || 'None'}, Color: ${selectedColor || 'None'})`);
+              }}
+            >
+              ADD TO BAG
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    if (productDetailView === 'reviews') {
+      const ratingsDistribution = [0, 0, 0, 0, 0];
+      let totalRatingSum = 0;
+      productReviews.forEach(r => {
+        const starIdx = 5 - Math.round(r.rating);
+        if (starIdx >= 0 && starIdx < 5) {
+          ratingsDistribution[starIdx]++;
+        }
+        totalRatingSum += r.rating;
+      });
+
+      const averageRating = productReviews.length > 0 ? (totalRatingSum / productReviews.length).toFixed(1) : '0.0';
+
+      const filteredReviews = productReviews.filter(r => {
+        if (reviewsFilter === 'with_photos') return r.photos !== '';
+        if (reviewsFilter === '5star') return Math.round(r.rating) === 5;
+        if (reviewsFilter === '4star') return Math.round(r.rating) === 4;
+        if (reviewsFilter === '3star') return Math.round(r.rating) === 3;
+        return true;
+      });
+
+      return (
+        <div className="ratings-reviews-page">
+          <header className="details-header">
+            <button className="header-icon-btn" onClick={() => setProductDetailView('details')}>
+              <ChevronLeft size={24} />
+            </button>
+            <span className="header-title-text">Rating and Reviews</span>
+            <div style={{ width: '40px' }} />
+          </header>
+
+          <div className="reviews-statistics-card">
+            <div className="score-summary-col">
+              <span className="big-score-number">{averageRating}</span>
+              <span className="total-ratings-label">{productReviews.length} ratings</span>
+            </div>
+            
+            <div className="rating-bars-col">
+              {ratingsDistribution.map((count, index) => {
+                const stars = 5 - index;
+                const percent = productReviews.length > 0 ? (count / productReviews.length) * 100 : 0;
+                return (
+                  <div key={stars} className="rating-bar-row">
+                    <div className="stars-label-wrap">
+                      {[...Array(5)].map((_, starI) => (
+                        <Star 
+                          key={starI} 
+                          size={10} 
+                          className="star-icon" 
+                          fill={starI < stars ? 'currentColor' : 'none'} 
+                        />
+                      ))}
+                    </div>
+                    <div className="rating-progress-bg">
+                      <div className="rating-progress-bar" style={{ width: `${percent}%` }} />
+                    </div>
+                    <span className="rating-count-num">{count}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="reviews-filter-bar">
+            <button 
+              className={`filter-pill-btn ${reviewsFilter === 'all' ? 'active' : ''}`}
+              onClick={() => setReviewsFilter('all')}
+            >
+              All reviews
+            </button>
+            <button 
+              className={`filter-pill-btn ${reviewsFilter === 'with_photos' ? 'active' : ''}`}
+              onClick={() => setReviewsFilter('with_photos')}
+            >
+              With photos
+            </button>
+            <button 
+              className={`filter-pill-btn ${reviewsFilter === '5star' ? 'active' : ''}`}
+              onClick={() => setReviewsFilter('5star')}
+            >
+              5 stars
+            </button>
+            <button 
+              className={`filter-pill-btn ${reviewsFilter === '4star' ? 'active' : ''}`}
+              onClick={() => setReviewsFilter('4star')}
+            >
+              4 stars
+            </button>
+          </div>
+
+          <div className="reviews-list-container">
+            <div className="reviews-list-header-row">
+              <span className="reviews-count-header">{filteredReviews.length} reviews</span>
+            </div>
+
+            {filteredReviews.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--gray)' }}>
+                No reviews match this filter.
+              </div>
+            ) : (
+              filteredReviews.map((rev) => (
+                <div key={rev.id} className="review-card">
+                  <div className="review-user-avatar">
+                    {rev.userName.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="review-card-body">
+                    <div className="review-author-row">
+                      <span className="review-author-name">{rev.userName}</span>
+                      <span className="review-date-label">
+                        {new Date(rev.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+                      </span>
+                    </div>
+                    
+                    <div className="review-stars-wrap">
+                      {[...Array(5)].map((_, starI) => (
+                        <Star 
+                          key={starI} 
+                          size={12} 
+                          className="star-icon" 
+                          fill={starI < rev.rating ? 'currentColor' : 'none'} 
+                        />
+                      ))}
+                    </div>
+
+                    <p className="review-comment-text">{rev.comment}</p>
+
+                    {rev.photos && (
+                      <div className="review-photo-wrapper">
+                        <img src={rev.photos} alt="Review attachment" className="review-attachment-img" />
+                      </div>
+                    )}
+
+                    <div className="review-helpful-action-row">
+                      <button 
+                        className={`helpful-like-btn ${helpfulReviews.includes(rev.id) ? 'liked' : ''}`}
+                        onClick={() => {
+                          if (helpfulReviews.includes(rev.id)) {
+                            setHelpfulReviews(helpfulReviews.filter(id => id !== rev.id));
+                          } else {
+                            setHelpfulReviews([...helpfulReviews, rev.id]);
+                          }
+                        }}
+                      >
+                        Helpful? <span>({rev.helpfulCount + (helpfulReviews.includes(rev.id) ? 1 : 0)})</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          <button 
+            className="write-review-fab"
+            onClick={() => {
+              setWriteReviewRating(5);
+              setWriteReviewComment('');
+              setWriteReviewPhoto('');
+              setProductDetailView('write_review');
+            }}
+          >
+            Write a review
+          </button>
+        </div>
+      );
+    }
+
+    if (productDetailView === 'write_review') {
+      const handleAddReviewSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!writeReviewComment.trim()) {
+          alert('Please enter review comment text.');
+          return;
+        }
+
+        const payload = {
+          userName: user?.name || 'Anonymous User',
+          rating: writeReviewRating,
+          comment: writeReviewComment,
+          photos: writeReviewPhoto
+        };
+
+        fetch(`http://localhost:3000/api/products/${product.id}/reviews`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+          .then(res => res.json())
+          .then(newRev => {
+            setProductReviews([newRev, ...productReviews]);
+            
+            const updatedProducts = products.map(p => {
+              if (p.id === product.id) {
+                const totalCount = p.ratingCount + 1;
+                const newAvg = (p.rating * p.ratingCount + writeReviewRating) / totalCount;
+                return {
+                  ...p,
+                  rating: Math.round(newAvg * 10) / 10,
+                  ratingCount: totalCount
+                };
+              }
+              return p;
+            });
+            setProducts(updatedProducts);
+            setProductDetailView('reviews');
+          })
+          .catch(err => {
+            console.error('Failed to post review to backend, saving locally:', err);
+            const fallbackRev: Review = {
+              id: Date.now(),
+              productId: product.id,
+              userName: user?.name || 'Anonymous User',
+              rating: writeReviewRating,
+              comment: writeReviewComment,
+              createdAt: new Date().toISOString(),
+              helpfulCount: 0,
+              photos: writeReviewPhoto
+            };
+            setProductReviews([fallbackRev, ...productReviews]);
+            setProductDetailView('reviews');
+          });
+      };
+
+      return (
+        <div className="write-review-overlay">
+          <header className="details-header">
+            <button className="header-icon-btn" onClick={() => setProductDetailView('reviews')}>
+              <ChevronLeft size={24} />
+            </button>
+            <span className="header-title-text">Write a review</span>
+            <div style={{ width: '40px' }} />
+          </header>
+
+          <form className="write-review-form" onSubmit={handleAddReviewSubmit}>
+            <h3 className="write-review-section-title">Please rate the product</h3>
+            <div className="stars-interactive-wrapper">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  type="button"
+                  key={star}
+                  className="interactive-star-btn"
+                  onClick={() => setWriteReviewRating(star)}
+                >
+                  <Star 
+                    size={36} 
+                    className="interactive-star-icon"
+                    fill={star <= writeReviewRating ? 'var(--star-color)' : 'none'} 
+                    color={star <= writeReviewRating ? 'var(--star-color)' : '#9B9B9B'}
+                  />
+                </button>
+              ))}
+            </div>
+
+            <h3 className="write-review-section-title">Please share your feedback</h3>
+            <textarea
+              className="write-review-textarea"
+              placeholder="What did you think of this product? Mention quality, comfort, fit, sizing etc."
+              value={writeReviewComment}
+              onChange={(e) => setWriteReviewComment(e.target.value)}
+              required
+            />
+
+            <h3 className="write-review-section-title">Add photo (Optional)</h3>
+            <div className="photo-attachment-simulator">
+              {writeReviewPhoto ? (
+                <div className="attached-photo-preview-wrap">
+                  <img src={writeReviewPhoto} alt="Attached preview" className="attached-photo-preview" />
+                  <button 
+                    type="button" 
+                    className="remove-attached-photo-btn"
+                    onClick={() => setWriteReviewPhoto('')}
+                  >
+                    ×
+                  </button>
+                </div>
+              ) : (
+                <button 
+                  type="button" 
+                  className="attach-photo-trigger-btn"
+                  onClick={() => {
+                    setWriteReviewPhoto(product.imageUrl);
+                  }}
+                >
+                  <div className="plus-sign-icon">+</div>
+                  <span>Add Photo</span>
+                </button>
+              )}
+            </div>
+
+            <button type="submit" className="submit-review-form-btn">
+              SUBMIT REVIEW
+            </button>
+          </form>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <div className="app-layout">
 
@@ -1052,7 +1634,9 @@ export default function App() {
 
       {/* ========= MAIN CONTENT AREA ========= */}
       <div className="app-content">
-        {activeTab === 'home' ? (
+        {selectedProductId !== null ? (
+          renderProductDetailView()
+        ) : activeTab === 'home' ? (
           <div 
             ref={sliderRef}
             className="home-slider" 
@@ -1090,10 +1674,14 @@ export default function App() {
                   </div>
                   <a href="#view-all" className="section-link" onClick={(e) => {e.preventDefault(); setActiveTab('shop');}}>View all</a>
                 </div>
-
                 <div className="products-scroll">
                   {newProducts.map((product) => (
-                    <div key={product.id} className="product-card">
+                    <div 
+                      key={product.id} 
+                      className="product-card"
+                      onClick={() => setSelectedProductId(product.id)}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <div className="product-img-wrapper">
                         <img src={product.imageUrl} alt={product.name} className="product-image" draggable="false" />
                         <span className="tag-badge badge-new">NEW</span>
@@ -1142,10 +1730,14 @@ export default function App() {
                   </div>
                   <a href="#view-all" className="section-link" onClick={(e) => {e.preventDefault(); setActiveTab('shop');}}>View all</a>
                 </div>
-
                 <div className="products-scroll">
                   {saleProducts.map((product) => (
-                    <div key={product.id} className="product-card">
+                    <div 
+                      key={product.id} 
+                      className="product-card"
+                      onClick={() => setSelectedProductId(product.id)}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <div className="product-img-wrapper">
                         <img src={product.imageUrl} alt={product.name} className="product-image" draggable="false" />
                         <span className="tag-badge badge-discount">-{product.discountPercent}%</span>
@@ -1179,7 +1771,12 @@ export default function App() {
                 </div>
                 <div className="products-scroll">
                   {newProducts.map((product) => (
-                    <div key={product.id} className="product-card">
+                    <div 
+                      key={product.id} 
+                      className="product-card"
+                      onClick={() => setSelectedProductId(product.id)}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <div className="product-img-wrapper">
                         <img src={product.imageUrl} alt={product.name} className="product-image" draggable="false" />
                         <span className="tag-badge badge-new">NEW</span>
@@ -2187,7 +2784,12 @@ export default function App() {
                     /* Grid Layout format */
                     <div className="catalog-grid-feed">
                       {sorted.map((prod) => (
-                        <div key={prod.id} className="catalog-grid-card">
+                        <div 
+                          key={prod.id} 
+                          className="catalog-grid-card"
+                          onClick={() => setSelectedProductId(prod.id)}
+                          style={{ cursor: 'pointer' }}
+                        >
                           <div className="grid-card-img-wrapper">
                             <img src={prod.imageUrl} alt={prod.name} className="grid-card-img" />
                             {prod.isSale && prod.discountPercent && (
@@ -2225,7 +2827,12 @@ export default function App() {
                     /* List Layout format */
                     <div className="catalog-list-feed">
                       {sorted.map((prod) => (
-                        <div key={prod.id} className="catalog-list-card">
+                        <div 
+                          key={prod.id} 
+                          className="catalog-list-card"
+                          onClick={() => setSelectedProductId(prod.id)}
+                          style={{ cursor: 'pointer' }}
+                        >
                           <div className="list-card-img-wrapper">
                             <img src={prod.imageUrl} alt={prod.name} className="list-card-img" />
                             {prod.isSale && prod.discountPercent && (
@@ -2357,6 +2964,46 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* ========= SELECT SIZE BOTTOM SHEET ========= */}
+      {showSizeSheet && selectedProductId !== null && (() => {
+        const product = products.find(p => p.id === selectedProductId);
+        if (!product) return null;
+        const sizeList = product.sizes ? product.sizes.split(',') : ['XS', 'S', 'M', 'L', 'XL'];
+        
+        return (
+          <div className="size-sheet-overlay" onClick={() => setShowSizeSheet(false)}>
+            <div className="size-sheet-card" onClick={(e) => e.stopPropagation()}>
+              <div className="size-sheet-handle" />
+              <h3 className="size-sheet-title">Select size</h3>
+              
+              <div className="size-options-grid">
+                {sizeList.map((sz) => (
+                  <button
+                    key={sz}
+                    className={`size-grid-option ${selectedSize === sz ? 'active' : ''}`}
+                    onClick={() => {
+                      setSelectedSize(sz);
+                      setShowSizeSheet(false);
+                    }}
+                  >
+                    {sz}
+                  </button>
+                ))}
+              </div>
+
+              <div className="size-sheet-footer">
+                <button 
+                  className="size-sheet-close-btn"
+                  onClick={() => setShowSizeSheet(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* ========= FILTERS OVERLAY SCREEN (Milestone 3) ========= */}
       {showFilterScreen && (

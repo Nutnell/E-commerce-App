@@ -2,12 +2,15 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Product } from './product.entity';
+import { Review } from './review.entity';
 
 @Injectable()
 export class ProductsService implements OnModuleInit {
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    @InjectRepository(Review)
+    private readonly reviewRepository: Repository<Review>,
   ) {}
 
   async onModuleInit() {
@@ -15,15 +18,15 @@ export class ProductsService implements OnModuleInit {
   }
 
   private async seedProducts() {
-    // Re-seed if database has fewer than the expected product count
+    // Re-seed if database has fewer than the expected product count or no reviews
     const existingCount = await this.productRepository.count();
-    if (existingCount > 0) {
-      if (existingCount < 80) {
-        console.log('Legacy product count detected. Clearing products for re-seeding...');
-        await this.productRepository.clear();
-      } else {
-        return; // Already seeded with expanded catalog
-      }
+    const reviewCount = await this.reviewRepository.count();
+    if (existingCount < 80 || reviewCount === 0) {
+      console.log('Clearing products and reviews database for seeding...');
+      await this.reviewRepository.clear();
+      await this.productRepository.clear();
+    } else {
+      return; // Already seeded with expanded catalog and reviews
     }
 
     const mockProducts: Partial<Product>[] = [
@@ -1731,8 +1734,95 @@ export class ProductsService implements OnModuleInit {
       },
     ];
 
-    await this.productRepository.save(mockProducts);
-    console.log(`Successfully seeded database with ${mockProducts.length} products.`);
+    const savedProducts = await this.productRepository.save(mockProducts);
+    console.log(`Successfully seeded database with ${savedProducts.length} products.`);
+    
+    // Seed reviews mapping them to the newly generated product IDs
+    await this.seedReviewsForProducts(savedProducts);
+  }
+
+  private async seedReviewsForProducts(products: Product[]) {
+    const reviewers = [
+      'Helena P.', 'Kimberly M.', 'Samuel L.', 'Sophia B.', 'Oliver T.',
+      'Emma W.', 'Jackson D.', 'Mia K.', 'Lucas N.', 'Isabella C.'
+    ];
+
+    const star5Reviews = [
+      "Absolutely love this! The quality is amazing and fits perfectly.",
+      "Exceeded my expectations. Highly recommend!",
+      "Super comfortable and stylish. Will definitely buy again!",
+      "The material is incredibly soft and premium. Perfect purchase."
+    ];
+
+    const star4Reviews = [
+      "Very nice fit, though the color is slightly different than the picture.",
+      "Great quality for the price. Fast shipping and good service.",
+      "Comfy and fits well, perfect for everyday wear.",
+      "Good quality fabric, just a bit long in the sleeves."
+    ];
+
+    const star3Reviews = [
+      "It is decent, but the sizing runs slightly smaller than standard.",
+      "Average quality, but looks nice for casual outings.",
+      "Nice design, but the material is a bit thinner than expected."
+    ];
+
+    const star2Reviews = [
+      "Not the best material, felt a bit cheap after the first wash.",
+      "The fit was very weird on me, and sizing wasn't accurate."
+    ];
+
+    const mockReviews: Partial<Review>[] = [];
+
+    // Seed reviews for every product
+    for (const product of products) {
+      // Each product gets 3 to 6 reviews
+      const numReviews = Math.floor(Math.random() * 4) + 3;
+      
+      for (let i = 0; i < numReviews; i++) {
+        const reviewer = reviewers[Math.floor(Math.random() * reviewers.length)];
+        
+        // Distribute ratings: mostly 4 and 5 stars to make the products look good
+        const rand = Math.random();
+        let rating = 5;
+        let comment = star5Reviews[Math.floor(Math.random() * star5Reviews.length)];
+
+        if (rand < 0.1) {
+          rating = 2;
+          comment = star2Reviews[Math.floor(Math.random() * star2Reviews.length)];
+        } else if (rand < 0.2) {
+          rating = 3;
+          comment = star3Reviews[Math.floor(Math.random() * star3Reviews.length)];
+        } else if (rand < 0.5) {
+          rating = 4;
+          comment = star4Reviews[Math.floor(Math.random() * star4Reviews.length)];
+        }
+
+        // Attach a mock photo occasionally (simulate user review photo)
+        let photos = '';
+        if (Math.random() < 0.3) {
+          photos = product.imageUrl;
+        }
+
+        // Random date within the last 90 days
+        const daysAgo = Math.floor(Math.random() * 90);
+        const createdAt = new Date();
+        createdAt.setDate(createdAt.getDate() - daysAgo);
+
+        mockReviews.push({
+          productId: product.id,
+          userName: reviewer,
+          rating,
+          comment,
+          createdAt,
+          helpfulCount: Math.floor(Math.random() * 15),
+          photos
+        });
+      }
+    }
+
+    await this.reviewRepository.save(mockReviews);
+    console.log(`Successfully seeded database with ${mockReviews.length} product reviews.`);
   }
 
   async getNewProducts(): Promise<Product[]> {
@@ -1745,5 +1835,38 @@ export class ProductsService implements OnModuleInit {
 
   async getAllProducts(): Promise<Product[]> {
     return this.productRepository.find();
+  }
+
+  async getProductById(id: number): Promise<Product | null> {
+    return this.productRepository.findOne({ where: { id } });
+  }
+
+  async getReviewsByProductId(productId: number): Promise<Review[]> {
+    return this.reviewRepository.find({
+      where: { productId },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async createReview(productId: number, data: Partial<Review>): Promise<Review> {
+    const review = this.reviewRepository.create({
+      ...data,
+      productId,
+      createdAt: new Date(),
+      helpfulCount: 0,
+    });
+    const savedReview = await this.reviewRepository.save(review);
+    
+    // Recalculate average rating and review count
+    const allProductReviews = await this.reviewRepository.find({ where: { productId } });
+    if (allProductReviews.length > 0) {
+      const avgRating = allProductReviews.reduce((sum, r) => sum + r.rating, 0) / allProductReviews.length;
+      await this.productRepository.update(productId, {
+        rating: Math.round(avgRating * 10) / 10,
+        ratingCount: allProductReviews.length
+      });
+    }
+    
+    return savedReview;
   }
 }
