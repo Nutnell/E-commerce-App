@@ -145,6 +145,40 @@ export default function App() {
     setActiveTab(tab);
   };
 
+  // Returns inline styles for the color overlay blend layer
+  const getColorOverlayStyle = (selected: string | null, baseColor: string | null): React.CSSProperties => {
+    // No overlay when showing the original/base color
+    if (!selected || selected === baseColor) {
+      return { opacity: 0 };
+    }
+    const c = selected.toLowerCase().trim();
+    // Black: darken + desaturate using multiply
+    if (c === 'black') {
+      return { backgroundColor: '#1a1a1a', mixBlendMode: 'multiply', opacity: 0.75 };
+    }
+    // White: lighten using screen
+    if (c === 'white') {
+      return { backgroundColor: '#f0f0f0', mixBlendMode: 'screen', opacity: 0.65 };
+    }
+    // Grey/gray: desaturate
+    if (c === 'grey' || c === 'gray') {
+      return { backgroundColor: '#808080', mixBlendMode: 'color', opacity: 0.55 };
+    }
+    // All chromatic colors: replace hue+saturation, keep luminosity
+    const colorMap: Record<string, string> = {
+      red: '#e53935', blue: '#1e88e5', navy: '#1a237e', green: '#43a047',
+      olive: '#827717', yellow: '#fdd835', gold: '#ffb300', purple: '#8e24aa',
+      violet: '#7b1fa2', pink: '#ec407a', tan: '#d2b48c', brown: '#795548',
+      beige: '#f5f0e1', orange: '#fb8c00', teal: '#00897b', maroon: '#880e4f',
+      coral: '#ff7043', ivory: '#fffff0', burgundy: '#880e4f', khaki: '#c3b091',
+    };
+    return {
+      backgroundColor: colorMap[c] || selected,
+      mixBlendMode: 'color',
+      opacity: 0.55,
+    };
+  };
+
   // Fetch product reviews and set config defaults when selectedProductId changes
   useEffect(() => {
     if (selectedProductId !== null) {
@@ -1077,11 +1111,16 @@ export default function App() {
           <div className="details-main-grid">
             {/* Left Column: Image Media Panel */}
             <div className="details-media-col">
-              <div className="details-image-panel">
+              <div className="details-image-panel" style={{ isolation: 'isolate' }}>
                 <img 
                   src={product.imageUrl} 
                   alt={product.name} 
                   className="details-main-image" 
+                />
+                {/* Color overlay: blends selected color onto the clothing */}
+                <div 
+                  className="details-color-overlay"
+                  style={getColorOverlayStyle(selectedColor, colorList[0] || null)}
                 />
                 {selectedColor && (
                   <div className="details-color-badge">
