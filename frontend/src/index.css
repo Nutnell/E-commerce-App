@@ -2678,7 +2678,45 @@ body {
   color: var(--gray);
 }
 
+.details-color-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-full);
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 5;
+}
+
+.color-badge-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
 .colors-selector-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.color-label-text {
+  font-size: 13px;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.color-dots-row {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -2691,6 +2729,11 @@ body {
   border: 1px solid var(--light-gray);
   cursor: pointer;
   position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.color-dot-choice:hover {
+  transform: scale(1.1);
 }
 
 .color-dot-choice.active::after {

@@ -145,44 +145,6 @@ export default function App() {
     setActiveTab(tab);
   };
 
-  const getColorFilterStyle = (col: string | null) => {
-    if (!col) return { transition: 'filter 0.3s ease' };
-    const c = col.toLowerCase().trim();
-    switch (c) {
-      case 'red':
-        return { filter: 'hue-rotate(-40deg) saturate(1.8) brightness(0.95)', transition: 'filter 0.3s ease' };
-      case 'blue':
-      case 'navy':
-        return { filter: 'hue-rotate(180deg) saturate(1.6) brightness(1.05)', transition: 'filter 0.3s ease' };
-      case 'green':
-      case 'olive':
-        return { filter: 'hue-rotate(90deg) saturate(1.4) brightness(0.95)', transition: 'filter 0.3s ease' };
-      case 'yellow':
-      case 'gold':
-        return { filter: 'hue-rotate(45deg) saturate(2) brightness(1.1)', transition: 'filter 0.3s ease' };
-      case 'purple':
-      case 'violet':
-        return { filter: 'hue-rotate(240deg) saturate(1.5)', transition: 'filter 0.3s ease' };
-      case 'pink':
-        return { filter: 'hue-rotate(300deg) saturate(1.4)', transition: 'filter 0.3s ease' };
-      case 'black':
-        return { filter: 'grayscale(1) brightness(0.5) contrast(1.2)', transition: 'filter 0.3s ease' };
-      case 'white':
-        return { filter: 'brightness(1.25) contrast(0.9)', transition: 'filter 0.3s ease' };
-      case 'grey':
-      case 'gray':
-        return { filter: 'grayscale(0.8) brightness(0.85)', transition: 'filter 0.3s ease' };
-      case 'tan':
-      case 'brown':
-      case 'beige':
-        return { filter: 'sepia(0.6) hue-rotate(-20deg) brightness(0.9)', transition: 'filter 0.3s ease' };
-      case 'orange':
-        return { filter: 'hue-rotate(15deg) saturate(1.9)', transition: 'filter 0.3s ease' };
-      default:
-        return { transition: 'filter 0.3s ease' };
-    }
-  };
-
   // Fetch product reviews and set config defaults when selectedProductId changes
   useEffect(() => {
     if (selectedProductId !== null) {
@@ -1120,8 +1082,16 @@ export default function App() {
                   src={product.imageUrl} 
                   alt={product.name} 
                   className="details-main-image" 
-                  style={getColorFilterStyle(selectedColor)}
                 />
+                {selectedColor && (
+                  <div className="details-color-badge">
+                    <span 
+                      className="color-badge-dot" 
+                      style={{ backgroundColor: selectedColor === 'white' ? '#FFFFFF' : selectedColor === 'black' ? '#000000' : selectedColor }} 
+                    />
+                    <span className="color-badge-text">{selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1)}</span>
+                  </div>
+                )}
                 <button 
                   className={`details-favorite-circle ${favorites.includes(product.id) ? 'active' : ''}`}
                   onClick={(e) => toggleFavorite(product.id, e)}
@@ -1140,15 +1110,20 @@ export default function App() {
                 </button>
                 
                 <div className="colors-selector-group">
-                  {colorList.map((col) => (
-                    <button
-                      key={col}
-                      className={`color-dot-choice ${selectedColor === col ? 'active' : ''}`}
-                      style={{ backgroundColor: col === 'white' ? '#FFFFFF' : col === 'black' ? '#000000' : col }}
-                      onClick={() => setSelectedColor(col)}
-                      title={col}
-                    />
-                  ))}
+                  <span className="color-label-text">
+                    Color: <strong style={{ textTransform: 'capitalize' }}>{selectedColor || 'Default'}</strong>
+                  </span>
+                  <div className="color-dots-row">
+                    {colorList.map((col) => (
+                      <button
+                        key={col}
+                        className={`color-dot-choice ${selectedColor === col ? 'active' : ''}`}
+                        style={{ backgroundColor: col === 'white' ? '#FFFFFF' : col === 'black' ? '#000000' : col }}
+                        onClick={() => setSelectedColor(col)}
+                        title={col}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
 
