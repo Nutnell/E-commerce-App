@@ -3307,32 +3307,55 @@ body {
 @media (min-width: 769px) {
   .product-details-container {
     max-width: var(--max-width);
-    margin: 32px auto;
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 40px;
-    padding: 0 32px 120px;
+    margin: 24px auto;
+    padding: 0 32px 80px;
+    display: block;
   }
 
   .details-header {
-    grid-column: span 2;
     background: none;
     border-bottom: none;
-    padding: 0;
+    padding: 0 0 16px 0;
     position: relative;
     height: auto;
-    margin-bottom: 24px;
+  }
+
+  .details-main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .details-media-col {
+    position: sticky;
+    top: 80px;
   }
 
   .details-image-panel {
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
   }
 
   .details-favorite-circle {
     bottom: 24px;
     right: 24px;
     transform: none;
+  }
+
+  .details-info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .selection-capsules-row {
+    padding: 0;
+  }
+
+  .details-metadata-card {
+    padding: 0;
   }
 
   .accordions-container {
@@ -3342,14 +3365,20 @@ body {
   .details-bottom-bar {
     position: static;
     box-shadow: none;
-    padding: 0;
-    margin-top: 32px;
+    padding: 16px 0 0;
+    margin-top: 16px;
     background: none;
     justify-content: flex-start;
   }
 
   .add-to-bag-button {
     max-width: none;
+    width: 100%;
+  }
+
+  .details-related-section {
+    margin-top: 56px;
+    padding-bottom: 40px;
   }
 
   /* Reviews page on desktop */

@@ -139,6 +139,50 @@ export default function App() {
   const [helpfulReviews, setHelpfulReviews] = useState<number[]>([]);
   const [openAccordion, setOpenAccordion] = useState<'description' | 'size' | 'shipping' | null>('description');
 
+  const navigateToTab = (tab: 'home' | 'shop' | 'bag' | 'favorites' | 'profile') => {
+    setSelectedProductId(null);
+    setProductDetailView('details');
+    setActiveTab(tab);
+  };
+
+  const getColorFilterStyle = (col: string | null) => {
+    if (!col) return { transition: 'filter 0.3s ease' };
+    const c = col.toLowerCase().trim();
+    switch (c) {
+      case 'red':
+        return { filter: 'hue-rotate(-40deg) saturate(1.8) brightness(0.95)', transition: 'filter 0.3s ease' };
+      case 'blue':
+      case 'navy':
+        return { filter: 'hue-rotate(180deg) saturate(1.6) brightness(1.05)', transition: 'filter 0.3s ease' };
+      case 'green':
+      case 'olive':
+        return { filter: 'hue-rotate(90deg) saturate(1.4) brightness(0.95)', transition: 'filter 0.3s ease' };
+      case 'yellow':
+      case 'gold':
+        return { filter: 'hue-rotate(45deg) saturate(2) brightness(1.1)', transition: 'filter 0.3s ease' };
+      case 'purple':
+      case 'violet':
+        return { filter: 'hue-rotate(240deg) saturate(1.5)', transition: 'filter 0.3s ease' };
+      case 'pink':
+        return { filter: 'hue-rotate(300deg) saturate(1.4)', transition: 'filter 0.3s ease' };
+      case 'black':
+        return { filter: 'grayscale(1) brightness(0.5) contrast(1.2)', transition: 'filter 0.3s ease' };
+      case 'white':
+        return { filter: 'brightness(1.25) contrast(0.9)', transition: 'filter 0.3s ease' };
+      case 'grey':
+      case 'gray':
+        return { filter: 'grayscale(0.8) brightness(0.85)', transition: 'filter 0.3s ease' };
+      case 'tan':
+      case 'brown':
+      case 'beige':
+        return { filter: 'sepia(0.6) hue-rotate(-20deg) brightness(0.9)', transition: 'filter 0.3s ease' };
+      case 'orange':
+        return { filter: 'hue-rotate(15deg) saturate(1.9)', transition: 'filter 0.3s ease' };
+      default:
+        return { transition: 'filter 0.3s ease' };
+    }
+  };
+
   // Fetch product reviews and set config defaults when selectedProductId changes
   useEffect(() => {
     if (selectedProductId !== null) {
@@ -1068,128 +1112,152 @@ export default function App() {
             </button>
           </header>
 
-          <div className="details-image-panel">
-            <img src={product.imageUrl} alt={product.name} className="details-main-image" />
-            <button 
-              className={`details-favorite-circle ${favorites.includes(product.id) ? 'active' : ''}`}
-              onClick={(e) => toggleFavorite(product.id, e)}
-            >
-              <Heart className="heart-icon" />
-            </button>
-          </div>
-
-          <div className="selection-capsules-row">
-            <button className="capsule-select-btn" onClick={() => setShowSizeSheet(true)}>
-              Size: {selectedSize || 'Select'}
-              <span className="arrow-down-icon">▾</span>
-            </button>
-            
-            <div className="colors-selector-group">
-              {colorList.map((col) => (
-                <button
-                  key={col}
-                  className={`color-dot-choice ${selectedColor === col ? 'active' : ''}`}
-                  style={{ backgroundColor: col === 'white' ? '#FFFFFF' : col === 'black' ? '#000000' : col }}
-                  onClick={() => setSelectedColor(col)}
-                  title={col}
+          <div className="details-main-grid">
+            {/* Left Column: Image Media Panel */}
+            <div className="details-media-col">
+              <div className="details-image-panel">
+                <img 
+                  src={product.imageUrl} 
+                  alt={product.name} 
+                  className="details-main-image" 
+                  style={getColorFilterStyle(selectedColor)}
                 />
-              ))}
-            </div>
-          </div>
-
-          <div className="details-metadata-card">
-            <div className="brand-stars-row">
-              <span className="details-brand-name">{product.brand}</span>
-              <div 
-                className="details-stars-link"
-                onClick={() => setProductDetailView('reviews')}
-              >
-                {renderStars(product.rating, product.ratingCount)}
+                <button 
+                  className={`details-favorite-circle ${favorites.includes(product.id) ? 'active' : ''}`}
+                  onClick={(e) => toggleFavorite(product.id, e)}
+                >
+                  <Heart className="heart-icon" />
+                </button>
               </div>
             </div>
-            <h1 className="details-product-title">{product.name}</h1>
-            <div className="details-price-row">
-              {product.isSale && product.originalPrice ? (
-                <>
-                  <span className="price-discount">${product.price}</span>
-                  <span className="price-old">${product.originalPrice}</span>
-                </>
-              ) : (
-                <span className="price-regular">${product.price}</span>
-              )}
-            </div>
-          </div>
 
-          <div className="accordions-container">
-            <div className="accordion-item">
-              <button 
-                className="accordion-header"
-                onClick={() => setOpenAccordion(openAccordion === 'description' ? null : 'description')}
-              >
-                <span>Product description</span>
-                <span className="accordion-arrow">{openAccordion === 'description' ? '▴' : '▾'}</span>
-              </button>
-              {openAccordion === 'description' && (
-                <div className="accordion-content">
-                  <p>This premium quality {product.name} from {product.brand} is designed with a focus on both comfort and modern aesthetic style. Crafted from soft, breathable materials, it ensures all-day comfort and a perfect silhouette fit.</p>
-                  <ul style={{ paddingLeft: '18px', marginTop: '8px' }}>
-                    <li>Material: 95% cotton, 5% elastane</li>
-                    <li>Sleeve/Length: Standard fit</li>
-                    <li>Care instructions: Machine wash cold, dry flat</li>
-                  </ul>
+            {/* Right Column: Info & Action Panel */}
+            <div className="details-info-col">
+              <div className="selection-capsules-row">
+                <button className="capsule-select-btn" onClick={() => setShowSizeSheet(true)}>
+                  Size: {selectedSize || 'Select'}
+                  <span className="arrow-down-icon">▾</span>
+                </button>
+                
+                <div className="colors-selector-group">
+                  {colorList.map((col) => (
+                    <button
+                      key={col}
+                      className={`color-dot-choice ${selectedColor === col ? 'active' : ''}`}
+                      style={{ backgroundColor: col === 'white' ? '#FFFFFF' : col === 'black' ? '#000000' : col }}
+                      onClick={() => setSelectedColor(col)}
+                      title={col}
+                    />
+                  ))}
                 </div>
-              )}
-            </div>
+              </div>
 
-            <div className="accordion-item">
-              <button 
-                className="accordion-header"
-                onClick={() => setOpenAccordion(openAccordion === 'size' ? null : 'size')}
-              >
-                <span>Size guide</span>
-                <span className="accordion-arrow">{openAccordion === 'size' ? '▴' : '▾'}</span>
-              </button>
-              {openAccordion === 'size' && (
-                <div className="accordion-content">
-                  <table className="size-guide-table">
-                    <thead>
-                      <tr>
-                        <th>Size</th>
-                        <th>Chest (in)</th>
-                        <th>Waist (in)</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr><td>XS</td><td>32-34</td><td>26-28</td></tr>
-                      <tr><td>S</td><td>34-36</td><td>28-30</td></tr>
-                      <tr><td>M</td><td>38-40</td><td>32-34</td></tr>
-                      <tr><td>L</td><td>42-44</td><td>36-38</td></tr>
-                      <tr><td>XL</td><td>46-48</td><td>40-42</td></tr>
-                    </tbody>
-                  </table>
+              <div className="details-metadata-card">
+                <div className="brand-stars-row">
+                  <span className="details-brand-name">{product.brand}</span>
+                  <div 
+                    className="details-stars-link"
+                    onClick={() => setProductDetailView('reviews')}
+                  >
+                    {renderStars(product.rating, product.ratingCount)}
+                  </div>
                 </div>
-              )}
-            </div>
+                <h1 className="details-product-title">{product.name}</h1>
+                <div className="details-price-row">
+                  {product.isSale && product.originalPrice ? (
+                    <>
+                      <span className="price-discount">${product.price}</span>
+                      <span className="price-old">${product.originalPrice}</span>
+                    </>
+                  ) : (
+                    <span className="price-regular">${product.price}</span>
+                  )}
+                </div>
+              </div>
 
-            <div className="accordion-item">
-              <button 
-                className="accordion-header"
-                onClick={() => setOpenAccordion(openAccordion === 'shipping' ? null : 'shipping')}
-              >
-                <span>Shipping & Returns</span>
-                <span className="accordion-arrow">{openAccordion === 'shipping' ? '▴' : '▾'}</span>
-              </button>
-              {openAccordion === 'shipping' && (
-                <div className="accordion-content">
-                  <p><strong>Standard Shipping:</strong> Free for all orders above $50. Delivered within 3-5 business days.</p>
-                  <p style={{ marginTop: '6px' }}><strong>Easy Returns:</strong> We offer a 30-day free return policy if the product is in its original condition with labels intact.</p>
+              <div className="accordions-container">
+                <div className="accordion-item">
+                  <button 
+                    className="accordion-header"
+                    onClick={() => setOpenAccordion(openAccordion === 'description' ? null : 'description')}
+                  >
+                    <span>Product description</span>
+                    <span className="accordion-arrow">{openAccordion === 'description' ? '▴' : '▾'}</span>
+                  </button>
+                  {openAccordion === 'description' && (
+                    <div className="accordion-content">
+                      <p>This premium quality {product.name} from {product.brand} is designed with a focus on both comfort and modern aesthetic style. Crafted from soft, breathable materials, it ensures all-day comfort and a perfect silhouette fit.</p>
+                      <ul style={{ paddingLeft: '18px', marginTop: '8px' }}>
+                        <li>Material: 95% cotton, 5% elastane</li>
+                        <li>Sleeve/Length: Standard fit</li>
+                        <li>Care instructions: Machine wash cold, dry flat</li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
-              )}
+
+                <div className="accordion-item">
+                  <button 
+                    className="accordion-header"
+                    onClick={() => setOpenAccordion(openAccordion === 'size' ? null : 'size')}
+                  >
+                    <span>Size guide</span>
+                    <span className="accordion-arrow">{openAccordion === 'size' ? '▴' : '▾'}</span>
+                  </button>
+                  {openAccordion === 'size' && (
+                    <div className="accordion-content">
+                      <table className="size-guide-table">
+                        <thead>
+                          <tr>
+                            <th>Size</th>
+                            <th>Chest (in)</th>
+                            <th>Waist (in)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr><td>XS</td><td>32-34</td><td>26-28</td></tr>
+                          <tr><td>S</td><td>34-36</td><td>28-30</td></tr>
+                          <tr><td>M</td><td>38-40</td><td>32-34</td></tr>
+                          <tr><td>L</td><td>42-44</td><td>36-38</td></tr>
+                          <tr><td>XL</td><td>46-48</td><td>40-42</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+
+                <div className="accordion-item">
+                  <button 
+                    className="accordion-header"
+                    onClick={() => setOpenAccordion(openAccordion === 'shipping' ? null : 'shipping')}
+                  >
+                    <span>Shipping & Returns</span>
+                    <span className="accordion-arrow">{openAccordion === 'shipping' ? '▴' : '▾'}</span>
+                  </button>
+                  {openAccordion === 'shipping' && (
+                    <div className="accordion-content">
+                      <p><strong>Standard Shipping:</strong> Free for all orders above $50. Delivered within 3-5 business days.</p>
+                      <p style={{ marginTop: '6px' }}><strong>Easy Returns:</strong> We offer a 30-day free return policy if the product is in its original condition with labels intact.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="details-bottom-bar">
+                <button 
+                  className="add-to-bag-button"
+                  onClick={() => {
+                    alert(`Added to Shopping Bag: ${product.name} (Size: ${selectedSize || 'None'}, Color: ${selectedColor || 'None'})`);
+                  }}
+                >
+                  ADD TO BAG
+                </button>
+              </div>
             </div>
           </div>
 
           {relatedProducts.length > 0 && (
-            <div className="section-container" style={{ marginTop: '24px', paddingBottom: '100px' }}>
+            <div className="section-container details-related-section">
               <div className="section-header">
                 <h2 className="section-title">You can also like this</h2>
                 <span className="section-subtitle">{relatedProducts.length} items found</span>
@@ -1222,17 +1290,6 @@ export default function App() {
               </div>
             </div>
           )}
-
-          <div className="details-bottom-bar">
-            <button 
-              className="add-to-bag-button"
-              onClick={() => {
-                alert(`Added to Shopping Bag: ${product.name} (Size: ${selectedSize || 'None'}, Color: ${selectedColor || 'None'})`);
-              }}
-            >
-              ADD TO BAG
-            </button>
-          </div>
         </div>
       );
     }
@@ -1542,28 +1599,28 @@ export default function App() {
 
       {/* ========= TOP HEADER (Desktop / Tablet) ========= */}
       <header className="top-header">
-        <a href="/" className="header-brand" onClick={(e) => { e.preventDefault(); setActiveTab('home'); }}>
+        <a href="/" className="header-brand" onClick={(e) => { e.preventDefault(); navigateToTab('home'); }}>
           E-Shop
         </a>
 
         <nav className="header-nav">
           <button 
             className={`header-nav-item ${activeTab === 'home' ? 'active' : ''}`}
-            onClick={() => setActiveTab('home')}
+            onClick={() => navigateToTab('home')}
           >
             <HomeIcon className="header-nav-icon" />
             Home
           </button>
           <button 
             className={`header-nav-item ${activeTab === 'shop' ? 'active' : ''}`}
-            onClick={() => setActiveTab('shop')}
+            onClick={() => navigateToTab('shop')}
           >
             <Search className="header-nav-icon" />
             Shop
           </button>
           <button 
             className={`header-nav-item ${activeTab === 'favorites' ? 'active' : ''}`}
-            onClick={() => setActiveTab('favorites')}
+            onClick={() => navigateToTab('favorites')}
           >
             <Heart className="header-nav-icon" />
             Favorites
@@ -1589,14 +1646,14 @@ export default function App() {
           </button>
           <button 
             className={`header-action-btn ${activeTab === 'bag' ? 'active' : ''}`}
-            onClick={() => setActiveTab('bag')}
+            onClick={() => navigateToTab('bag')}
             title="Shopping Bag"
           >
             <ShoppingBag className="header-action-icon" />
           </button>
           <button 
             className={`header-action-btn ${activeTab === 'profile' ? 'active' : ''}`}
-            onClick={() => setActiveTab('profile')}
+            onClick={() => navigateToTab('profile')}
             title="My Profile"
           >
             <User className="header-action-icon" />
@@ -2885,7 +2942,7 @@ export default function App() {
             <button 
               className="hero-button" 
               style={{ marginTop: '24px' }}
-              onClick={() => setActiveTab('home')}
+              onClick={() => navigateToTab('home')}
             >
               Back to Home
             </button>
@@ -2897,35 +2954,35 @@ export default function App() {
       <nav className="bottom-nav">
         <button 
           className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
-          onClick={() => setActiveTab('home')}
+          onClick={() => navigateToTab('home')}
         >
           <HomeIcon className="nav-icon" />
           Home
         </button>
         <button 
           className={`nav-item ${activeTab === 'shop' ? 'active' : ''}`}
-          onClick={() => setActiveTab('shop')}
+          onClick={() => navigateToTab('shop')}
         >
           <Search className="nav-icon" />
           Shop
         </button>
         <button 
           className={`nav-item ${activeTab === 'bag' ? 'active' : ''}`}
-          onClick={() => setActiveTab('bag')}
+          onClick={() => navigateToTab('bag')}
         >
           <ShoppingBag className="nav-icon" />
           Bag
         </button>
         <button 
           className={`nav-item ${activeTab === 'favorites' ? 'active' : ''}`}
-          onClick={() => setActiveTab('favorites')}
+          onClick={() => navigateToTab('favorites')}
         >
           <Heart className="nav-icon" />
           Favorites
         </button>
         <button 
           className={`nav-item ${activeTab === 'profile' ? 'active' : ''}`}
-          onClick={() => setActiveTab('profile')}
+          onClick={() => navigateToTab('profile')}
         >
           <User className="nav-icon" />
           Profile
