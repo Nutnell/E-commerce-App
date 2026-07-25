@@ -1,81 +1,45 @@
 [
   {
-    "sourceImage": "/assets/cat_partywear.png",
+    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "baseColor": "silver",
+    "variantColor": "black",
+    "outputFileName": "women_pleated_mini_skirt_black.png"
+  },
+  {
+    "sourceImage": "/assets/women_pleated_mini_skirt.png",
     "baseColor": "silver",
     "variantColor": "red",
-    "outputFileName": "cat_partywear_red.png"
+    "outputFileName": "women_pleated_mini_skirt_red.png"
   },
   {
-    "sourceImage": "/assets/cat_partywear.png",
+    "sourceImage": "/assets/women_pleated_mini_skirt.png",
     "baseColor": "silver",
     "variantColor": "white",
-    "outputFileName": "cat_partywear_white.png"
+    "outputFileName": "women_pleated_mini_skirt_white.png"
   },
   {
-    "sourceImage": "/assets/cat_partywear.png",
+    "sourceImage": "/assets/women_pleated_mini_skirt.png",
     "baseColor": "silver",
     "variantColor": "tan",
-    "outputFileName": "cat_partywear_tan.png"
+    "outputFileName": "women_pleated_mini_skirt_tan.png"
   },
   {
-    "sourceImage": "/assets/cat_partywear.png",
+    "sourceImage": "/assets/women_pleated_mini_skirt.png",
     "baseColor": "silver",
     "variantColor": "gold",
-    "outputFileName": "cat_partywear_gold.png"
-  },
-  {
-    "sourceImage": "/assets/product_linen_pants.png",
-    "baseColor": "tan",
-    "variantColor": "white",
-    "outputFileName": "product_linen_pants_white.png"
-  },
-  {
-    "sourceImage": "/assets/product_linen_pants.png",
-    "baseColor": "tan",
-    "variantColor": "grey",
-    "outputFileName": "product_linen_pants_grey.png"
+    "outputFileName": "women_pleated_mini_skirt_gold.png"
   },
   {
     "sourceImage": "/assets/cat_officestyle.png",
     "baseColor": "black",
-    "variantColor": "tan",
-    "outputFileName": "cat_officestyle_tan.png"
+    "variantColor": "grey",
+    "outputFileName": "cat_officestyle_grey.png"
   },
   {
-    "sourceImage": "/assets/cat_jeanswear.png",
+    "sourceImage": "/assets/women_skinny_jeans.png",
     "baseColor": "blue",
     "variantColor": "black",
-    "outputFileName": "cat_jeanswear_black.png"
-  },
-  {
-    "sourceImage": "/assets/cat_jeanswear.png",
-    "baseColor": "blue",
-    "variantColor": "grey",
-    "outputFileName": "cat_jeanswear_grey.png"
-  },
-  {
-    "sourceImage": "/assets/product_knit_sweater.png",
-    "baseColor": "white",
-    "variantColor": "grey",
-    "outputFileName": "product_knit_sweater_grey.png"
-  },
-  {
-    "sourceImage": "/assets/product_knit_sweater.png",
-    "baseColor": "white",
-    "variantColor": "black",
-    "outputFileName": "product_knit_sweater_black.png"
-  },
-  {
-    "sourceImage": "/assets/product_knit_sweater.png",
-    "baseColor": "white",
-    "variantColor": "red",
-    "outputFileName": "product_knit_sweater_red.png"
-  },
-  {
-    "sourceImage": "/assets/product_knit_sweater.png",
-    "baseColor": "white",
-    "variantColor": "blue",
-    "outputFileName": "product_knit_sweater_blue.png"
+    "outputFileName": "women_skinny_jeans_black.png"
   },
   {
     "sourceImage": "/assets/cat_cardigans.png",
@@ -90,24 +54,6 @@
     "outputFileName": "cat_cardigans_white.png"
   },
   {
-    "sourceImage": "/assets/cat_cardigans.png",
-    "baseColor": "tan",
-    "variantColor": "red",
-    "outputFileName": "cat_cardigans_red.png"
-  },
-  {
-    "sourceImage": "/assets/cat_cardigans.png",
-    "baseColor": "tan",
-    "variantColor": "black",
-    "outputFileName": "cat_cardigans_black.png"
-  },
-  {
-    "sourceImage": "/assets/cat_cardigans.png",
-    "baseColor": "tan",
-    "variantColor": "blue",
-    "outputFileName": "cat_cardigans_blue.png"
-  },
-  {
     "sourceImage": "/assets/product_denim_jacket.png",
     "baseColor": "blue",
     "variantColor": "grey",
@@ -120,64 +66,22 @@
     "outputFileName": "product_denim_jacket_black.png"
   },
   {
-    "sourceImage": "/assets/product_denim_jacket.png",
-    "baseColor": "blue",
-    "variantColor": "green",
-    "outputFileName": "product_denim_jacket_green.png"
-  },
-  {
     "sourceImage": "/assets/cat_outerwear.png",
     "baseColor": "tan",
     "variantColor": "black",
     "outputFileName": "cat_outerwear_black.png"
   },
   {
-    "sourceImage": "/assets/cat_outerwear.png",
-    "baseColor": "tan",
-    "variantColor": "brown",
-    "outputFileName": "cat_outerwear_brown.png"
-  },
-  {
-    "sourceImage": "/assets/cat_outerwear.png",
-    "baseColor": "tan",
-    "variantColor": "red",
-    "outputFileName": "cat_outerwear_red.png"
-  },
-  {
-    "sourceImage": "/assets/cat_outerwear.png",
-    "baseColor": "tan",
-    "variantColor": "blue",
-    "outputFileName": "cat_outerwear_blue.png"
+    "sourceImage": "/assets/women_denim_shorts.png",
+    "baseColor": "blue",
+    "variantColor": "white",
+    "outputFileName": "women_denim_shorts_white.png"
   },
   {
     "sourceImage": "/assets/cat_beachwear.png",
-    "baseColor": "blue",
+    "baseColor": "tan",
     "variantColor": "white",
     "outputFileName": "cat_beachwear_white.png"
-  },
-  {
-    "sourceImage": "/assets/cat_beachwear.png",
-    "baseColor": "blue",
-    "variantColor": "tan",
-    "outputFileName": "cat_beachwear_tan.png"
-  },
-  {
-    "sourceImage": "/assets/cat_beachwear.png",
-    "baseColor": "blue",
-    "variantColor": "black",
-    "outputFileName": "cat_beachwear_black.png"
-  },
-  {
-    "sourceImage": "/assets/cat_beachwear.png",
-    "baseColor": "blue",
-    "variantColor": "red",
-    "outputFileName": "cat_beachwear_red.png"
-  },
-  {
-    "sourceImage": "/assets/cat_swimwear.png",
-    "baseColor": "tan",
-    "variantColor": "white",
-    "outputFileName": "cat_swimwear_white.png"
   },
   {
     "sourceImage": "/assets/product_sneakers.png",
@@ -192,22 +96,40 @@
     "outputFileName": "product_sneakers_blue.png"
   },
   {
-    "sourceImage": "/assets/product_sneakers.png",
-    "baseColor": "white",
-    "variantColor": "red",
-    "outputFileName": "product_sneakers_red.png"
+    "sourceImage": "/assets/women_casual_sandals.png",
+    "baseColor": "tan",
+    "variantColor": "white",
+    "outputFileName": "women_casual_sandals_white.png"
   },
   {
-    "sourceImage": "/assets/cat_loungewear.png",
+    "sourceImage": "/assets/women_red_stiletto_heels.png",
+    "baseColor": "red",
+    "variantColor": "black",
+    "outputFileName": "women_red_stiletto_heels_black.png"
+  },
+  {
+    "sourceImage": "/assets/women_block_heel_pumps.png",
     "baseColor": "black",
     "variantColor": "tan",
-    "outputFileName": "cat_loungewear_tan.png"
+    "outputFileName": "women_block_heel_pumps_tan.png"
   },
   {
-    "sourceImage": "/assets/cat_loungewear.png",
+    "sourceImage": "/assets/women_warm_leather_boots.png",
+    "baseColor": "black",
+    "variantColor": "tan",
+    "outputFileName": "women_warm_leather_boots_tan.png"
+  },
+  {
+    "sourceImage": "/assets/women_ballet_flats.png",
+    "baseColor": "black",
+    "variantColor": "tan",
+    "outputFileName": "women_ballet_flats_tan.png"
+  },
+  {
+    "sourceImage": "/assets/women_ballet_flats.png",
     "baseColor": "black",
     "variantColor": "red",
-    "outputFileName": "cat_loungewear_red.png"
+    "outputFileName": "women_ballet_flats_red.png"
   },
   {
     "sourceImage": "/assets/product_leather_bag.png",
@@ -222,64 +144,34 @@
     "outputFileName": "product_leather_bag_grey.png"
   },
   {
-    "sourceImage": "/assets/product_leather_bag.png",
-    "baseColor": "black",
-    "variantColor": "white",
-    "outputFileName": "product_leather_bag_white.png"
-  },
-  {
-    "sourceImage": "/assets/cat_accessories_hats.png",
+    "sourceImage": "/assets/women_straw_sun_hat.png",
     "baseColor": "tan",
     "variantColor": "white",
-    "outputFileName": "cat_accessories_hats_white.png"
+    "outputFileName": "women_straw_sun_hat_white.png"
   },
   {
-    "sourceImage": "/assets/cat_accessories_hats.png",
-    "baseColor": "tan",
-    "variantColor": "black",
-    "outputFileName": "cat_accessories_hats_black.png"
-  },
-  {
-    "sourceImage": "/assets/cat_accessories_hats.png",
-    "baseColor": "tan",
-    "variantColor": "blue",
-    "outputFileName": "cat_accessories_hats_blue.png"
-  },
-  {
-    "sourceImage": "/assets/cat_accessories_hats.png",
-    "baseColor": "tan",
-    "variantColor": "red",
-    "outputFileName": "cat_accessories_hats_red.png"
-  },
-  {
-    "sourceImage": "/assets/cat_vintage.png",
+    "sourceImage": "/assets/women_retro_sunglasses.png",
     "baseColor": "black",
     "variantColor": "brown",
-    "outputFileName": "cat_vintage_brown.png"
+    "outputFileName": "women_retro_sunglasses_brown.png"
   },
   {
-    "sourceImage": "/assets/cat_vintage.png",
-    "baseColor": "black",
+    "sourceImage": "/assets/women_silk_scarf.png",
+    "baseColor": "red",
     "variantColor": "tan",
-    "outputFileName": "cat_vintage_tan.png"
+    "outputFileName": "women_silk_scarf_tan.png"
   },
   {
-    "sourceImage": "/assets/cat_vintage.png",
-    "baseColor": "black",
-    "variantColor": "gold",
-    "outputFileName": "cat_vintage_gold.png"
+    "sourceImage": "/assets/women_silk_scarf.png",
+    "baseColor": "red",
+    "variantColor": "black",
+    "outputFileName": "women_silk_scarf_black.png"
   },
   {
     "sourceImage": "/assets/mens_check_shirt.png",
     "baseColor": "blue",
     "variantColor": "white",
     "outputFileName": "mens_check_shirt_white.png"
-  },
-  {
-    "sourceImage": "/assets/mens_check_shirt.png",
-    "baseColor": "blue",
-    "variantColor": "grey",
-    "outputFileName": "mens_check_shirt_grey.png"
   },
   {
     "sourceImage": "/assets/mens_tshirt_plain.png",
@@ -294,18 +186,6 @@
     "outputFileName": "mens_tshirt_plain_grey.png"
   },
   {
-    "sourceImage": "/assets/mens_tshirt_plain.png",
-    "baseColor": "white",
-    "variantColor": "blue",
-    "outputFileName": "mens_tshirt_plain_blue.png"
-  },
-  {
-    "sourceImage": "/assets/mens_tshirt_plain.png",
-    "baseColor": "white",
-    "variantColor": "red",
-    "outputFileName": "mens_tshirt_plain_red.png"
-  },
-  {
     "sourceImage": "/assets/mens_polo_shirt.png",
     "baseColor": "blue",
     "variantColor": "white",
@@ -316,18 +196,6 @@
     "baseColor": "blue",
     "variantColor": "red",
     "outputFileName": "mens_polo_shirt_red.png"
-  },
-  {
-    "sourceImage": "/assets/mens_polo_shirt.png",
-    "baseColor": "blue",
-    "variantColor": "black",
-    "outputFileName": "mens_polo_shirt_black.png"
-  },
-  {
-    "sourceImage": "/assets/mens_polo_shirt.png",
-    "baseColor": "blue",
-    "variantColor": "grey",
-    "outputFileName": "mens_polo_shirt_grey.png"
   },
   {
     "sourceImage": "/assets/mens_hoodies_banner.png",
@@ -346,18 +214,6 @@
     "baseColor": "grey",
     "variantColor": "black",
     "outputFileName": "mens_hoodie_grey_black.png"
-  },
-  {
-    "sourceImage": "/assets/mens_hoodie_grey.png",
-    "baseColor": "grey",
-    "variantColor": "blue",
-    "outputFileName": "mens_hoodie_grey_blue.png"
-  },
-  {
-    "sourceImage": "/assets/mens_hoodie_grey.png",
-    "baseColor": "grey",
-    "variantColor": "red",
-    "outputFileName": "mens_hoodie_grey_red.png"
   },
   {
     "sourceImage": "/assets/mens_bomber_jacket.png",
@@ -384,16 +240,10 @@
     "outputFileName": "mens_blazer_grey.png"
   },
   {
-    "sourceImage": "/assets/cat_cargo.png",
+    "sourceImage": "/assets/mens_cargo_pants.png",
     "baseColor": "black",
     "variantColor": "grey",
-    "outputFileName": "cat_cargo_grey.png"
-  },
-  {
-    "sourceImage": "/assets/cat_cargo.png",
-    "baseColor": "black",
-    "variantColor": "tan",
-    "outputFileName": "cat_cargo_tan.png"
+    "outputFileName": "mens_cargo_pants_grey.png"
   },
   {
     "sourceImage": "/assets/mens_chinos.png",
@@ -406,6 +256,12 @@
     "baseColor": "tan",
     "variantColor": "blue",
     "outputFileName": "mens_chinos_blue.png"
+  },
+  {
+    "sourceImage": "/assets/mens_slim_jeans.png",
+    "baseColor": "blue",
+    "variantColor": "black",
+    "outputFileName": "mens_slim_jeans_black.png"
   },
   {
     "sourceImage": "/assets/mens_shorts_chino.png",
@@ -426,52 +282,16 @@
     "outputFileName": "mens_joggers_black.png"
   },
   {
-    "sourceImage": "/assets/mens_joggers.png",
-    "baseColor": "grey",
-    "variantColor": "blue",
-    "outputFileName": "mens_joggers_blue.png"
-  },
-  {
     "sourceImage": "/assets/mens_leather_boots.png",
     "baseColor": "brown",
     "variantColor": "black",
     "outputFileName": "mens_leather_boots_black.png"
   },
   {
-    "sourceImage": "/assets/mens_leather_boots.png",
-    "baseColor": "brown",
-    "variantColor": "tan",
-    "outputFileName": "mens_leather_boots_tan.png"
-  },
-  {
-    "sourceImage": "/assets/mens_leather_boots.png",
-    "baseColor": "brown",
-    "variantColor": "yellow",
-    "outputFileName": "mens_leather_boots_yellow.png"
-  },
-  {
-    "sourceImage": "/assets/mens_leather_boots.png",
-    "baseColor": "brown",
-    "variantColor": "blue",
-    "outputFileName": "mens_leather_boots_blue.png"
-  },
-  {
-    "sourceImage": "/assets/mens_leather_boots.png",
-    "baseColor": "brown",
-    "variantColor": "red",
-    "outputFileName": "mens_leather_boots_red.png"
-  },
-  {
     "sourceImage": "/assets/mens_loafers.png",
     "baseColor": "tan",
     "variantColor": "black",
     "outputFileName": "mens_loafers_black.png"
-  },
-  {
-    "sourceImage": "/assets/mens_loafers.png",
-    "baseColor": "tan",
-    "variantColor": "brown",
-    "outputFileName": "mens_loafers_brown.png"
   },
   {
     "sourceImage": "/assets/mens_running_shoes.png",
@@ -486,52 +306,16 @@
     "outputFileName": "mens_running_shoes_white.png"
   },
   {
-    "sourceImage": "/assets/mens_running_shoes.png",
-    "baseColor": "black",
-    "variantColor": "grey",
-    "outputFileName": "mens_running_shoes_grey.png"
-  },
-  {
-    "sourceImage": "/assets/mens_running_shoes.png",
-    "baseColor": "black",
-    "variantColor": "green",
-    "outputFileName": "mens_running_shoes_green.png"
-  },
-  {
     "sourceImage": "/assets/mens_watch.png",
     "baseColor": "silver",
     "variantColor": "black",
     "outputFileName": "mens_watch_black.png"
   },
   {
-    "sourceImage": "/assets/mens_watch.png",
-    "baseColor": "silver",
-    "variantColor": "blue",
-    "outputFileName": "mens_watch_blue.png"
-  },
-  {
     "sourceImage": "/assets/mens_wallet.png",
     "baseColor": "brown",
     "variantColor": "black",
     "outputFileName": "mens_wallet_black.png"
-  },
-  {
-    "sourceImage": "/assets/mens_wallet.png",
-    "baseColor": "brown",
-    "variantColor": "tan",
-    "outputFileName": "mens_wallet_tan.png"
-  },
-  {
-    "sourceImage": "/assets/mens_wallet.png",
-    "baseColor": "brown",
-    "variantColor": "blue",
-    "outputFileName": "mens_wallet_blue.png"
-  },
-  {
-    "sourceImage": "/assets/mens_wallet.png",
-    "baseColor": "brown",
-    "variantColor": "grey",
-    "outputFileName": "mens_wallet_grey.png"
   },
   {
     "sourceImage": "/assets/mens_backpack.png",
@@ -546,33 +330,267 @@
     "outputFileName": "mens_backpack_grey.png"
   },
   {
-    "sourceImage": "/assets/mens_backpack.png",
-    "baseColor": "blue",
-    "variantColor": "red",
-    "outputFileName": "mens_backpack_red.png"
+    "sourceImage": "/assets/mens_casual_leather_belt.png",
+    "baseColor": "black",
+    "variantColor": "tan",
+    "outputFileName": "mens_casual_leather_belt_tan.png"
   },
   {
-    "sourceImage": "/assets/mens_backpack.png",
+    "sourceImage": "/assets/mens_aviator_sunglasses.png",
+    "baseColor": "gold",
+    "variantColor": "black",
+    "outputFileName": "mens_aviator_sunglasses_black.png"
+  },
+  {
+    "sourceImage": "/assets/mens_sport_cap.png",
+    "baseColor": "black",
+    "variantColor": "blue",
+    "outputFileName": "mens_sport_cap_blue.png"
+  },
+  {
+    "sourceImage": "/assets/kids_graphic_tee.png",
+    "baseColor": "red",
+    "variantColor": "blue",
+    "outputFileName": "kids_graphic_tee_blue.png"
+  },
+  {
+    "sourceImage": "/assets/kids_graphic_tee.png",
+    "baseColor": "red",
+    "variantColor": "white",
+    "outputFileName": "kids_graphic_tee_white.png"
+  },
+  {
+    "sourceImage": "/assets/kids_striped_tee.png",
     "baseColor": "blue",
+    "variantColor": "white",
+    "outputFileName": "kids_striped_tee_white.png"
+  },
+  {
+    "sourceImage": "/assets/girls_floral_dress.png",
+    "baseColor": "pink",
+    "variantColor": "white",
+    "outputFileName": "girls_floral_dress_white.png"
+  },
+  {
+    "sourceImage": "/assets/girls_floral_dress.png",
+    "baseColor": "pink",
+    "variantColor": "blue",
+    "outputFileName": "girls_floral_dress_blue.png"
+  },
+  {
+    "sourceImage": "/assets/girls_party_dress.png",
+    "baseColor": "red",
     "variantColor": "pink",
-    "outputFileName": "mens_backpack_pink.png"
+    "outputFileName": "girls_party_dress_pink.png"
   },
   {
-    "sourceImage": "/assets/cat_activewear.png",
+    "sourceImage": "/assets/girls_tutu_skirt.png",
+    "baseColor": "pink",
+    "variantColor": "white",
+    "outputFileName": "girls_tutu_skirt_white.png"
+  },
+  {
+    "sourceImage": "/assets/kids_cargo_shorts.png",
     "baseColor": "tan",
     "variantColor": "blue",
-    "outputFileName": "cat_activewear_blue.png"
+    "outputFileName": "kids_cargo_shorts_blue.png"
+  },
+  {
+    "sourceImage": "/assets/kids_cargo_shorts.png",
+    "baseColor": "tan",
+    "variantColor": "grey",
+    "outputFileName": "kids_cargo_shorts_grey.png"
+  },
+  {
+    "sourceImage": "/assets/kids_pullover_hoodie.png",
+    "baseColor": "grey",
+    "variantColor": "blue",
+    "outputFileName": "kids_pullover_hoodie_blue.png"
+  },
+  {
+    "sourceImage": "/assets/kids_pullover_hoodie.png",
+    "baseColor": "grey",
+    "variantColor": "red",
+    "outputFileName": "kids_pullover_hoodie_red.png"
+  },
+  {
+    "sourceImage": "/assets/kids_light_jacket.png",
+    "baseColor": "blue",
+    "variantColor": "green",
+    "outputFileName": "kids_light_jacket_green.png"
+  },
+  {
+    "sourceImage": "/assets/kids_cargo_pants.png",
+    "baseColor": "grey",
+    "variantColor": "tan",
+    "outputFileName": "kids_cargo_pants_tan.png"
+  },
+  {
+    "sourceImage": "/assets/kids_knit_sweater.png",
+    "baseColor": "red",
+    "variantColor": "blue",
+    "outputFileName": "kids_knit_sweater_blue.png"
+  },
+  {
+    "sourceImage": "/assets/kids_knit_sweater.png",
+    "baseColor": "red",
+    "variantColor": "grey",
+    "outputFileName": "kids_knit_sweater_grey.png"
+  },
+  {
+    "sourceImage": "/assets/kids_running_sneakers.png",
+    "baseColor": "white",
+    "variantColor": "red",
+    "outputFileName": "kids_running_sneakers_red.png"
+  },
+  {
+    "sourceImage": "/assets/kids_running_sneakers.png",
+    "baseColor": "white",
+    "variantColor": "blue",
+    "outputFileName": "kids_running_sneakers_blue.png"
+  },
+  {
+    "sourceImage": "/assets/kids_summer_sandals.png",
+    "baseColor": "blue",
+    "variantColor": "red",
+    "outputFileName": "kids_summer_sandals_red.png"
+  },
+  {
+    "sourceImage": "/assets/kids_summer_sandals.png",
+    "baseColor": "blue",
+    "variantColor": "white",
+    "outputFileName": "kids_summer_sandals_white.png"
+  },
+  {
+    "sourceImage": "/assets/kids_rain_boots.png",
+    "baseColor": "yellow",
+    "variantColor": "blue",
+    "outputFileName": "kids_rain_boots_blue.png"
+  },
+  {
+    "sourceImage": "/assets/kids_rain_boots.png",
+    "baseColor": "yellow",
+    "variantColor": "red",
+    "outputFileName": "kids_rain_boots_red.png"
+  },
+  {
+    "sourceImage": "/assets/kids_school_backpack.png",
+    "baseColor": "blue",
+    "variantColor": "red",
+    "outputFileName": "kids_school_backpack_red.png"
+  },
+  {
+    "sourceImage": "/assets/kids_school_backpack.png",
+    "baseColor": "blue",
+    "variantColor": "black",
+    "outputFileName": "kids_school_backpack_black.png"
+  },
+  {
+    "sourceImage": "/assets/kids_baseball_cap.png",
+    "baseColor": "red",
+    "variantColor": "blue",
+    "outputFileName": "kids_baseball_cap_blue.png"
+  },
+  {
+    "sourceImage": "/assets/kids_baseball_cap.png",
+    "baseColor": "red",
+    "variantColor": "black",
+    "outputFileName": "kids_baseball_cap_black.png"
+  },
+  {
+    "sourceImage": "/assets/cat_accessories_hats.png",
+    "baseColor": "tan",
+    "variantColor": "white",
+    "outputFileName": "cat_accessories_hats_white.png"
   },
   {
     "sourceImage": "/assets/cat_activewear.png",
-    "baseColor": "tan",
+    "baseColor": "blue",
     "variantColor": "grey",
     "outputFileName": "cat_activewear_grey.png"
   },
   {
+    "sourceImage": "/assets/cat_activewear.png",
+    "baseColor": "blue",
+    "variantColor": "black",
+    "outputFileName": "cat_activewear_black.png"
+  },
+  {
+    "sourceImage": "/assets/cat_cargo.png",
+    "baseColor": "tan",
+    "variantColor": "black",
+    "outputFileName": "cat_cargo_black.png"
+  },
+  {
+    "sourceImage": "/assets/cat_cargo.png",
+    "baseColor": "tan",
+    "variantColor": "green",
+    "outputFileName": "cat_cargo_green.png"
+  },
+  {
+    "sourceImage": "/assets/cat_loungewear.png",
+    "baseColor": "pink",
+    "variantColor": "grey",
+    "outputFileName": "cat_loungewear_grey.png"
+  },
+  {
+    "sourceImage": "/assets/cat_loungewear.png",
+    "baseColor": "pink",
+    "variantColor": "white",
+    "outputFileName": "cat_loungewear_white.png"
+  },
+  {
+    "sourceImage": "/assets/cat_sleepwear.png",
+    "baseColor": "pink",
+    "variantColor": "white",
+    "outputFileName": "cat_sleepwear_white.png"
+  },
+  {
+    "sourceImage": "/assets/cat_sleepwear.png",
+    "baseColor": "pink",
+    "variantColor": "black",
+    "outputFileName": "cat_sleepwear_black.png"
+  },
+  {
     "sourceImage": "/assets/cat_sportswear.png",
     "baseColor": "black",
-    "variantColor": "blue",
-    "outputFileName": "cat_sportswear_blue.png"
+    "variantColor": "white",
+    "outputFileName": "cat_sportswear_white.png"
+  },
+  {
+    "sourceImage": "/assets/cat_sportswear.png",
+    "baseColor": "black",
+    "variantColor": "red",
+    "outputFileName": "cat_sportswear_red.png"
+  },
+  {
+    "sourceImage": "/assets/cat_swimwear.png",
+    "baseColor": "blue",
+    "variantColor": "red",
+    "outputFileName": "cat_swimwear_red.png"
+  },
+  {
+    "sourceImage": "/assets/cat_swimwear.png",
+    "baseColor": "blue",
+    "variantColor": "white",
+    "outputFileName": "cat_swimwear_white.png"
+  },
+  {
+    "sourceImage": "/assets/cat_urbanwear.png",
+    "baseColor": "grey",
+    "variantColor": "black",
+    "outputFileName": "cat_urbanwear_black.png"
+  },
+  {
+    "sourceImage": "/assets/cat_urbanwear.png",
+    "baseColor": "grey",
+    "variantColor": "tan",
+    "outputFileName": "cat_urbanwear_tan.png"
+  },
+  {
+    "sourceImage": "/assets/cat_vintage.png",
+    "baseColor": "brown",
+    "variantColor": "black",
+    "outputFileName": "cat_vintage_black.png"
   }
 ]

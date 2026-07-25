@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, Query } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './product.entity';
 import { Review } from './review.entity';
@@ -8,8 +8,8 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  async getAll(): Promise<Product[]> {
-    return this.productsService.getAllProducts();
+  async getAll(@Query('search') search?: string): Promise<Product[]> {
+    return this.productsService.getAllProducts(search);
   }
 
   @Get('new')
@@ -20,6 +20,12 @@ export class ProductsController {
   @Get('sale')
   async getSale(): Promise<Product[]> {
     return this.productsService.getSaleProducts();
+  }
+
+  @Post('reseed')
+  async reseed(): Promise<{ message: string }> {
+    await this.productsService.reseedDatabase();
+    return { message: 'Catalog re-seeded successfully' };
   }
 
   @Get(':id')
