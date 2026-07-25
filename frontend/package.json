@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "upload:supabase": "node scripts/upload_to_supabase.cjs",
+    "ignore:variants": "node scripts/ignore_generated_variants.cjs",
     "lint": "oxlint",
     "preview": "vite preview"
   },
