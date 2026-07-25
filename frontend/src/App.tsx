@@ -11,7 +11,11 @@ import {
   Moon,
   Check,
   X,
-  ArrowRight
+  ArrowRight,
+  Plus,
+  MoreVertical,
+  CheckSquare,
+  Square
 } from 'lucide-react';
 
 interface Product {
@@ -31,6 +35,47 @@ interface Product {
   gender?: string;
   colors?: string;
   sizes?: string;
+}
+
+interface CartItem {
+  id: string;
+  productId: number;
+  product: Product;
+  color: string;
+  size: string;
+  quantity: number;
+  price: number;
+}
+
+interface ShippingAddress {
+  id: string;
+  fullName: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+  isDefault: boolean;
+}
+
+interface PaymentCard {
+  id: string;
+  cardNumber: string;
+  cardHolderName: string;
+  expiryDate: string;
+  cvv: string;
+  cardType: 'mastercard' | 'visa';
+  isDefault: boolean;
+}
+
+interface PromoCode {
+  code: string;
+  discountPercent: number;
+  title: string;
+  description: string;
+  badge: string;
+  daysRemaining: string;
+  bgType?: 'red' | 'image' | 'black';
 }
 
 interface Review {
@@ -173,6 +218,126 @@ const MOCK_PRODUCTS: Product[] = [
 ];
 const SLIDE_LABELS = ['Trending', 'Summer Sale', 'Collection'];
 
+const DEFAULT_CART_ITEMS: CartItem[] = [
+  {
+    id: '11-black-L',
+    productId: 11,
+    product: MOCK_PRODUCTS.find(p => p.id === 11) || { id: 11, name: 'Pullover', brand: 'Dorothy Perkins', price: 51, rating: 5, ratingCount: 12, imageUrl: '/assets/product_knit_sweater.png', isNew: true, isSale: false, category: 'clothes' },
+    color: 'Black',
+    size: 'L',
+    quantity: 1,
+    price: 51
+  },
+  {
+    id: '5-grey-L',
+    productId: 5,
+    product: MOCK_PRODUCTS.find(p => p.id === 5) || { id: 5, name: 'T-Shirt', brand: 'Sitlly', price: 30, rating: 4, ratingCount: 3, imageUrl: '/assets/new_product_2.png', isNew: true, isSale: false, category: 'clothes' },
+    color: 'Gray',
+    size: 'L',
+    quantity: 1,
+    price: 30
+  },
+  {
+    id: '2-black-M',
+    productId: 2,
+    product: MOCK_PRODUCTS.find(p => p.id === 2) || { id: 2, name: 'Sport Dress', brand: 'Sitlly', price: 43, rating: 5, ratingCount: 10, imageUrl: '/assets/sport_dress_product.png', isNew: false, isSale: true, category: 'clothes' },
+    color: 'Black',
+    size: 'M',
+    quantity: 1,
+    price: 43
+  }
+];
+
+const DEFAULT_ADDRESSES: ShippingAddress[] = [
+  {
+    id: 'addr-1',
+    fullName: 'Jane Doe',
+    address: '3 Newbridge Court',
+    city: 'Chino Hills',
+    state: 'CA',
+    zipCode: '91709',
+    country: 'United States',
+    isDefault: true
+  },
+  {
+    id: 'addr-2',
+    fullName: 'John Doe',
+    address: '3 Newbridge Court',
+    city: 'Chino Hills',
+    state: 'CA',
+    zipCode: '91709',
+    country: 'United States',
+    isDefault: false
+  },
+  {
+    id: 'addr-3',
+    fullName: 'John Doe',
+    address: '51 Riverside',
+    city: 'Chino Hills',
+    state: 'CA',
+    zipCode: '91709',
+    country: 'United States',
+    isDefault: false
+  }
+];
+
+const DEFAULT_CARDS: PaymentCard[] = [
+  {
+    id: 'card-1',
+    cardNumber: '5546 8205 3693 3947',
+    cardHolderName: 'Jennyfer Doe',
+    expiryDate: '05/23',
+    cvv: '567',
+    cardType: 'mastercard',
+    isDefault: true
+  },
+  {
+    id: 'card-2',
+    cardNumber: '4546 1234 5678 4546',
+    cardHolderName: 'Jennyfer Doe',
+    expiryDate: '11/22',
+    cvv: '123',
+    cardType: 'visa',
+    isDefault: false
+  }
+];
+
+const PROMO_CODES: PromoCode[] = [
+  {
+    code: 'mypromocode2020',
+    discountPercent: 10,
+    title: 'Personal offer',
+    description: 'mypromocode2020',
+    badge: '10% off',
+    daysRemaining: '6 days remaining',
+    bgType: 'red'
+  },
+  {
+    code: 'summer2020',
+    discountPercent: 15,
+    title: 'Summer Sale',
+    description: 'summer2020',
+    badge: '15% off',
+    daysRemaining: '23 days remaining',
+    bgType: 'image'
+  },
+  {
+    code: 'personal22',
+    discountPercent: 22,
+    title: 'Personal offer',
+    description: 'mypromocode2020',
+    badge: '22% off',
+    daysRemaining: '6 days remaining',
+    bgType: 'black'
+  }
+];
+
+const DELIVERY_METHODS = [
+  { id: 'fedex', name: 'FedEx', days: '2-3 days', fee: 15, logo: 'FedEx' },
+  { id: 'usps', name: 'USPS', days: '2-3 days', fee: 10, logo: 'USPS' },
+  { id: 'dhl', name: 'DHL', days: '2-3 days', fee: 20, logo: 'DHL' }
+];
+
 export default function App() {
   const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS);
   const [activeTab, setActiveTab] = useState<'home' | 'shop' | 'bag' | 'favorites' | 'profile'>('home');
@@ -181,6 +346,138 @@ export default function App() {
   const [summerSubcategory, setSummerSubcategory] = useState<string>('All');
   const [favorites, setFavorites] = useState<number[]>([]);
   const [isDesktop, setIsDesktop] = useState(false);
+
+  // Milestone 5 State: Cart & Checkout Pipeline
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('ecommerce_cart_items');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.error(e);
+    }
+    return DEFAULT_CART_ITEMS;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('ecommerce_cart_items', JSON.stringify(cartItems));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [cartItems]);
+
+  const [appliedPromo, setAppliedPromo] = useState<PromoCode | null>(() => {
+    try {
+      const saved = localStorage.getItem('ecommerce_applied_promo');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return null;
+  });
+
+  useEffect(() => {
+    try {
+      if (appliedPromo) {
+        localStorage.setItem('ecommerce_applied_promo', JSON.stringify(appliedPromo));
+      } else {
+        localStorage.removeItem('ecommerce_applied_promo');
+      }
+    } catch (e) {}
+  }, [appliedPromo]);
+
+  const [promoInput, setPromoInput] = useState('');
+  const [showPromoSheet, setShowPromoSheet] = useState(false);
+
+  // Addresses State
+  const [addresses, setAddresses] = useState<ShippingAddress[]>(() => {
+    try {
+      const saved = localStorage.getItem('ecommerce_addresses');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return DEFAULT_ADDRESSES;
+  });
+  const [selectedAddressId, setSelectedAddressId] = useState<string>('addr-1');
+  const [newAddressForm, setNewAddressForm] = useState({
+    fullName: '',
+    address: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    country: 'United States'
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('ecommerce_addresses', JSON.stringify(addresses));
+    } catch (e) {}
+  }, [addresses]);
+
+  // Payment Cards State
+  const [paymentCards, setPaymentCards] = useState<PaymentCard[]>(() => {
+    try {
+      const saved = localStorage.getItem('ecommerce_payment_cards');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return DEFAULT_CARDS;
+  });
+  const [selectedCardId, setSelectedCardId] = useState<string>('card-1');
+  const [newCardForm, setNewCardForm] = useState({
+    cardHolderName: '',
+    cardNumber: '',
+    expiryDate: '',
+    cvv: '',
+    isDefault: true
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('ecommerce_payment_cards', JSON.stringify(paymentCards));
+    } catch (e) {}
+  }, [paymentCards]);
+
+  const [selectedDeliveryId, setSelectedDeliveryId] = useState<string>('fedex');
+  const [checkoutStep, setCheckoutStep] = useState<'bag' | 'checkout' | 'shipping_addresses' | 'add_shipping_address' | 'payment_methods' | 'add_payment_card' | 'success'>('bag');
+
+  const addToCart = (product: Product, color?: string, size?: string) => {
+    const itemColor = color || (product.colors ? product.colors.split(',')[0].trim() : 'Black');
+    const itemSize = size || (product.sizes ? product.sizes.split(',')[0].trim() : 'L');
+    const cartId = `${product.id}-${itemColor.toLowerCase()}-${itemSize.toLowerCase()}`;
+
+    setCartItems(prev => {
+      const existingIndex = prev.findIndex(item => item.id === cartId);
+      if (existingIndex > -1) {
+        const updated = [...prev];
+        updated[existingIndex] = {
+          ...updated[existingIndex],
+          quantity: updated[existingIndex].quantity + 1
+        };
+        return updated;
+      } else {
+        return [...prev, {
+          id: cartId,
+          productId: product.id,
+          product,
+          color: itemColor,
+          size: itemSize,
+          quantity: 1,
+          price: product.price
+        }];
+      }
+    });
+  };
+
+  const updateCartQuantity = (cartId: string, delta: number) => {
+    setCartItems(prev => prev.map(item => {
+      if (item.id === cartId) {
+        const newQty = item.quantity + delta;
+        return newQty > 0 ? { ...item, quantity: newQty } : null;
+      }
+      return item;
+    }).filter(Boolean) as CartItem[]);
+  };
+
+  const removeFromCart = (cartId: string) => {
+    setCartItems(prev => prev.filter(item => item.id !== cartId));
+  };
 
   const handleSubcategoryNav = (slideIdx: number, subcatKey: string) => {
     setCurrentSlide(slideIdx);
@@ -1326,7 +1623,9 @@ export default function App() {
                 <button 
                   className="add-to-bag-button"
                   onClick={() => {
-                    alert(`Added to Shopping Bag: ${product.name} (Size: ${selectedSize || 'None'}, Color: ${selectedColor || 'None'})`);
+                    addToCart(product, selectedColor || undefined, selectedSize || undefined);
+                    setCheckoutStep('bag');
+                    navigateToTab('bag');
                   }}
                 >
                   ADD TO BAG
@@ -3178,24 +3477,700 @@ export default function App() {
               );
             })()}
           </div>
+        ) : activeTab === 'bag' ? (
+          /* =========================================================
+             MILESTONE 5: MY BAG & CHECKOUT PIPELINE
+             ========================================================= */
+          <div className="bag-checkout-pipeline-wrapper" style={{ width: '100%' }}>
+            
+            {/* 1. MY BAG VIEW */}
+            {checkoutStep === 'bag' && (
+              <div className="my-bag-container">
+                <header className="bag-header">
+                  <span className="bag-header-title">My Bag</span>
+                  <button className="header-icon-btn" onClick={() => navigateToTab('shop')}>
+                    <Search size={22} color="var(--primary)" />
+                  </button>
+                </header>
+
+                {cartItems.length === 0 ? (
+                  <div className="empty-cart-state">
+                    <div className="empty-cart-icon-bg">
+                      <ShoppingBag size={48} color="var(--accent)" />
+                    </div>
+                    <h3 className="empty-cart-title">Your Bag is Empty</h3>
+                    <p className="empty-cart-desc">Looks like you haven't added any items to your bag yet. Explore our catalog to find your style!</p>
+                    <button className="hero-button" style={{ marginTop: '20px' }} onClick={() => navigateToTab('shop')}>
+                      Start Shopping
+                    </button>
+                  </div>
+                ) : (
+                  <div className="bag-content-scroll">
+                    <div className="cart-items-list">
+                      {cartItems.map((item) => (
+                        <div key={item.id} className="cart-item-card">
+                          <div className="cart-item-img-wrap">
+                            <ProductImage src={item.product.imageUrl} alt={item.product.name} className="cart-item-img" />
+                          </div>
+                          
+                          <div className="cart-item-details">
+                            <div className="cart-item-top-row">
+                              <h4 className="cart-item-name">{item.product.name}</h4>
+                              <button 
+                                className="cart-item-options-btn"
+                                onClick={() => removeFromCart(item.id)}
+                                title="Remove item"
+                              >
+                                <MoreVertical size={20} color="var(--gray)" />
+                              </button>
+                            </div>
+
+                            <div className="cart-item-specs">
+                              <span>Color: <strong>{item.color}</strong></span>
+                              <span>Size: <strong>{item.size}</strong></span>
+                            </div>
+
+                            <div className="cart-item-bottom-row">
+                              <div className="quantity-stepper">
+                                <button 
+                                  className="stepper-btn"
+                                  onClick={() => updateCartQuantity(item.id, -1)}
+                                >
+                                  -
+                                </button>
+                                <span className="stepper-count">{item.quantity}</span>
+                                <button 
+                                  className="stepper-btn"
+                                  onClick={() => updateCartQuantity(item.id, 1)}
+                                >
+                                  +
+                                </button>
+                              </div>
+
+                              <span className="cart-item-price">${item.price * item.quantity}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Promo Code Bar */}
+                    <div className="promo-input-card">
+                      <input 
+                        type="text" 
+                        className="promo-input-field" 
+                        placeholder="Enter your promo code"
+                        value={appliedPromo ? appliedPromo.code : promoInput}
+                        onChange={(e) => setPromoInput(e.target.value)}
+                        readOnly={!!appliedPromo}
+                      />
+                      {appliedPromo ? (
+                        <button 
+                          className="promo-applied-badge-btn"
+                          onClick={() => setAppliedPromo(null)}
+                          title="Remove promo code"
+                        >
+                          <span className="promo-applied-tag">{appliedPromo.badge}</span>
+                          <X size={16} color="#FFF" />
+                        </button>
+                      ) : (
+                        <button 
+                          className="promo-apply-arrow-btn"
+                          onClick={() => {
+                            if (promoInput.trim()) {
+                              const found = PROMO_CODES.find(p => p.code.toLowerCase() === promoInput.trim().toLowerCase());
+                              if (found) {
+                                setAppliedPromo(found);
+                                setPromoInput('');
+                              } else {
+                                alert('Invalid promo code. Tap to view available promo codes.');
+                                setShowPromoSheet(true);
+                              }
+                            } else {
+                              setShowPromoSheet(true);
+                            }
+                          }}
+                        >
+                          <ArrowRight size={18} color="#FFF" />
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Total Summary */}
+                    {(() => {
+                      const rawSubtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+                      const discountAmount = appliedPromo ? Math.round(rawSubtotal * (appliedPromo.discountPercent / 100)) : 0;
+                      const subtotal = Math.max(0, rawSubtotal - discountAmount);
+
+                      return (
+                        <div className="bag-total-footer">
+                          <div className="total-amount-row">
+                            <span className="total-label-text">Total amount:</span>
+                            <span className="total-price-text">${subtotal}</span>
+                          </div>
+                          
+                          {appliedPromo && (
+                            <div className="discount-applied-subtext">
+                              Discount ({appliedPromo.badge}): -${discountAmount}
+                            </div>
+                          )}
+
+                          <button 
+                            className="primary-checkout-btn"
+                            onClick={() => setCheckoutStep('checkout')}
+                          >
+                            CHECK OUT
+                          </button>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* 2. CHECKOUT VIEW */}
+            {checkoutStep === 'checkout' && (
+              <div className="checkout-screen-container">
+                <header className="checkout-header">
+                  <button className="header-icon-btn" onClick={() => setCheckoutStep('bag')}>
+                    <ChevronLeft size={24} />
+                  </button>
+                  <span className="header-title-text">Checkout</span>
+                  <div style={{ width: '36px' }} />
+                </header>
+
+                <div className="checkout-content-scroll">
+                  {/* Shipping Address Section */}
+                  <div className="checkout-section-block">
+                    <h3 className="checkout-section-title">Shipping address</h3>
+                    {(() => {
+                      const activeAddr = addresses.find(a => a.id === selectedAddressId) || addresses[0];
+                      return (
+                        <div className="checkout-card address-summary-card">
+                          <div className="card-top-row">
+                            <span className="card-person-name">{activeAddr.fullName}</span>
+                            <button 
+                              className="card-change-link"
+                              onClick={() => setCheckoutStep('shipping_addresses')}
+                            >
+                              Change
+                            </button>
+                          </div>
+                          <p className="card-body-address">
+                            {activeAddr.address}, {activeAddr.city}, {activeAddr.state} {activeAddr.zipCode}, {activeAddr.country}
+                          </p>
+                        </div>
+                      );
+                    })()}
+                  </div>
+
+                  {/* Payment Section */}
+                  <div className="checkout-section-block">
+                    <div className="checkout-section-header">
+                      <h3 className="checkout-section-title">Payment</h3>
+                      <button 
+                        className="card-change-link"
+                        onClick={() => setCheckoutStep('payment_methods')}
+                      >
+                        Change
+                      </button>
+                    </div>
+                    {(() => {
+                      const activeCard = paymentCards.find(c => c.id === selectedCardId) || paymentCards[0];
+                      return (
+                        <div className="checkout-card payment-summary-card">
+                          <div className="payment-logo-box">
+                            {activeCard.cardType === 'mastercard' ? (
+                              <svg width="32" height="20" viewBox="0 0 32 20" fill="none">
+                                <circle cx="11" cy="10" r="9" fill="#EB001B" />
+                                <circle cx="21" cy="10" r="9" fill="#F79E1B" fillOpacity="0.8" />
+                              </svg>
+                            ) : (
+                              <span style={{ fontWeight: 800, fontStyle: 'italic', fontSize: '16px', color: '#1A1F71' }}>VISA</span>
+                            )}
+                          </div>
+                          <span className="masked-card-number">
+                            **** **** **** {activeCard.cardNumber.slice(-4)}
+                          </span>
+                        </div>
+                      );
+                    })()}
+                  </div>
+
+                  {/* Delivery Method Section */}
+                  <div className="checkout-section-block">
+                    <h3 className="checkout-section-title">Delivery method</h3>
+                    <div className="delivery-methods-grid">
+                      {DELIVERY_METHODS.map((del) => {
+                        const isSelected = selectedDeliveryId === del.id;
+                        return (
+                          <div 
+                            key={del.id}
+                            className={`delivery-option-card ${isSelected ? 'selected' : ''}`}
+                            onClick={() => setSelectedDeliveryId(del.id)}
+                          >
+                            <span className="delivery-brand-logo">{del.logo}</span>
+                            <span className="delivery-days-text">{del.days}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Order Pricing Breakdown */}
+                  {(() => {
+                    const rawSubtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+                    const discountAmount = appliedPromo ? Math.round(rawSubtotal * (appliedPromo.discountPercent / 100)) : 0;
+                    const orderTotal = Math.max(0, rawSubtotal - discountAmount);
+                    const deliveryFee = DELIVERY_METHODS.find(d => d.id === selectedDeliveryId)?.fee || 15;
+                    const finalSummary = orderTotal + deliveryFee;
+
+                    return (
+                      <div className="checkout-pricing-summary">
+                        <div className="price-summary-row">
+                          <span className="summary-label">Order:</span>
+                          <span className="summary-value">${orderTotal}</span>
+                        </div>
+                        {appliedPromo && (
+                          <div className="price-summary-row" style={{ color: '#2AA952' }}>
+                            <span className="summary-label">Discount ({appliedPromo.badge}):</span>
+                            <span className="summary-value">-${discountAmount}</span>
+                          </div>
+                        )}
+                        <div className="price-summary-row">
+                          <span className="summary-label">Delivery:</span>
+                          <span className="summary-value">${deliveryFee}</span>
+                        </div>
+                        <div className="price-summary-row summary-total">
+                          <span className="summary-label">Summary:</span>
+                          <span className="summary-value">${finalSummary}</span>
+                        </div>
+
+                        <button 
+                          className="primary-checkout-btn"
+                          style={{ marginTop: '24px' }}
+                          onClick={() => {
+                            setCartItems([]);
+                            setAppliedPromo(null);
+                            setCheckoutStep('success');
+                          }}
+                        >
+                          SUBMIT ORDER
+                        </button>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+            )}
+
+            {/* 3. SHIPPING ADDRESSES VIEW */}
+            {checkoutStep === 'shipping_addresses' && (
+              <div className="shipping-addresses-container">
+                <header className="checkout-header">
+                  <button className="header-icon-btn" onClick={() => setCheckoutStep('checkout')}>
+                    <ChevronLeft size={24} />
+                  </button>
+                  <span className="header-title-text">Shipping Addresses</span>
+                  <div style={{ width: '36px' }} />
+                </header>
+
+                <div className="addresses-content-scroll">
+                  {addresses.map((addr) => {
+                    const isSelected = selectedAddressId === addr.id;
+                    return (
+                      <div key={addr.id} className={`address-card ${isSelected ? 'selected' : ''}`}>
+                        <div className="card-top-row">
+                          <span className="card-person-name">{addr.fullName}</span>
+                          <button className="card-change-link" onClick={() => setCheckoutStep('add_shipping_address')}>
+                            Edit
+                          </button>
+                        </div>
+
+                        <p className="card-body-address">
+                          {addr.address}, {addr.city}, {addr.state} {addr.zipCode}, {addr.country}
+                        </p>
+
+                        <div 
+                          className="address-checkbox-row"
+                          onClick={() => setSelectedAddressId(addr.id)}
+                        >
+                          {isSelected ? (
+                            <CheckSquare size={20} color="var(--primary)" />
+                          ) : (
+                            <Square size={20} color="var(--gray)" />
+                          )}
+                          <span className="checkbox-label-text">Use as the shipping address</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <button 
+                  className="fab-add-button"
+                  onClick={() => {
+                    setNewAddressForm({
+                      fullName: '',
+                      address: '',
+                      city: '',
+                      state: '',
+                      zipCode: '',
+                      country: 'United States'
+                    });
+                    setCheckoutStep('add_shipping_address');
+                  }}
+                  title="Add new address"
+                >
+                  <Plus size={24} color="#FFF" />
+                </button>
+              </div>
+            )}
+
+            {/* 4. ADD SHIPPING ADDRESS VIEW */}
+            {checkoutStep === 'add_shipping_address' && (
+              <div className="add-address-container">
+                <header className="checkout-header">
+                  <button className="header-icon-btn" onClick={() => setCheckoutStep('shipping_addresses')}>
+                    <ChevronLeft size={24} />
+                  </button>
+                  <span className="header-title-text">Adding Shipping Address</span>
+                  <div style={{ width: '36px' }} />
+                </header>
+
+                <form 
+                  className="add-address-form"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!newAddressForm.fullName || !newAddressForm.address || !newAddressForm.city) {
+                      alert('Please fill in all required address fields.');
+                      return;
+                    }
+                    const newAddr: ShippingAddress = {
+                      id: `addr-${Date.now()}`,
+                      fullName: newAddressForm.fullName,
+                      address: newAddressForm.address,
+                      city: newAddressForm.city,
+                      state: newAddressForm.state,
+                      zipCode: newAddressForm.zipCode,
+                      country: newAddressForm.country,
+                      isDefault: false
+                    };
+                    setAddresses([...addresses, newAddr]);
+                    setSelectedAddressId(newAddr.id);
+                    setCheckoutStep('shipping_addresses');
+                  }}
+                >
+                  <div className="custom-floating-field">
+                    <label>Full name</label>
+                    <input 
+                      type="text"
+                      placeholder="Enter full name"
+                      value={newAddressForm.fullName}
+                      onChange={(e) => setNewAddressForm({ ...newAddressForm, fullName: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  <div className="custom-floating-field">
+                    <label>Address</label>
+                    <input 
+                      type="text"
+                      placeholder="Street address"
+                      value={newAddressForm.address}
+                      onChange={(e) => setNewAddressForm({ ...newAddressForm, address: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  <div className="custom-floating-field">
+                    <label>City</label>
+                    <input 
+                      type="text"
+                      placeholder="City"
+                      value={newAddressForm.city}
+                      onChange={(e) => setNewAddressForm({ ...newAddressForm, city: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  <div className="custom-floating-field">
+                    <label>State/Province/Region</label>
+                    <input 
+                      type="text"
+                      placeholder="State or Region"
+                      value={newAddressForm.state}
+                      onChange={(e) => setNewAddressForm({ ...newAddressForm, state: e.target.value })}
+                    />
+                  </div>
+
+                  <div className="custom-floating-field">
+                    <label>Zip Code (Postal Code)</label>
+                    <input 
+                      type="text"
+                      placeholder="Zip Code"
+                      value={newAddressForm.zipCode}
+                      onChange={(e) => setNewAddressForm({ ...newAddressForm, zipCode: e.target.value })}
+                    />
+                  </div>
+
+                  <div className="custom-floating-field">
+                    <label>Country</label>
+                    <select 
+                      value={newAddressForm.country}
+                      onChange={(e) => setNewAddressForm({ ...newAddressForm, country: e.target.value })}
+                    >
+                      <option value="United States">United States</option>
+                      <option value="Canada">Canada</option>
+                      <option value="United Kingdom">United Kingdom</option>
+                      <option value="Australia">Australia</option>
+                      <option value="Germany">Germany</option>
+                    </select>
+                  </div>
+
+                  <button className="primary-checkout-btn" type="submit" style={{ marginTop: '24px' }}>
+                    SAVE ADDRESS
+                  </button>
+                </form>
+              </div>
+            )}
+
+            {/* 5. PAYMENT METHODS VIEW */}
+            {checkoutStep === 'payment_methods' && (
+              <div className="payment-methods-container">
+                <header className="checkout-header">
+                  <button className="header-icon-btn" onClick={() => setCheckoutStep('checkout')}>
+                    <ChevronLeft size={24} />
+                  </button>
+                  <span className="header-title-text">Payment methods</span>
+                  <div style={{ width: '36px' }} />
+                </header>
+
+                <div className="payment-content-scroll">
+                  <h3 className="checkout-section-title" style={{ padding: '0 16px' }}>Your payment cards</h3>
+
+                  <div className="cards-stack-list">
+                    {paymentCards.map((card) => {
+                      const isSelected = selectedCardId === card.id;
+                      const isDark = card.cardType === 'mastercard';
+
+                      return (
+                        <div key={card.id} className="card-item-group">
+                          <div className={`visual-credit-card ${isDark ? 'card-theme-dark' : 'card-theme-silver'}`}>
+                            <div className="card-header-row">
+                              <div className="chip-graphic" />
+                              {card.cardType === 'visa' && (
+                                <span className="card-brand-label visa">VISA</span>
+                              )}
+                            </div>
+
+                            <div className="card-number-display">
+                              {card.cardNumber}
+                            </div>
+
+                            <div className="card-footer-row">
+                              <div className="card-holder-col">
+                                <span className="card-mini-label">Card Holder Name</span>
+                                <span className="card-holder-val">{card.cardHolderName}</span>
+                              </div>
+
+                              <div className="card-expiry-col">
+                                <span className="card-mini-label">Expiry Date</span>
+                                <span className="card-expiry-val">{card.expiryDate}</span>
+                              </div>
+
+                              {card.cardType === 'mastercard' && (
+                                <div className="mastercard-circles">
+                                  <div className="circle circle-red" />
+                                  <div className="circle circle-orange" />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          <div 
+                            className="address-checkbox-row"
+                            style={{ padding: '8px 16px 16px' }}
+                            onClick={() => setSelectedCardId(card.id)}
+                          >
+                            {isSelected ? (
+                              <CheckSquare size={20} color="var(--primary)" />
+                            ) : (
+                              <Square size={20} color="var(--gray)" />
+                            )}
+                            <span className="checkbox-label-text">Use as default payment method</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <button 
+                  className="fab-add-button"
+                  onClick={() => {
+                    setNewCardForm({
+                      cardHolderName: '',
+                      cardNumber: '',
+                      expiryDate: '',
+                      cvv: '',
+                      isDefault: true
+                    });
+                    setCheckoutStep('add_payment_card');
+                  }}
+                  title="Add new card"
+                >
+                  <Plus size={24} color="#FFF" />
+                </button>
+              </div>
+            )}
+
+            {/* 6. ADD PAYMENT CARD VIEW */}
+            {checkoutStep === 'add_payment_card' && (
+              <div className="add-card-container">
+                <header className="checkout-header">
+                  <button className="header-icon-btn" onClick={() => setCheckoutStep('payment_methods')}>
+                    <ChevronLeft size={24} />
+                  </button>
+                  <span className="header-title-text">Add new card</span>
+                  <div style={{ width: '36px' }} />
+                </header>
+
+                <form 
+                  className="add-card-form"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!newCardForm.cardHolderName || !newCardForm.cardNumber) {
+                      alert('Please fill in cardholder name and card number.');
+                      return;
+                    }
+                    const isVisa = newCardForm.cardNumber.startsWith('4');
+                    const newCard: PaymentCard = {
+                      id: `card-${Date.now()}`,
+                      cardNumber: newCardForm.cardNumber,
+                      cardHolderName: newCardForm.cardHolderName,
+                      expiryDate: newCardForm.expiryDate || '08/25',
+                      cvv: newCardForm.cvv || '123',
+                      cardType: isVisa ? 'visa' : 'mastercard',
+                      isDefault: newCardForm.isDefault
+                    };
+                    setPaymentCards([...paymentCards, newCard]);
+                    setSelectedCardId(newCard.id);
+                    setCheckoutStep('payment_methods');
+                  }}
+                >
+                  <div className="custom-floating-field">
+                    <label>Name on card</label>
+                    <input 
+                      type="text"
+                      placeholder="e.g. Jennyfer Doe"
+                      value={newCardForm.cardHolderName}
+                      onChange={(e) => setNewCardForm({ ...newCardForm, cardHolderName: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  <div className="custom-floating-field">
+                    <label>Card number</label>
+                    <input 
+                      type="text"
+                      placeholder="5546 8205 3693 3947"
+                      value={newCardForm.cardNumber}
+                      onChange={(e) => setNewCardForm({ ...newCardForm, cardNumber: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <div className="custom-floating-field">
+                      <label>Expire Date</label>
+                      <input 
+                        type="text"
+                        placeholder="MM/YY"
+                        value={newCardForm.expiryDate}
+                        onChange={(e) => setNewCardForm({ ...newCardForm, expiryDate: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="custom-floating-field">
+                      <label>CVV</label>
+                      <input 
+                        type="text"
+                        placeholder="123"
+                        value={newCardForm.cvv}
+                        onChange={(e) => setNewCardForm({ ...newCardForm, cvv: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div 
+                    className="address-checkbox-row"
+                    style={{ margin: '12px 0' }}
+                    onClick={() => setNewCardForm({ ...newCardForm, isDefault: !newCardForm.isDefault })}
+                  >
+                    {newCardForm.isDefault ? (
+                      <CheckSquare size={20} color="var(--primary)" />
+                    ) : (
+                      <Square size={20} color="var(--gray)" />
+                    )}
+                    <span className="checkbox-label-text">Set as default payment method</span>
+                  </div>
+
+                  <button className="primary-checkout-btn" type="submit" style={{ marginTop: '16px' }}>
+                    ADD CARD
+                  </button>
+                </form>
+              </div>
+            )}
+
+            {/* 7. ORDER SUCCESS VIEW */}
+            {checkoutStep === 'success' && (
+              <div className="order-success-screen">
+                <div className="success-hero-panel">
+                  <div 
+                    className="success-model-image"
+                    style={{ backgroundImage: "url('/assets/fashion_sale_banner.png')" }}
+                  />
+                  
+                  <div className="success-content-box">
+                    <h1 className="success-title">Success!</h1>
+                    <p className="success-subtitle">
+                      Your order will be delivered soon.<br />Thank you for choosing our app!
+                    </p>
+
+                    <button 
+                      className="continue-shopping-pill-btn"
+                      onClick={() => {
+                        setCheckoutStep('bag');
+                        navigateToTab('home');
+                      }}
+                    >
+                      Continue shopping
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         ) : (
-          /* Placeholder for other tabs */
+          /* Favorites Tab Placeholder / Standard View */
           <div className="placeholder-tab">
             <div className="placeholder-tab-icon">
-              {activeTab}
+              <Heart size={48} color="var(--accent)" />
             </div>
-            <h2 className="placeholder-tab-title">
-              {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Screen
-            </h2>
+            <h2 className="placeholder-tab-title">Favorites</h2>
             <p className="placeholder-tab-desc">
-              This tab is interactive! It will be fully populated and implemented in its respective milestone.
+              {favorites.length === 0 
+                ? "You haven't added any favorite items yet. Tap the heart icon on any product to save it here!"
+                : `You have ${favorites.length} saved favorite product(s).`}
             </p>
             <button 
               className="hero-button" 
               style={{ marginTop: '24px' }}
-              onClick={() => navigateToTab('home')}
+              onClick={() => navigateToTab('shop')}
             >
-              Back to Home
+              Explore Catalog
             </button>
           </div>
         )}
@@ -3640,6 +4615,73 @@ export default function App() {
             <button className="google-modal-close" onClick={() => setShowGoogleModal(false)}>
               Cancel
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* ========= PROMO CODES BOTTOM SHEET MODAL ========= */}
+      {showPromoSheet && (
+        <div className="promo-sheet-overlay" onClick={() => setShowPromoSheet(false)}>
+          <div className="promo-sheet-card" onClick={(e) => e.stopPropagation()}>
+            <div className="promo-sheet-handle" />
+            
+            <div className="promo-sheet-input-row">
+              <input 
+                type="text" 
+                className="promo-sheet-input" 
+                placeholder="Enter your promo code"
+                value={promoInput}
+                onChange={(e) => setPromoInput(e.target.value)}
+              />
+              <button 
+                className="promo-sheet-apply-btn"
+                onClick={() => {
+                  if (promoInput.trim()) {
+                    const found = PROMO_CODES.find(p => p.code.toLowerCase() === promoInput.trim().toLowerCase());
+                    if (found) {
+                      setAppliedPromo(found);
+                      setPromoInput('');
+                      setShowPromoSheet(false);
+                    } else {
+                      alert('Invalid promo code. Please select one of the available vouchers below.');
+                    }
+                  }
+                }}
+              >
+                <ArrowRight size={18} color="#FFF" />
+              </button>
+            </div>
+
+            <h3 className="promo-sheet-section-title">Your Promo Codes</h3>
+
+            <div className="promo-cards-list">
+              {PROMO_CODES.map((promo) => (
+                <div key={promo.code} className="promo-voucher-card">
+                  <div className={`promo-badge-left ${promo.bgType || 'red'}`}>
+                    <span className="promo-percent-number">{promo.discountPercent}%</span>
+                    <span className="promo-off-text">off</span>
+                  </div>
+
+                  <div className="promo-voucher-details">
+                    <h4 className="promo-voucher-title">{promo.title}</h4>
+                    <span className="promo-voucher-code">{promo.code}</span>
+                  </div>
+
+                  <div className="promo-voucher-action">
+                    <span className="promo-days-left">{promo.daysRemaining}</span>
+                    <button 
+                      className="promo-voucher-apply-btn"
+                      onClick={() => {
+                        setAppliedPromo(promo);
+                        setShowPromoSheet(false);
+                      }}
+                    >
+                      Apply
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
