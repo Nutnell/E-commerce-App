@@ -1,5 +1,59 @@
 [
   {
+    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "baseColor": "silver",
+    "variantColor": "black",
+    "outputFileName": "women_pleated_mini_skirt_black.png"
+  },
+  {
+    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "baseColor": "silver",
+    "variantColor": "red",
+    "outputFileName": "women_pleated_mini_skirt_red.png"
+  },
+  {
+    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "baseColor": "silver",
+    "variantColor": "white",
+    "outputFileName": "women_pleated_mini_skirt_white.png"
+  },
+  {
+    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "baseColor": "silver",
+    "variantColor": "tan",
+    "outputFileName": "women_pleated_mini_skirt_tan.png"
+  },
+  {
+    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "baseColor": "silver",
+    "variantColor": "gold",
+    "outputFileName": "women_pleated_mini_skirt_gold.png"
+  },
+  {
+    "sourceImage": "/assets/cat_officestyle.png",
+    "baseColor": "black",
+    "variantColor": "grey",
+    "outputFileName": "cat_officestyle_grey.png"
+  },
+  {
+    "sourceImage": "/assets/women_skinny_jeans.png",
+    "baseColor": "blue",
+    "variantColor": "black",
+    "outputFileName": "women_skinny_jeans_black.png"
+  },
+  {
+    "sourceImage": "/assets/cat_cardigans.png",
+    "baseColor": "tan",
+    "variantColor": "grey",
+    "outputFileName": "cat_cardigans_grey.png"
+  },
+  {
+    "sourceImage": "/assets/cat_cardigans.png",
+    "baseColor": "tan",
+    "variantColor": "white",
+    "outputFileName": "cat_cardigans_white.png"
+  },
+  {
     "sourceImage": "/assets/product_denim_jacket.png",
     "baseColor": "blue",
     "variantColor": "grey",
@@ -10,6 +64,24 @@
     "baseColor": "blue",
     "variantColor": "black",
     "outputFileName": "product_denim_jacket_black.png"
+  },
+  {
+    "sourceImage": "/assets/cat_outerwear.png",
+    "baseColor": "tan",
+    "variantColor": "black",
+    "outputFileName": "cat_outerwear_black.png"
+  },
+  {
+    "sourceImage": "/assets/women_denim_shorts.png",
+    "baseColor": "blue",
+    "variantColor": "white",
+    "outputFileName": "women_denim_shorts_white.png"
+  },
+  {
+    "sourceImage": "/assets/cat_beachwear.png",
+    "baseColor": "tan",
+    "variantColor": "white",
+    "outputFileName": "cat_beachwear_white.png"
   },
   {
     "sourceImage": "/assets/product_sneakers.png",
@@ -444,24 +516,6 @@
     "outputFileName": "cat_activewear_black.png"
   },
   {
-    "sourceImage": "/assets/cat_beachwear.png",
-    "baseColor": "white",
-    "variantColor": "tan",
-    "outputFileName": "cat_beachwear_tan.png"
-  },
-  {
-    "sourceImage": "/assets/cat_cardigans.png",
-    "baseColor": "tan",
-    "variantColor": "grey",
-    "outputFileName": "cat_cardigans_grey.png"
-  },
-  {
-    "sourceImage": "/assets/cat_cardigans.png",
-    "baseColor": "tan",
-    "variantColor": "white",
-    "outputFileName": "cat_cardigans_white.png"
-  },
-  {
     "sourceImage": "/assets/cat_cargo.png",
     "baseColor": "tan",
     "variantColor": "black",
@@ -484,18 +538,6 @@
     "baseColor": "pink",
     "variantColor": "white",
     "outputFileName": "cat_loungewear_white.png"
-  },
-  {
-    "sourceImage": "/assets/cat_officestyle.png",
-    "baseColor": "black",
-    "variantColor": "grey",
-    "outputFileName": "cat_officestyle_grey.png"
-  },
-  {
-    "sourceImage": "/assets/cat_outerwear.png",
-    "baseColor": "tan",
-    "variantColor": "black",
-    "outputFileName": "cat_outerwear_black.png"
   },
   {
     "sourceImage": "/assets/cat_sleepwear.png",
