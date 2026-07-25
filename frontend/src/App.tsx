@@ -44,6 +44,39 @@ interface Review {
   photos: string;
 }
 
+function ProductImage({ src, alt, className, fallbackSrc }: { src: string; alt?: string; className?: string; fallbackSrc?: string }) {
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    setError(false);
+  }, [src]);
+
+  if (!src || error) {
+    return (
+      <div className="no-image-placeholder">
+        <ShoppingBag className="no-image-icon" size={24} />
+        <span className="no-image-text">No Image</span>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt || 'Product image'}
+      className={className || 'product-image'}
+      draggable="false"
+      onError={(e) => {
+        if (fallbackSrc && (e.target as HTMLImageElement).src !== fallbackSrc && fallbackSrc !== src) {
+          (e.target as HTMLImageElement).src = fallbackSrc;
+        } else {
+          setError(true);
+        }
+      }}
+    />
+  );
+}
+
 const MOCK_PRODUCTS: Product[] = [
   // ==========================================
   // WOMEN'S PRODUCTS
@@ -52,25 +85,26 @@ const MOCK_PRODUCTS: Product[] = [
   { id: 2, name: 'Sport Dress', brand: 'Sitlly', price: 19.0, originalPrice: 22.0, discountPercent: 15, rating: 5.0, ratingCount: 10, imageUrl: '/assets/sport_dress_product.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'dresses', gender: 'women', colors: 'grey,black,blue,red,white', sizes: 'XS,S,M' },
   { id: 3, name: 'Wrap Dress', brand: 'H&M', price: 24.0, originalPrice: 38.0, discountPercent: 37, rating: 4.0, ratingCount: 22, imageUrl: '/assets/product_wrap_dress.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'dresses', gender: 'women', colors: 'blue,red,white,tan', sizes: 'S,M,L,XL' },
   { id: 4, name: 'Striped Top', brand: 'Dorothy Perkins', price: 15.0, rating: 4.5, ratingCount: 5, imageUrl: '/assets/new_product_1.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'tops', gender: 'women', colors: 'red,black,white,blue', sizes: 'XS,S,M,L' },
-  { id: 5, name: 'White T-Shirt', brand: 'Sitlly', price: 12.0, rating: 4.0, ratingCount: 3, imageUrl: '/assets/new_product_2.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'tops', gender: 'women', colors: 'white,grey', sizes: 'S,M,L' },
+  { id: 5, name: 'Plain T-Shirt', brand: 'Sitlly', price: 12.0, rating: 4.0, ratingCount: 3, imageUrl: '/assets/new_product_2.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'tops', gender: 'women', colors: 'white,red,blue,grey', sizes: 'S,M,L' },
   { id: 6, name: 'Summer Blouse', brand: 'Zara', price: 22.0, rating: 4.5, ratingCount: 14, imageUrl: '/assets/product_summer_blouse.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'blouses', gender: 'women', colors: 'white,tan,red', sizes: 'XS,S,M' },
   { id: 7, name: 'Maxi Skirt', brand: 'Mango', price: 28.0, rating: 4.0, ratingCount: 8, imageUrl: '/assets/product_maxi_skirt.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'skirts', gender: 'women', colors: 'pink,black,tan,blue,white', sizes: 'S,M,L' },
-  { id: 8, name: 'Pleated Mini Skirt', brand: 'Zara', price: 18.0, rating: 4.3, ratingCount: 11, imageUrl: '/assets/cat_partywear.png', isNew: false, isSale: false, category: 'clothes', subcategory: 'skirts', gender: 'women', colors: 'silver,black,red,white,tan,gold', sizes: 'XS,S,M' },
+  { id: 8, name: 'Pleated Mini Skirt', brand: 'Zara', price: 18.0, rating: 4.3, ratingCount: 11, imageUrl: '/assets/cat_partywear.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'skirts', gender: 'women', colors: 'silver,black,red,white,tan,gold', sizes: 'XS,S,M' },
   { id: 9, name: 'Linen Pants', brand: 'H&M', price: 32.0, rating: 4.5, ratingCount: 19, imageUrl: '/assets/product_linen_pants.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'pants', gender: 'women', colors: 'tan,white,grey', sizes: 'M,L,XL' },
-  { id: 10, name: 'Skinny Fit Jeans', brand: 'Zara', price: 34.0, originalPrice: 45.0, discountPercent: 24, rating: 4.2, ratingCount: 9, imageUrl: '/assets/cat_jeanswear.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'jeans', gender: 'women', colors: 'blue,black', sizes: 'S,M,L,XL' },
-  { id: 11, name: 'Knit Sweater', brand: 'Dorothy Perkins', price: 26.0, rating: 5.0, ratingCount: 12, imageUrl: '/assets/product_knit_sweater.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'sweaters', gender: 'women', colors: 'white,grey,black,red', sizes: 'S,M,L,XL' },
+  { id: 10, name: 'Skinny Fit Jeans', brand: 'Zara', price: 34.0, originalPrice: 45.0, discountPercent: 24, rating: 4.2, ratingCount: 9, imageUrl: '/assets/cat_jeanswear.png', isNew: true, isSale: true, category: 'clothes', subcategory: 'jeans', gender: 'women', colors: 'blue,black,grey', sizes: 'S,M,L,XL' },
+  { id: 11, name: 'Knit Sweater', brand: 'Dorothy Perkins', price: 26.0, rating: 5.0, ratingCount: 12, imageUrl: '/assets/product_knit_sweater.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'sweaters', gender: 'women', colors: 'white,grey,black,red,blue', sizes: 'S,M,L,XL' },
   { id: 12, name: 'Denim Jacket', brand: 'Mango', price: 29.0, originalPrice: 45.0, discountPercent: 35, rating: 4.5, ratingCount: 18, imageUrl: '/assets/product_denim_jacket.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'outerwear', gender: 'women', colors: 'blue,grey,black', sizes: 'M,L,XL' },
-  { id: 13, name: 'Denim Shorts', brand: 'H&M', price: 16.0, rating: 4.1, ratingCount: 7, imageUrl: '/assets/cat_beachwear.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'shorts', gender: 'women', colors: 'blue,white', sizes: 'XS,S,M' },
+  { id: 13, name: 'Denim Shorts', brand: 'H&M', price: 16.0, originalPrice: 22.0, discountPercent: 27, rating: 4.1, ratingCount: 7, imageUrl: '/assets/women_denim_shorts.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'shorts', gender: 'women', colors: 'blue,white', sizes: 'XS,S,M' },
   { id: 14, name: 'Platform Sneakers', brand: 'Nike', price: 59.0, originalPrice: 89.0, discountPercent: 34, rating: 5.0, ratingCount: 45, imageUrl: '/assets/product_sneakers.png', isNew: false, isSale: true, category: 'shoes', subcategory: 'sneakers', gender: 'women', colors: 'white,black,blue', sizes: 'S,M,L' },
-  { id: 15, name: 'Casual Sandals', brand: 'Zara', price: 24.0, rating: 4.4, ratingCount: 11, imageUrl: '/assets/cat_beachwear.png', isNew: true, isSale: false, category: 'shoes', subcategory: 'sandals', gender: 'women', colors: 'tan,white', sizes: 'S,M,L' },
-  { id: 16, name: 'Red Stiletto Heels', brand: 'Dorothy Perkins', price: 45.0, originalPrice: 55.0, discountPercent: 18, rating: 4.8, ratingCount: 15, imageUrl: '/assets/cat_partywear.png', isNew: false, isSale: true, category: 'shoes', subcategory: 'heels', gender: 'women', colors: 'red,black', sizes: 'S,M,L' },
-  { id: 17, name: 'Warm Leather Boots', brand: 'Mango', price: 89.0, rating: 4.7, ratingCount: 20, imageUrl: '/assets/cat_outerwear.png', isNew: true, isSale: false, category: 'shoes', subcategory: 'boots', gender: 'women', colors: 'black,tan', sizes: 'M,L' },
-  { id: 18, name: 'Ballet Flats', brand: 'H&M', price: 22.0, rating: 4.3, ratingCount: 14, imageUrl: '/assets/cat_loungewear.png', isNew: true, isSale: false, category: 'shoes', subcategory: 'flats', gender: 'women', colors: 'black,tan,red', sizes: 'S,M,L' },
-  { id: 19, name: 'Leather Handbag', brand: 'Zara', price: 35.0, originalPrice: 55.0, discountPercent: 36, rating: 4.5, ratingCount: 31, imageUrl: '/assets/product_leather_bag.png', isNew: false, isSale: true, category: 'accessories', subcategory: 'bags', gender: 'women', colors: 'black,tan,grey', sizes: 'M' },
-  { id: 20, name: 'Straw Sun Hat', brand: 'H&M', price: 15.0, rating: 4.3, ratingCount: 6, imageUrl: '/assets/cat_accessories_hats.png', isNew: true, isSale: false, category: 'accessories', subcategory: 'hats', gender: 'women', colors: 'tan,white', sizes: 'M' },
-  { id: 21, name: 'Retro Sunglasses', brand: 'Mango', price: 29.0, rating: 4.6, ratingCount: 14, imageUrl: '/assets/cat_vintage.png', isNew: true, isSale: false, category: 'accessories', subcategory: 'sunglasses', gender: 'women', colors: 'black,brown', sizes: 'M' },
-  { id: 22, name: 'Silk Scarf', brand: 'Dorothy Perkins', price: 18.0, rating: 4.5, ratingCount: 7, imageUrl: '/assets/cat_cardigans.png', isNew: true, isSale: false, category: 'accessories', subcategory: 'scarves', gender: 'women', colors: 'red,tan,black', sizes: 'M' },
-  { id: 23, name: 'Gold Pendant Necklace', brand: 'Mango', price: 14.0, rating: 4.7, ratingCount: 18, imageUrl: '/assets/cat_partywear.png', isNew: true, isSale: false, category: 'accessories', subcategory: 'jewelry', gender: 'women', colors: 'gold', sizes: 'M' },
+  { id: 15, name: 'Casual Sandals', brand: 'Zara', price: 24.0, originalPrice: 32.0, discountPercent: 25, rating: 4.4, ratingCount: 11, imageUrl: '/assets/women_casual_sandals.png', isNew: false, isSale: true, category: 'shoes', subcategory: 'sandals', gender: 'women', colors: 'tan,white', sizes: 'S,M,L' },
+  { id: 16, name: 'Red Stiletto Heels', brand: 'Dorothy Perkins', price: 45.0, originalPrice: 55.0, discountPercent: 18, rating: 4.8, ratingCount: 15, imageUrl: '/assets/women_red_stiletto_heels.png', isNew: true, isSale: true, category: 'shoes', subcategory: 'heels', gender: 'women', colors: 'red,black', sizes: 'S,M,L' },
+  { id: 17, name: 'Block Heel Pumps', brand: 'Mango', price: 38.0, rating: 4.5, ratingCount: 12, imageUrl: '/assets/women_block_heel_pumps.png', isNew: true, isSale: false, category: 'shoes', subcategory: 'heels', gender: 'women', colors: 'black,tan', sizes: 'S,M,L' },
+  { id: 18, name: 'Warm Leather Boots', brand: 'Mango', price: 89.0, rating: 4.7, ratingCount: 20, imageUrl: '/assets/women_warm_leather_boots.png', isNew: true, isSale: false, category: 'shoes', subcategory: 'boots', gender: 'women', colors: 'black,tan', sizes: 'M,L' },
+  { id: 19, name: 'Ballet Flats', brand: 'H&M', price: 22.0, rating: 4.3, ratingCount: 14, imageUrl: '/assets/women_ballet_flats.png', isNew: true, isSale: false, category: 'shoes', subcategory: 'flats', gender: 'women', colors: 'black,tan,red', sizes: 'S,M,L' },
+  { id: 20, name: 'Leather Handbag', brand: 'Zara', price: 35.0, originalPrice: 55.0, discountPercent: 36, rating: 4.5, ratingCount: 31, imageUrl: '/assets/product_leather_bag.png', isNew: false, isSale: true, category: 'accessories', subcategory: 'bags', gender: 'women', colors: 'black,tan,grey', sizes: 'M' },
+  { id: 21, name: 'Straw Sun Hat', brand: 'H&M', price: 15.0, originalPrice: 20.0, discountPercent: 25, rating: 4.3, ratingCount: 6, imageUrl: '/assets/women_straw_sun_hat.png', isNew: false, isSale: true, category: 'accessories', subcategory: 'hats', gender: 'women', colors: 'tan,white', sizes: 'M' },
+  { id: 22, name: 'Retro Sunglasses', brand: 'Mango', price: 29.0, originalPrice: 39.0, discountPercent: 25, rating: 4.6, ratingCount: 14, imageUrl: '/assets/women_retro_sunglasses.png', isNew: false, isSale: true, category: 'accessories', subcategory: 'sunglasses', gender: 'women', colors: 'black,brown', sizes: 'M' },
+  { id: 23, name: 'Silk Scarf', brand: 'Dorothy Perkins', price: 18.0, rating: 4.5, ratingCount: 7, imageUrl: '/assets/women_silk_scarf.png', isNew: true, isSale: false, category: 'accessories', subcategory: 'scarves', gender: 'women', colors: 'red,tan,black', sizes: 'M' },
+  { id: 24, name: 'Gold Pendant Necklace', brand: 'Mango', price: 14.0, rating: 4.7, ratingCount: 18, imageUrl: '/assets/women_gold_pendant_necklace.png', isNew: true, isSale: false, category: 'accessories', subcategory: 'jewelry', gender: 'women', colors: 'gold', sizes: 'M' },
 
   // ==========================================
   // MEN'S PRODUCTS
@@ -82,48 +116,80 @@ const MOCK_PRODUCTS: Product[] = [
   { id: 34, name: 'Grey Zip Hoodie', brand: 'Nike', price: 44.0, rating: 4.7, ratingCount: 19, imageUrl: '/assets/mens_hoodie_grey.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'hoodies', gender: 'men', colors: 'grey,black', sizes: 'M,L,XL' },
   { id: 35, name: 'Bomber Jacket', brand: 'Jack & Jones', price: 55.0, originalPrice: 72.0, discountPercent: 24, rating: 4.7, ratingCount: 28, imageUrl: '/assets/mens_bomber_jacket.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'jackets', gender: 'men', colors: 'green,black,blue', sizes: 'M,L,XL' },
   { id: 36, name: 'Casual Blazer', brand: 'Tommy Hilfiger', price: 85.0, rating: 4.8, ratingCount: 15, imageUrl: '/assets/mens_blazer.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'jackets', gender: 'men', colors: 'blue,black,grey', sizes: 'M,L,XL' },
-  { id: 37, name: 'Classic Cargo Pants', brand: 's.Oliver', price: 35.0, rating: 4.2, ratingCount: 8, imageUrl: '/assets/cat_cargo.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'pants', gender: 'men', colors: 'black,grey', sizes: 'M,L,XL' },
+  { id: 37, name: 'Classic Cargo Pants', brand: 's.Oliver', price: 35.0, rating: 4.2, ratingCount: 8, imageUrl: '/assets/mens_cargo_pants.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'pants', gender: 'men', colors: 'black,grey', sizes: 'M,L,XL' },
   { id: 38, name: 'Slim Fit Chinos', brand: 'Tommy Hilfiger', price: 38.0, rating: 4.5, ratingCount: 16, imageUrl: '/assets/mens_chinos.png', isNew: false, isSale: false, category: 'clothes', subcategory: 'pants', gender: 'men', colors: 'tan,black,blue', sizes: 'M,L,XL' },
-  { id: 39, name: 'Slim Fit Denim Jeans', brand: 'Jack & Jones', price: 45.0, rating: 4.4, ratingCount: 19, imageUrl: '/assets/cat_jeanswear.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'jeans', gender: 'men', colors: 'blue,black', sizes: 'M,L,XL' },
+  { id: 39, name: 'Slim Fit Denim Jeans', brand: 'Jack & Jones', price: 45.0, rating: 4.4, ratingCount: 19, imageUrl: '/assets/mens_slim_jeans.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'jeans', gender: 'men', colors: 'blue,black', sizes: 'M,L,XL' },
   { id: 40, name: 'Chino Shorts', brand: 'Tommy Hilfiger', price: 22.0, rating: 4.5, ratingCount: 14, imageUrl: '/assets/mens_shorts_chino.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'shorts', gender: 'men', colors: 'blue,tan,black', sizes: 'M,L,XL' },
   { id: 41, name: 'Cotton Joggers', brand: 'Nike', price: 32.0, rating: 4.6, ratingCount: 20, imageUrl: '/assets/mens_joggers.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'joggers', gender: 'men', colors: 'grey,black', sizes: 'M,L,XL' },
-  { id: 42, name: 'Men Canvas Sneakers', brand: 'Nike', price: 49.0, rating: 4.8, ratingCount: 40, imageUrl: '/assets/product_sneakers.png', isNew: true, isSale: false, category: 'shoes', subcategory: 'sneakers', gender: 'men', colors: 'black,white', sizes: 'M,L,XL' },
   { id: 43, name: 'Chelsea Leather Boots', brand: 'Tommy Hilfiger', price: 79.0, originalPrice: 99.0, discountPercent: 20, rating: 4.8, ratingCount: 18, imageUrl: '/assets/mens_leather_boots.png', isNew: false, isSale: true, category: 'shoes', subcategory: 'boots', gender: 'men', colors: 'brown,black', sizes: 'M,L,XL' },
   { id: 44, name: 'Suede Loafers', brand: 'Tommy Hilfiger', price: 52.0, rating: 4.6, ratingCount: 14, imageUrl: '/assets/mens_loafers.png', isNew: true, isSale: false, category: 'shoes', subcategory: 'loafers', gender: 'men', colors: 'tan,black', sizes: 'M,L,XL' },
   { id: 45, name: 'Performance Running Shoes', brand: 'Nike', price: 65.0, originalPrice: 85.0, discountPercent: 24, rating: 4.9, ratingCount: 35, imageUrl: '/assets/mens_running_shoes.png', isNew: false, isSale: true, category: 'shoes', subcategory: 'running', gender: 'men', colors: 'black,blue,white', sizes: 'M,L,XL' },
   { id: 46, name: 'Classic Silver Watch', brand: 'Tommy Hilfiger', price: 89.0, originalPrice: 120.0, discountPercent: 26, rating: 4.9, ratingCount: 42, imageUrl: '/assets/mens_watch.png', isNew: false, isSale: true, category: 'accessories', subcategory: 'watches', gender: 'men', colors: 'silver,black', sizes: 'M' },
   { id: 47, name: 'Leather Bifold Wallet', brand: 'Tommy Hilfiger', price: 32.0, rating: 4.7, ratingCount: 26, imageUrl: '/assets/mens_wallet.png', isNew: true, isSale: false, category: 'accessories', subcategory: 'wallets', gender: 'men', colors: 'brown,black', sizes: 'M' },
   { id: 48, name: 'Canvas Backpack', brand: 'Nike', price: 42.0, rating: 4.6, ratingCount: 20, imageUrl: '/assets/mens_backpack.png', isNew: true, isSale: false, category: 'accessories', subcategory: 'backpacks', gender: 'men', colors: 'blue,black,grey', sizes: 'M' },
-  { id: 49, name: 'Casual Leather Belt', brand: 's.Oliver', price: 19.0, rating: 4.5, ratingCount: 12, imageUrl: '/assets/mens_wallet.png', isNew: true, isSale: false, category: 'accessories', subcategory: 'belts', gender: 'men', colors: 'black,tan', sizes: 'M,L' },
-  { id: 50, name: 'Aviator Sunglasses', brand: 'Tommy Hilfiger', price: 35.0, rating: 4.7, ratingCount: 16, imageUrl: '/assets/cat_vintage.png', isNew: true, isSale: false, category: 'accessories', subcategory: 'sunglasses', gender: 'men', colors: 'gold,black', sizes: 'M' },
-  { id: 51, name: 'Classic Sport Cap', brand: 'adidas Originals', price: 12.0, rating: 4.3, ratingCount: 8, imageUrl: '/assets/cat_accessories_hats.png', isNew: true, isSale: false, category: 'accessories', subcategory: 'hats', gender: 'men', colors: 'black,blue', sizes: 'M' },
+  { id: 49, name: 'Casual Leather Belt', brand: 's.Oliver', price: 19.0, rating: 4.5, ratingCount: 12, imageUrl: '/assets/mens_casual_leather_belt.png', isNew: true, isSale: false, category: 'accessories', subcategory: 'belts', gender: 'men', colors: 'black,tan', sizes: 'M,L' },
+  { id: 50, name: 'Aviator Sunglasses', brand: 'Tommy Hilfiger', price: 35.0, originalPrice: 45.0, discountPercent: 22, rating: 4.7, ratingCount: 16, imageUrl: '/assets/mens_aviator_sunglasses.png', isNew: false, isSale: true, category: 'accessories', subcategory: 'sunglasses', gender: 'men', colors: 'gold,black', sizes: 'M' },
+  { id: 51, name: 'Classic Sport Cap', brand: 'adidas Originals', price: 12.0, originalPrice: 16.0, discountPercent: 25, rating: 4.3, ratingCount: 8, imageUrl: '/assets/mens_sport_cap.png', isNew: false, isSale: true, category: 'accessories', subcategory: 'hats', gender: 'men', colors: 'black,blue', sizes: 'M' },
 
   // ==========================================
   // KIDS' PRODUCTS
   // ==========================================
-  { id: 60, name: 'Kids Fun Graphic Tee', brand: 'H&M', price: 9.0, rating: 4.5, ratingCount: 6, imageUrl: '/assets/new_product_2.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'tops', gender: 'kids', colors: 'red,blue,white', sizes: 'XS,S' },
-  { id: 61, name: 'Girls Floral Dress', brand: 'H&M', price: 15.0, rating: 4.7, ratingCount: 10, imageUrl: '/assets/evening_dress_product.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'dresses', gender: 'kids', colors: 'pink,white,blue', sizes: 'XS,S' },
-  { id: 62, name: 'Girls Tutu Skirt', brand: 'H&M', price: 12.0, rating: 4.6, ratingCount: 7, imageUrl: '/assets/product_maxi_skirt.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'skirts', gender: 'kids', colors: 'pink,white', sizes: 'XS,S' },
-  { id: 63, name: 'Kids Cargo Jeans', brand: 'Mango', price: 22.0, rating: 4.1, ratingCount: 4, imageUrl: '/assets/cat_jeanswear.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'jeans', gender: 'kids', colors: 'blue', sizes: 'XS,S' },
-  { id: 64, name: 'Kids Cargo Shorts', brand: 'H&M', price: 10.0, rating: 4.4, ratingCount: 5, imageUrl: '/assets/cat_activewear.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'shorts', gender: 'kids', colors: 'tan,blue,grey', sizes: 'XS,S' },
-  { id: 65, name: 'Kids Pullover Hoodie', brand: 'Nike', price: 25.0, rating: 4.8, ratingCount: 12, imageUrl: '/assets/mens_hoodie_grey.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'hoodies', gender: 'kids', colors: 'grey,blue,red', sizes: 'XS,S' },
-  { id: 66, name: 'Kids Light Jacket', brand: 'H&M', price: 28.0, rating: 4.5, ratingCount: 7, imageUrl: '/assets/product_denim_jacket.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'jackets', gender: 'kids', colors: 'blue,green', sizes: 'XS,S' },
-  { id: 67, name: 'Kids Cargo Pants', brand: 'Mango', price: 18.0, rating: 4.3, ratingCount: 5, imageUrl: '/assets/cat_cargo.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'pants', gender: 'kids', colors: 'grey,tan', sizes: 'XS,S' },
-  { id: 68, name: 'Kids Knit Sweater', brand: 'H&M', price: 20.0, rating: 4.5, ratingCount: 6, imageUrl: '/assets/product_knit_sweater.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'sweaters', gender: 'kids', colors: 'red,blue,grey', sizes: 'XS,S' },
-  { id: 69, name: 'Kids Running Sneakers', brand: 'Nike', price: 29.0, rating: 4.9, ratingCount: 15, imageUrl: '/assets/product_sneakers.png', isNew: true, isSale: false, category: 'shoes', subcategory: 'sneakers', gender: 'kids', colors: 'white,red,blue', sizes: 'XS,S' },
-  { id: 70, name: 'Kids Summer Sandals', brand: 'H&M', price: 14.0, rating: 4.4, ratingCount: 7, imageUrl: '/assets/cat_beachwear.png', isNew: true, isSale: false, category: 'shoes', subcategory: 'sandals', gender: 'kids', colors: 'blue,red,white', sizes: 'XS,S' },
-  { id: 71, name: 'Kids Rain Boots', brand: 'H&M', price: 20.0, rating: 4.7, ratingCount: 9, imageUrl: '/assets/mens_leather_boots.png', isNew: true, isSale: false, category: 'shoes', subcategory: 'boots', gender: 'kids', colors: 'yellow,blue,red', sizes: 'XS,S' },
-  { id: 72, name: 'Kids School Backpack', brand: 'Nike', price: 22.0, rating: 4.8, ratingCount: 14, imageUrl: '/assets/mens_backpack.png', isNew: true, isSale: false, category: 'accessories', subcategory: 'backpacks', gender: 'kids', colors: 'blue,red,black', sizes: 'S' },
-  { id: 73, name: 'Kids Baseball Cap', brand: 'Nike', price: 8.0, rating: 4.4, ratingCount: 6, imageUrl: '/assets/cat_accessories_hats.png', isNew: true, isSale: false, category: 'accessories', subcategory: 'hats', gender: 'kids', colors: 'red,blue,black', sizes: 'S' },
+  { id: 60, name: 'Kids Fun Graphic Tee', brand: 'H&M', price: 9.0, rating: 4.5, ratingCount: 6, imageUrl: '/assets/kids_graphic_tee.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'tops', gender: 'kids', colors: 'red,blue,white', sizes: 'XS,S' },
+  { id: 61, name: 'Kids Striped Tee', brand: 'H&M', price: 11.0, rating: 4.6, ratingCount: 8, imageUrl: '/assets/kids_striped_tee.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'tops', gender: 'kids', colors: 'blue,white', sizes: 'XS,S' },
+  { id: 62, name: 'Girls Floral Dress', brand: 'H&M', price: 15.0, originalPrice: 20.0, discountPercent: 25, rating: 4.7, ratingCount: 10, imageUrl: '/assets/girls_floral_dress.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'dresses', gender: 'kids', colors: 'pink,white,blue', sizes: 'XS,S' },
+  { id: 63, name: 'Girls Party Dress', brand: 'Zara', price: 24.0, rating: 4.8, ratingCount: 12, imageUrl: '/assets/girls_party_dress.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'dresses', gender: 'kids', colors: 'red,pink', sizes: 'XS,S' },
+  { id: 64, name: 'Girls Tutu Skirt', brand: 'H&M', price: 12.0, rating: 4.6, ratingCount: 7, imageUrl: '/assets/girls_tutu_skirt.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'skirts', gender: 'kids', colors: 'pink,white', sizes: 'XS,S' },
+  { id: 65, name: 'Kids Cargo Jeans', brand: 'Mango', price: 22.0, rating: 4.1, ratingCount: 4, imageUrl: '/assets/kids_cargo_jeans.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'jeans', gender: 'kids', colors: 'blue', sizes: 'XS,S' },
+  { id: 66, name: 'Kids Cargo Shorts', brand: 'H&M', price: 10.0, originalPrice: 15.0, discountPercent: 33, rating: 4.4, ratingCount: 5, imageUrl: '/assets/kids_cargo_shorts.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'shorts', gender: 'kids', colors: 'tan,blue,grey', sizes: 'XS,S' },
+  { id: 67, name: 'Kids Pullover Hoodie', brand: 'Nike', price: 25.0, rating: 4.8, ratingCount: 12, imageUrl: '/assets/kids_pullover_hoodie.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'hoodies', gender: 'kids', colors: 'grey,blue,red', sizes: 'XS,S' },
+  { id: 68, name: 'Kids Light Jacket', brand: 'H&M', price: 28.0, rating: 4.5, ratingCount: 7, imageUrl: '/assets/kids_light_jacket.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'jackets', gender: 'kids', colors: 'blue,green', sizes: 'XS,S' },
+  { id: 69, name: 'Kids Cargo Pants', brand: 'Mango', price: 18.0, rating: 4.3, ratingCount: 5, imageUrl: '/assets/kids_cargo_pants.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'pants', gender: 'kids', colors: 'grey,tan', sizes: 'XS,S' },
+  { id: 70, name: 'Kids Knit Sweater', brand: 'H&M', price: 20.0, rating: 4.5, ratingCount: 6, imageUrl: '/assets/kids_knit_sweater.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'sweaters', gender: 'kids', colors: 'red,blue,grey', sizes: 'XS,S' },
+  { id: 71, name: 'Kids Running Sneakers', brand: 'Nike', price: 29.0, rating: 4.9, ratingCount: 15, imageUrl: '/assets/kids_running_sneakers.png', isNew: true, isSale: false, category: 'shoes', subcategory: 'sneakers', gender: 'kids', colors: 'white,red,blue', sizes: 'XS,S' },
+  { id: 72, name: 'Kids Summer Sandals', brand: 'H&M', price: 14.0, originalPrice: 18.0, discountPercent: 22, rating: 4.4, ratingCount: 7, imageUrl: '/assets/kids_summer_sandals.png', isNew: false, isSale: true, category: 'shoes', subcategory: 'sandals', gender: 'kids', colors: 'blue,red,white', sizes: 'XS,S' },
+  { id: 73, name: 'Kids Rain Boots', brand: 'H&M', price: 20.0, rating: 4.7, ratingCount: 9, imageUrl: '/assets/kids_rain_boots.png', isNew: true, isSale: false, category: 'shoes', subcategory: 'boots', gender: 'kids', colors: 'yellow,blue,red', sizes: 'XS,S' },
+  { id: 74, name: 'Kids School Backpack', brand: 'Nike', price: 22.0, rating: 4.8, ratingCount: 14, imageUrl: '/assets/kids_school_backpack.png', isNew: true, isSale: false, category: 'accessories', subcategory: 'backpacks', gender: 'kids', colors: 'blue,red,black', sizes: 'S' },
+  { id: 75, name: 'Kids Baseball Cap', brand: 'Nike', price: 8.0, originalPrice: 12.0, discountPercent: 33, rating: 4.4, ratingCount: 6, imageUrl: '/assets/kids_baseball_cap.png', isNew: false, isSale: true, category: 'accessories', subcategory: 'hats', gender: 'kids', colors: 'red,blue,black', sizes: 'S' },
+
+  // ==========================================
+  // CATEGORY & SPECIAL COLLECTION PRODUCTS
+  // ==========================================
+  { id: 80, name: 'Summer Fedora Sun Hat', brand: 'H&M', price: 18.0, originalPrice: 24.0, discountPercent: 25, rating: 4.6, ratingCount: 15, imageUrl: '/assets/cat_accessories_hats.png', isNew: false, isSale: true, category: 'accessories', subcategory: 'hats', gender: 'women', colors: 'tan,white', sizes: 'M' },
+  { id: 81, name: 'Seamless Activewear Set', brand: 'Nike', price: 42.0, rating: 4.8, ratingCount: 29, imageUrl: '/assets/cat_activewear.png', isNew: true, isSale: false, category: 'activewear', subcategory: 'activewear', gender: 'women', colors: 'blue,grey,black', sizes: 'S,M,L' },
+  { id: 82, name: 'Resort Beachwear Cover-up', brand: 'Zara', price: 29.0, originalPrice: 39.0, discountPercent: 25, rating: 4.7, ratingCount: 18, imageUrl: '/assets/cat_beachwear.png', isNew: false, isSale: true, category: 'beachwear', subcategory: 'beachwear', gender: 'women', colors: 'white,tan', sizes: 'S,M,L' },
+  { id: 83, name: 'Cozy Knit Cardigan', brand: 'Mango', price: 38.0, rating: 4.9, ratingCount: 22, imageUrl: '/assets/cat_cardigans.png', isNew: true, isSale: false, category: 'sweaters', subcategory: 'sweaters', gender: 'women', colors: 'tan,grey,white', sizes: 'S,M,L' },
+  { id: 84, name: 'Cargo Streetwear Trousers', brand: 'Jack & Jones', price: 48.0, rating: 4.6, ratingCount: 20, imageUrl: '/assets/cat_cargo.png', isNew: true, isSale: false, category: 'pants', subcategory: 'pants', gender: 'men', colors: 'tan,black,green', sizes: 'M,L,XL' },
+  { id: 85, name: 'Classic Jeanswear Jacket', brand: 'Levi\'s', price: 65.0, rating: 4.9, ratingCount: 34, imageUrl: '/assets/product_denim_jacket.png', isNew: true, isSale: false, category: 'jackets', subcategory: 'jeans', gender: 'women', colors: 'blue,grey,black', sizes: 'S,M,L' },
+  { id: 86, name: 'Soft Velvet Loungewear', brand: 'H&M', price: 34.0, rating: 4.5, ratingCount: 16, imageUrl: '/assets/cat_loungewear.png', isNew: true, isSale: false, category: 'loungewear', subcategory: 'loungewear', gender: 'women', colors: 'pink,grey,white', sizes: 'S,M,L' },
+  { id: 87, name: 'Executive Office Blazer', brand: 'Zara', price: 79.0, rating: 4.8, ratingCount: 25, imageUrl: '/assets/cat_officestyle.png', isNew: true, isSale: false, category: 'jackets', subcategory: 'blouses', gender: 'women', colors: 'black,tan', sizes: 'S,M,L' },
+  { id: 88, name: 'Classic Trench Outerwear', brand: 'Burberry', price: 120.0, rating: 5.0, ratingCount: 40, imageUrl: '/assets/cat_outerwear.png', isNew: true, isSale: false, category: 'outerwear', subcategory: 'jackets', gender: 'women', colors: 'tan,black', sizes: 'S,M,L' },
+  { id: 89, name: 'Glamour Partywear Dress', brand: 'Dorothy Perkins', price: 59.0, rating: 4.9, ratingCount: 30, imageUrl: '/assets/cat_partywear.png', isNew: true, isSale: false, category: 'dresses', subcategory: 'partywear', gender: 'women', colors: 'silver,black,red,white,tan,gold', sizes: 'S,M,L' },
+  { id: 90, name: 'Satin Silk Sleepwear Set', brand: 'H&M', price: 26.0, rating: 4.7, ratingCount: 14, imageUrl: '/assets/cat_sleepwear.png', isNew: true, isSale: false, category: 'sleepwear', subcategory: 'sleepwear', gender: 'women', colors: 'pink,white,black', sizes: 'S,M,L' },
+  { id: 91, name: 'Athletic Sportswear Top', brand: 'adidas', price: 28.0, rating: 4.6, ratingCount: 19, imageUrl: '/assets/cat_sportswear.png', isNew: true, isSale: false, category: 'activewear', subcategory: 'sportswear', gender: 'women', colors: 'black,white,red', sizes: 'S,M,L' },
+  { id: 92, name: 'Tropical Swimwear Suit', brand: 'Zara', price: 32.0, originalPrice: 45.0, discountPercent: 28, rating: 4.8, ratingCount: 27, imageUrl: '/assets/cat_swimwear.png', isNew: false, isSale: true, category: 'swimwear', subcategory: 'swimwear', gender: 'women', colors: 'blue,red,white', sizes: 'S,M,L' },
+  { id: 93, name: 'Urban Streetwear Hoodie', brand: 'Nike', price: 54.0, rating: 4.8, ratingCount: 38, imageUrl: '/assets/cat_urbanwear.png', isNew: true, isSale: false, category: 'hoodies', subcategory: 'urbanwear', gender: 'men', colors: 'grey,black,tan', sizes: 'M,L,XL' },
+  { id: 94, name: 'Vintage Leather Jacket', brand: 'Mango', price: 95.0, rating: 4.9, ratingCount: 31, imageUrl: '/assets/cat_vintage.png', isNew: true, isSale: false, category: 'jackets', subcategory: 'vintage', gender: 'women', colors: 'brown,black', sizes: 'S,M,L' },
+  { id: 95, name: 'Noir Signature Trench Coat', brand: 'Zara', price: 110.0, rating: 5.0, ratingCount: 18, imageUrl: '/assets/black_collection_banner.png', isNew: true, isSale: false, category: 'outerwear', subcategory: 'outerwear', gender: 'women', colors: 'black', sizes: 'S,M,L' },
 ];
-const SLIDE_LABELS = ['Trending', 'Summer Sale', 'New Collection'];
+const SLIDE_LABELS = ['Trending', 'Summer Sale', 'Collection'];
 
 export default function App() {
   const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS);
   const [activeTab, setActiveTab] = useState<'home' | 'shop' | 'bag' | 'favorites' | 'profile'>('home');
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [trendingSubcategory, setTrendingSubcategory] = useState<string>('All');
+  const [summerSubcategory, setSummerSubcategory] = useState<string>('All');
   const [favorites, setFavorites] = useState<number[]>([]);
   const [isDesktop, setIsDesktop] = useState(false);
+
+  const handleSubcategoryNav = (slideIdx: number, subcatKey: string) => {
+    setCurrentSlide(slideIdx);
+    if (slideIdx === 0) {
+      setTrendingSubcategory(subcatKey);
+    } else if (slideIdx === 1) {
+      setSummerSubcategory(subcatKey);
+    }
+  };
 
   // Product Details & Engagement State (Milestone 4)
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
@@ -1113,14 +1179,11 @@ export default function App() {
                     : product.imageUrl;
 
                   return (
-                    <img 
+                    <ProductImage 
                       src={activeImgUrl} 
                       alt={product.name} 
                       className="details-main-image" 
-                      onError={(e) => {
-                        // Fallback to original product image if color variant file doesn't exist yet
-                        (e.target as HTMLImageElement).src = product.imageUrl;
-                      }}
+                      fallbackSrc={product.imageUrl}
                     />
                   );
                 })()}
@@ -1287,7 +1350,7 @@ export default function App() {
                     style={{ cursor: 'pointer' }}
                   >
                     <div className="product-img-wrapper">
-                      <img src={p.imageUrl} alt={p.name} className="product-image" draggable="false" />
+                      <ProductImage src={p.imageUrl} alt={p.name} className="product-image" />
                       {p.isSale && p.discountPercent && (
                         <span className="tag-badge badge-discount">-{p.discountPercent}%</span>
                       )}
@@ -1649,7 +1712,36 @@ export default function App() {
             className="header-search-input" 
             type="text" 
             placeholder="Search products..." 
+            value={searchQuery}
+            onChange={(e) => {
+              const val = e.target.value;
+              setSearchQuery(val);
+              if (val.trim() !== '') {
+                if (activeTab !== 'shop') setActiveTab('shop');
+                if (shopView !== 'catalog') setShopView('catalog');
+                if (selectedProductId !== null) setSelectedProductId(null);
+              }
+            }}
           />
+          {searchQuery && (
+            <button 
+              className="clear-search-btn" 
+              onClick={() => setSearchQuery('')}
+              title="Clear search"
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'inherit',
+                cursor: 'pointer',
+                padding: '0 6px',
+                display: 'flex',
+                alignItems: 'center',
+                opacity: 0.7
+              }}
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
 
         <div className="header-actions">
@@ -1735,46 +1827,80 @@ export default function App() {
                 </div>
                 <div className="hero-content">
                   <h1 className="hero-title">Fashion<br />sale</h1>
-                  <button className="hero-button">Check</button>
+                  <button className="hero-button" onClick={() => jumpToSlide(1)}>Check</button>
                 </div>
               </div>
 
               <div className="section-container">
                 <div className="section-header">
                   <div className="section-title-wrap">
-                    <h2 className="section-title">New</h2>
-                    <span className="section-subtitle">You've never seen it before!</span>
+                    <h2 className="section-title">New & Trending</h2>
+                    <span className="section-subtitle">Explore trending collections by subcategory</span>
                   </div>
                   <a href="#view-all" className="section-link" onClick={(e) => {e.preventDefault(); setActiveTab('shop');}}>View all</a>
                 </div>
-                <div className="products-scroll">
-                  {newProducts.map((product) => (
-                    <div 
-                      key={product.id} 
-                      className="product-card"
-                      onClick={() => setSelectedProductId(product.id)}
-                      style={{ cursor: 'pointer' }}
+
+                {/* Trending Subcategory Filter Chips */}
+                <div className="subcategory-filter-chips" style={{ display: 'flex', gap: '8px', overflowX: 'auto', padding: '4px 0 16px 0', scrollbarWidth: 'none' }}>
+                  {['All', 'Hoodies', 'Sweaters', 'Dresses', 'Jeans', 'Jackets', 'Pants', 'Shoes', 'Accessories', 'Partywear', 'Cargo'].map((chip) => (
+                    <button
+                      key={chip}
+                      className={`chip-button ${trendingSubcategory.toLowerCase() === chip.toLowerCase() ? 'active' : ''}`}
+                      onClick={() => setTrendingSubcategory(chip === 'All' ? 'All' : chip.toLowerCase())}
+                      style={{
+                        padding: '6px 14px',
+                        borderRadius: '20px',
+                        border: '1px solid var(--light-gray)',
+                        background: trendingSubcategory.toLowerCase() === chip.toLowerCase() ? 'var(--accent-red, #DB3022)' : 'var(--card-bg)',
+                        color: trendingSubcategory.toLowerCase() === chip.toLowerCase() ? '#FFF' : 'var(--text-primary)',
+                        fontSize: '13px',
+                        fontWeight: 500,
+                        whiteSpace: 'nowrap',
+                        cursor: 'pointer'
+                      }}
                     >
-                      <div className="product-img-wrapper">
-                        <img src={product.imageUrl} alt={product.name} className="product-image" draggable="false" />
-                        <span className="tag-badge badge-new">NEW</span>
-                        <button 
-                          className={`favorite-btn ${favorites.includes(product.id) ? 'active' : ''}`}
-                          onClick={(e) => toggleFavorite(product.id, e)}
-                        >
-                          <Heart className="favorite-icon" />
-                        </button>
-                      </div>
-                      <div className="product-meta">
-                        {renderStars(product.rating, product.ratingCount)}
-                        <span className="product-brand">{product.brand}</span>
-                        <h3 className="product-name">{product.name}</h3>
-                        <div className="product-pricing">
-                          <span className="price-current">${product.price}</span>
+                      {chip}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="products-scroll">
+                  {newProducts
+                    .filter((product) => {
+                      if (trendingSubcategory === 'All') return true;
+                      const sub = (product.subcategory || '').toLowerCase();
+                      const cat = (product.category || '').toLowerCase();
+                      const key = trendingSubcategory.toLowerCase();
+                      if (key === 'black') return product.colors?.toLowerCase().includes('black');
+                      return sub.includes(key) || cat.includes(key);
+                    })
+                    .map((product) => (
+                      <div 
+                        key={product.id} 
+                        className="product-card"
+                        onClick={() => setSelectedProductId(product.id)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <div className="product-img-wrapper">
+                          <ProductImage src={product.imageUrl} alt={product.name} className="product-image" />
+                          <span className="tag-badge badge-new">NEW</span>
+                          <button 
+                            className={`favorite-btn ${favorites.includes(product.id) ? 'active' : ''}`}
+                            onClick={(e) => toggleFavorite(product.id, e)}
+                          >
+                            <Heart className="favorite-icon" />
+                          </button>
+                        </div>
+                        <div className="product-meta">
+                          {renderStars(product.rating, product.ratingCount)}
+                          <span className="product-brand">{product.brand}</span>
+                          <h3 className="product-name">{product.name}</h3>
+                          <div className="product-pricing">
+                            <span className="price-current">${product.price}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
             </div>
@@ -1791,90 +1917,136 @@ export default function App() {
                   <div className="banner-image right" style={{ backgroundImage: "url('/assets/street_clothes_banner.png')" }} />
                 </div>
                 <div className="hero-content">
-                  <h1 className="hero-title" style={{ fontSize: isDesktopView ? '54px' : '38px' }}>Street clothes</h1>
+                  <h1 className="hero-title" style={{ fontSize: isDesktopView ? '54px' : '38px' }}>Summer<br />Sale</h1>
                 </div>
               </div>
 
               <div className="section-container">
                 <div className="section-header">
                   <div className="section-title-wrap">
-                    <h2 className="section-title">Sale</h2>
-                    <span className="section-subtitle">Super summer sale</span>
+                    <h2 className="section-title">Summer Sale</h2>
+                    <span className="section-subtitle">Exclusive summer discounts & essentials</span>
                   </div>
                   <a href="#view-all" className="section-link" onClick={(e) => {e.preventDefault(); setActiveTab('shop');}}>View all</a>
                 </div>
-                <div className="products-scroll">
-                  {saleProducts.map((product) => (
-                    <div 
-                      key={product.id} 
-                      className="product-card"
-                      onClick={() => setSelectedProductId(product.id)}
-                      style={{ cursor: 'pointer' }}
+
+                {/* Summer Sale Subcategory Filter Chips */}
+                <div className="subcategory-filter-chips" style={{ display: 'flex', gap: '8px', overflowX: 'auto', padding: '4px 0 16px 0', scrollbarWidth: 'none' }}>
+                  {['All', 'Dresses', 'Shorts', 'Sandals', 'Beachwear', 'Swimwear', 'Hats', 'Tops'].map((chip) => (
+                    <button
+                      key={chip}
+                      className={`chip-button ${summerSubcategory.toLowerCase() === chip.toLowerCase() ? 'active' : ''}`}
+                      onClick={() => setSummerSubcategory(chip === 'All' ? 'All' : chip.toLowerCase())}
+                      style={{
+                        padding: '6px 14px',
+                        borderRadius: '20px',
+                        border: '1px solid var(--light-gray)',
+                        background: summerSubcategory.toLowerCase() === chip.toLowerCase() ? 'var(--accent-red, #DB3022)' : 'var(--card-bg)',
+                        color: summerSubcategory.toLowerCase() === chip.toLowerCase() ? '#FFF' : 'var(--text-primary)',
+                        fontSize: '13px',
+                        fontWeight: 500,
+                        whiteSpace: 'nowrap',
+                        cursor: 'pointer'
+                      }}
                     >
-                      <div className="product-img-wrapper">
-                        <img src={product.imageUrl} alt={product.name} className="product-image" draggable="false" />
-                        <span className="tag-badge badge-discount">-{product.discountPercent}%</span>
-                        <button 
-                          className={`favorite-btn ${favorites.includes(product.id) ? 'active' : ''}`}
-                          onClick={(e) => toggleFavorite(product.id, e)}
-                        >
-                          <Heart className="favorite-icon" />
-                        </button>
-                      </div>
-                      <div className="product-meta">
-                        {renderStars(product.rating, product.ratingCount)}
-                        <span className="product-brand">{product.brand}</span>
-                        <h3 className="product-name">{product.name}</h3>
-                        <div className="product-pricing">
-                          <span className="price-original">${product.originalPrice}</span>
-                          <span className="price-current sale-price">${product.price}</span>
-                        </div>
-                      </div>
-                    </div>
+                      {chip}
+                    </button>
                   ))}
                 </div>
 
-                {/* Additional New section from Main 2 */}
-                <div className="section-header" style={{ marginTop: '16px' }}>
+                <div className="products-scroll">
+                  {saleProducts
+                    .filter((product) => {
+                      if (summerSubcategory === 'All') return true;
+                      const sub = (product.subcategory || '').toLowerCase();
+                      const cat = (product.category || '').toLowerCase();
+                      const key = summerSubcategory.toLowerCase();
+                      return sub.includes(key) || cat.includes(key);
+                    })
+                    .map((product) => (
+                      <div 
+                        key={product.id} 
+                        className="product-card"
+                        onClick={() => setSelectedProductId(product.id)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <div className="product-img-wrapper">
+                          <ProductImage src={product.imageUrl} alt={product.name} className="product-image" />
+                          <span className="tag-badge badge-discount">-{product.discountPercent}%</span>
+                          <button 
+                            className={`favorite-btn ${favorites.includes(product.id) ? 'active' : ''}`}
+                            onClick={(e) => toggleFavorite(product.id, e)}
+                          >
+                            <Heart className="favorite-icon" />
+                          </button>
+                        </div>
+                        <div className="product-meta">
+                          {renderStars(product.rating, product.ratingCount)}
+                          <span className="product-brand">{product.brand}</span>
+                          <h3 className="product-name">{product.name}</h3>
+                          <div className="product-pricing">
+                            <span className="price-original">${product.originalPrice}</span>
+                            <span className="price-current sale-price">${product.price}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+
+                {/* Summer New Arrivals Section */}
+                <div className="section-header" style={{ marginTop: '24px' }}>
                   <div className="section-title-wrap">
                     <h2 className="section-title">New</h2>
-                    <span className="section-subtitle">You've never seen it before!</span>
+                    <span className="section-subtitle">Summer new arrivals</span>
                   </div>
                   <a href="#view-all" className="section-link" onClick={(e) => {e.preventDefault(); setActiveTab('shop');}}>View all</a>
                 </div>
                 <div className="products-scroll">
-                  {newProducts.map((product) => (
-                    <div 
-                      key={product.id} 
-                      className="product-card"
-                      onClick={() => setSelectedProductId(product.id)}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <div className="product-img-wrapper">
-                        <img src={product.imageUrl} alt={product.name} className="product-image" draggable="false" />
-                        <span className="tag-badge badge-new">NEW</span>
-                        <button 
-                          className={`favorite-btn ${favorites.includes(product.id) ? 'active' : ''}`}
-                          onClick={(e) => toggleFavorite(product.id, e)}
-                        >
-                          <Heart className="favorite-icon" />
-                        </button>
-                      </div>
-                      <div className="product-meta">
-                        {renderStars(product.rating, product.ratingCount)}
-                        <span className="product-brand">{product.brand}</span>
-                        <h3 className="product-name">{product.name}</h3>
-                        <div className="product-pricing">
-                          <span className="price-current">${product.price}</span>
+                  {newProducts
+                    .filter((product) => {
+                      const sub = (product.subcategory || '').toLowerCase();
+                      const cat = (product.category || '').toLowerCase();
+                      const name = (product.name || '').toLowerCase();
+                      // Exclude non-summer items from Summer Sale slide
+                      if (sub.includes('hoodie') || sub.includes('sweater') || sub.includes('winter') || name.includes('hoodie') || name.includes('boots') || name.includes('coat') || name.includes('knit')) {
+                        return false;
+                      }
+                      if (summerSubcategory === 'All') return true;
+                      const key = summerSubcategory.toLowerCase();
+                      return sub.includes(key) || cat.includes(key);
+                    })
+                    .map((product) => (
+                      <div 
+                        key={product.id} 
+                        className="product-card"
+                        onClick={() => setSelectedProductId(product.id)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <div className="product-img-wrapper">
+                          <ProductImage src={product.imageUrl} alt={product.name} className="product-image" />
+                          <span className="tag-badge badge-new">NEW</span>
+                          <button 
+                            className={`favorite-btn ${favorites.includes(product.id) ? 'active' : ''}`}
+                            onClick={(e) => toggleFavorite(product.id, e)}
+                          >
+                            <Heart className="favorite-icon" />
+                          </button>
+                        </div>
+                        <div className="product-meta">
+                          {renderStars(product.rating, product.ratingCount)}
+                          <span className="product-brand">{product.brand}</span>
+                          <h3 className="product-name">{product.name}</h3>
+                          <div className="product-pricing">
+                            <span className="price-current">${product.price}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
             </div>
 
-            {/* ================= SLIDE 3 (New Collection) ================= */}
+            {/* ================= SLIDE 3 (Collection) ================= */}
             <div 
               className="home-slide" 
               style={isDesktop ? { display: currentSlide === 2 ? 'flex' : 'none', width: '100%' } : undefined}
@@ -1886,22 +2058,22 @@ export default function App() {
                     <div className="banner-image center" style={{ backgroundImage: "url('/assets/new_collection_banner_center.png')" }} />
                     <div className="banner-image right" style={{ backgroundImage: "url('/assets/new_collection_banner.png')" }} />
                   </div>
-                  <h2 className="grid-top-title">New collection</h2>
+                  <h2 className="grid-top-title">Collection</h2>
                 </div>
 
                 <div className="grid-bottom-row">
                   <div className="grid-col-left">
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/sport_dress_product.png')" }}
-                      onClick={() => setCurrentSlide(1)}
+                      style={{ backgroundImage: "url('/assets/sport_dress_product.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(1, 'All')}
                     >
                       <h4 className="grid-block-title">Summer<br />sale</h4>
                     </div>
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/black_collection_banner.png')" }}
-                      onClick={() => setCurrentSlide(1)}
+                      style={{ backgroundImage: "url('/assets/black_collection_banner.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'black')}
                     >
                       <h4 className="grid-block-title">Black</h4>
                     </div>
@@ -1909,7 +2081,8 @@ export default function App() {
                   <div className="grid-col-right">
                     <div 
                       className="grid-block image-block block-right-full"
-                      style={{ backgroundImage: "url('/assets/mens_hoodies_banner.png')" }}
+                      style={{ backgroundImage: "url('/assets/mens_hoodies_banner.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'hoodies')}
                     >
                       <h4 className="grid-block-title">Men's<br />hoodies</h4>
                     </div>
@@ -1920,13 +2093,15 @@ export default function App() {
                   <div className="grid-col-left">
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/product_knit_sweater.png')" }}
+                      style={{ backgroundImage: "url('/assets/product_knit_sweater.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'sweaters')}
                     >
                       <h4 className="grid-block-title">Winter<br />knitwear</h4>
                     </div>
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/product_leather_bag.png')" }}
+                      style={{ backgroundImage: "url('/assets/product_leather_bag.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'accessories')}
                     >
                       <h4 className="grid-block-title">Accessories</h4>
                     </div>
@@ -1934,7 +2109,8 @@ export default function App() {
                   <div className="grid-col-right">
                     <div 
                       className="grid-block image-block block-right-full"
-                      style={{ backgroundImage: "url('/assets/product_sneakers.png')" }}
+                      style={{ backgroundImage: "url('/assets/product_sneakers.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'shoes')}
                     >
                       <h4 className="grid-block-title">Footwear</h4>
                     </div>
@@ -1945,13 +2121,15 @@ export default function App() {
                   <div className="grid-col-left">
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/evening_dress_product.png')" }}
+                      style={{ backgroundImage: "url('/assets/evening_dress_product.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'dresses')}
                     >
                       <h4 className="grid-block-title">Formal<br />wear</h4>
                     </div>
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/product_denim_jacket.png')" }}
+                      style={{ backgroundImage: "url('/assets/product_denim_jacket.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'jeans')}
                     >
                       <h4 className="grid-block-title">Denim</h4>
                     </div>
@@ -1959,7 +2137,8 @@ export default function App() {
                   <div className="grid-col-right">
                     <div 
                       className="grid-block image-block block-right-full"
-                      style={{ backgroundImage: "url('/assets/product_wrap_dress.png')" }}
+                      style={{ backgroundImage: "url('/assets/product_wrap_dress.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'dresses')}
                     >
                       <h4 className="grid-block-title">Dresses</h4>
                     </div>
@@ -1971,13 +2150,15 @@ export default function App() {
                   <div className="grid-col-left">
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/cat_sportswear.png')" }}
+                      style={{ backgroundImage: "url('/assets/cat_sportswear.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'sportswear')}
                     >
                       <h4 className="grid-block-title">Sportswear</h4>
                     </div>
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/cat_swimwear.png')" }}
+                      style={{ backgroundImage: "url('/assets/cat_swimwear.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(1, 'swimwear')}
                     >
                       <h4 className="grid-block-title">Swimwear</h4>
                     </div>
@@ -1985,7 +2166,8 @@ export default function App() {
                   <div className="grid-col-right">
                     <div 
                       className="grid-block image-block block-right-full"
-                      style={{ backgroundImage: "url('/assets/cat_loungewear.png')" }}
+                      style={{ backgroundImage: "url('/assets/cat_loungewear.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'loungewear')}
                     >
                       <h4 className="grid-block-title">Loungewear</h4>
                     </div>
@@ -1997,13 +2179,15 @@ export default function App() {
                   <div className="grid-col-left">
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/cat_activewear.png')" }}
+                      style={{ backgroundImage: "url('/assets/cat_activewear.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'activewear')}
                     >
                       <h4 className="grid-block-title">Activewear</h4>
                     </div>
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/cat_outerwear.png')" }}
+                      style={{ backgroundImage: "url('/assets/cat_outerwear.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'jackets')}
                     >
                       <h4 className="grid-block-title">Outerwear</h4>
                     </div>
@@ -2011,7 +2195,8 @@ export default function App() {
                   <div className="grid-col-right">
                     <div 
                       className="grid-block image-block block-right-full"
-                      style={{ backgroundImage: "url('/assets/cat_jeanswear.png')" }}
+                      style={{ backgroundImage: "url('/assets/cat_jeanswear.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'jeans')}
                     >
                       <h4 className="grid-block-title">Jeanswear</h4>
                     </div>
@@ -2023,13 +2208,15 @@ export default function App() {
                   <div className="grid-col-left">
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/cat_urbanwear.png')" }}
+                      style={{ backgroundImage: "url('/assets/cat_urbanwear.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'tops')}
                     >
                       <h4 className="grid-block-title">Urban<br />wear</h4>
                     </div>
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/cat_accessories_hats.png')" }}
+                      style={{ backgroundImage: "url('/assets/cat_accessories_hats.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(1, 'hats')}
                     >
                       <h4 className="grid-block-title">Summer<br />hats</h4>
                     </div>
@@ -2037,7 +2224,8 @@ export default function App() {
                   <div className="grid-col-right">
                     <div 
                       className="grid-block image-block block-right-full"
-                      style={{ backgroundImage: "url('/assets/cat_cargo.png')" }}
+                      style={{ backgroundImage: "url('/assets/cat_cargo.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'pants')}
                     >
                       <h4 className="grid-block-title">Cargo<br />style</h4>
                     </div>
@@ -2049,13 +2237,15 @@ export default function App() {
                   <div className="grid-col-left">
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/cat_sleepwear.png')" }}
+                      style={{ backgroundImage: "url('/assets/cat_sleepwear.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'sleepwear')}
                     >
                       <h4 className="grid-block-title">Sleepwear</h4>
                     </div>
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/cat_beachwear.png')" }}
+                      style={{ backgroundImage: "url('/assets/cat_beachwear.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(1, 'beachwear')}
                     >
                       <h4 className="grid-block-title">Beachwear</h4>
                     </div>
@@ -2063,7 +2253,8 @@ export default function App() {
                   <div className="grid-col-right">
                     <div 
                       className="grid-block image-block block-right-full"
-                      style={{ backgroundImage: "url('/assets/cat_partywear.png')" }}
+                      style={{ backgroundImage: "url('/assets/cat_partywear.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'partywear')}
                     >
                       <h4 className="grid-block-title">Party<br />wear</h4>
                     </div>
@@ -2075,13 +2266,15 @@ export default function App() {
                   <div className="grid-col-left">
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/cat_cardigans.png')" }}
+                      style={{ backgroundImage: "url('/assets/cat_cardigans.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'sweaters')}
                     >
                       <h4 className="grid-block-title">Cardigans</h4>
                     </div>
                     <div 
                       className="grid-block image-block"
-                      style={{ backgroundImage: "url('/assets/cat_officestyle.png')" }}
+                      style={{ backgroundImage: "url('/assets/cat_officestyle.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'blouses')}
                     >
                       <h4 className="grid-block-title">Office<br />style</h4>
                     </div>
@@ -2089,7 +2282,8 @@ export default function App() {
                   <div className="grid-col-right">
                     <div 
                       className="grid-block image-block block-right-full"
-                      style={{ backgroundImage: "url('/assets/cat_vintage.png')" }}
+                      style={{ backgroundImage: "url('/assets/cat_vintage.png')", cursor: 'pointer' }}
+                      onClick={() => handleSubcategoryNav(0, 'accessories')}
                     >
                       <h4 className="grid-block-title">Vintage<br />style</h4>
                     </div>
@@ -2480,7 +2674,7 @@ export default function App() {
                     <ChevronLeft size={24} />
                   </button>
                   <span className="header-title-text">Categories</span>
-                  <button className="header-icon-btn">
+                  <button className="header-icon-btn" onClick={() => { setShopView('catalog'); setTimeout(() => document.querySelector<HTMLInputElement>('.header-search-input')?.focus(), 100); }}>
                     <Search size={20} />
                   </button>
                 </header>
@@ -2548,7 +2742,7 @@ export default function App() {
                     <ChevronLeft size={24} />
                   </button>
                   <span className="header-title-text">{selectedCategory}</span>
-                  <button className="header-icon-btn">
+                  <button className="header-icon-btn" onClick={() => { setShopView('catalog'); setTimeout(() => document.querySelector<HTMLInputElement>('.header-search-input')?.focus(), 100); }}>
                     <Search size={20} />
                   </button>
                 </header>
@@ -2631,24 +2825,41 @@ export default function App() {
             {/* ========= 3. Catalog Page (List or Grid View) ========= */}
             {shopView === 'catalog' && (() => {
               // 1. Get filtered products
+              const isSearching = searchQuery.trim() !== '';
+              const searchQ = searchQuery.toLowerCase().trim();
+
               const filtered = products.filter((p) => {
-                // Gender check
-                if ((p.gender || 'women') !== selectedGenderTab) return false;
+                // If searching, check search query match first
+                if (isSearching) {
+                  const matchesName = p.name.toLowerCase().includes(searchQ);
+                  const matchesBrand = p.brand.toLowerCase().includes(searchQ);
+                  const matchesCategory = (p.category || '').toLowerCase().includes(searchQ);
+                  const matchesSubcategory = (p.subcategory || '').toLowerCase().includes(searchQ);
+                  const matchesGender = (p.gender || '').toLowerCase().includes(searchQ);
+                  const matchesColors = (p.colors || '').toLowerCase().includes(searchQ);
 
-                // Category check (Main Category)
-                if (selectedCategory === 'Clothes') {
-                  if (p.category !== 'clothes') return false;
-                } else if (selectedCategory === 'Shoes') {
-                  if (p.category !== 'shoes') return false;
-                } else if (selectedCategory === 'Accesories' || selectedCategory === 'Accessories') {
-                  if (p.category !== 'accessories') return false;
-                } else if (selectedCategory === 'New') {
-                  if (!p.isNew) return false;
-                }
+                  if (!matchesName && !matchesBrand && !matchesCategory && !matchesSubcategory && !matchesGender && !matchesColors) {
+                    return false;
+                  }
+                } else {
+                  // Gender check
+                  if ((p.gender || 'women') !== selectedGenderTab) return false;
 
-                // Subcategory check
-                if (selectedSubcategory && selectedSubcategory !== 'All') {
-                  if ((p.subcategory || 'other') !== selectedSubcategory) return false;
+                  // Category check (Main Category)
+                  if (selectedCategory === 'Clothes') {
+                    if (p.category !== 'clothes') return false;
+                  } else if (selectedCategory === 'Shoes') {
+                    if (p.category !== 'shoes') return false;
+                  } else if (selectedCategory === 'Accesories' || selectedCategory === 'Accessories') {
+                    if (p.category !== 'accessories') return false;
+                  } else if (selectedCategory === 'New') {
+                    if (!p.isNew) return false;
+                  }
+
+                  // Subcategory check
+                  if (selectedSubcategory && selectedSubcategory !== 'All') {
+                    if ((p.subcategory || 'other') !== selectedSubcategory) return false;
+                  }
                 }
 
                 // Price range filter
@@ -2669,14 +2880,6 @@ export default function App() {
                 // Brand filter
                 if (activeFilters.brands.length > 0) {
                   if (!activeFilters.brands.includes(p.brand)) return false;
-                }
-
-                // Search query
-                if (searchQuery.trim() !== '') {
-                  const query = searchQuery.toLowerCase();
-                  const matchesName = p.name.toLowerCase().includes(query);
-                  const matchesBrand = p.brand.toLowerCase().includes(query);
-                  if (!matchesName && !matchesBrand) return false;
                 }
 
                 return true;
@@ -2715,7 +2918,9 @@ export default function App() {
                       <ChevronLeft size={24} />
                     </button>
                     <span className="header-title-text">
-                      {subName === 'All' 
+                      {isSearching
+                        ? `Search Results`
+                        : subName === 'All' 
                         ? selectedCategory 
                         : (subName === 'shirts' 
                             ? 'Shirts & Blouses' 
@@ -2725,10 +2930,40 @@ export default function App() {
                             ? 'Outerwear & Jackets' 
                             : subName.charAt(0).toUpperCase() + subName.slice(1))}
                     </span>
-                    <button className="header-icon-btn">
+                    <button className="header-icon-btn" onClick={() => document.querySelector<HTMLInputElement>('.header-search-input')?.focus()}>
                       <Search size={20} />
                     </button>
                   </header>
+
+                  {isSearching && (
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '10px 16px',
+                      backgroundColor: 'var(--card-bg, rgba(255, 255, 255, 0.05))',
+                      borderRadius: '12px',
+                      margin: '12px 16px 4px 16px',
+                      border: '1px solid var(--border-color, rgba(255, 255, 255, 0.1))'
+                    }}>
+                      <span style={{ fontSize: '14px' }}>
+                        Results for <strong style={{ color: '#DB3022' }}>"{searchQuery}"</strong> ({filtered.length} found)
+                      </span>
+                      <button 
+                        onClick={() => setSearchQuery('')}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: '#DB3022',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          fontSize: '13px'
+                        }}
+                      >
+                        Clear Search
+                      </button>
+                    </div>
+                  )}
 
                   <div className="catalog-controls-container">
                     <div className="subcategories-pills-slider">
@@ -2864,7 +3099,7 @@ export default function App() {
                           style={{ cursor: 'pointer' }}
                         >
                           <div className="grid-card-img-wrapper">
-                            <img src={prod.imageUrl} alt={prod.name} className="grid-card-img" />
+                            <ProductImage src={prod.imageUrl} alt={prod.name} className="grid-card-img" />
                             {prod.isSale && prod.discountPercent && (
                               <span className="discount-badge-red">-{prod.discountPercent}%</span>
                             )}
@@ -2907,7 +3142,7 @@ export default function App() {
                           style={{ cursor: 'pointer' }}
                         >
                           <div className="list-card-img-wrapper">
-                            <img src={prod.imageUrl} alt={prod.name} className="list-card-img" />
+                            <ProductImage src={prod.imageUrl} alt={prod.name} className="list-card-img" />
                             {prod.isSale && prod.discountPercent && (
                               <span className="discount-badge-red">-{prod.discountPercent}%</span>
                             )}
