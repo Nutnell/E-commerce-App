@@ -48,17 +48,17 @@ const MOCK_PRODUCTS: Product[] = [
   // ==========================================
   // WOMEN'S PRODUCTS
   // ==========================================
-  { id: 1, name: 'Evening Dress', brand: 'Dorothy Perkins', price: 12.0, originalPrice: 15.0, discountPercent: 20, rating: 5.0, ratingCount: 10, imageUrl: '/assets/evening_dress_product.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'dresses', gender: 'women', colors: 'black,red,white', sizes: 'S,M,L' },
-  { id: 2, name: 'Sport Dress', brand: 'Sitlly', price: 19.0, originalPrice: 22.0, discountPercent: 15, rating: 5.0, ratingCount: 10, imageUrl: '/assets/sport_dress_product.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'dresses', gender: 'women', colors: 'black,blue', sizes: 'XS,S,M' },
-  { id: 3, name: 'Wrap Dress', brand: 'H&M', price: 24.0, originalPrice: 38.0, discountPercent: 37, rating: 4.0, ratingCount: 22, imageUrl: '/assets/product_wrap_dress.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'dresses', gender: 'women', colors: 'red,white,tan', sizes: 'S,M,L,XL' },
-  { id: 4, name: 'Striped Top', brand: 'Dorothy Perkins', price: 15.0, rating: 4.5, ratingCount: 5, imageUrl: '/assets/new_product_1.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'tops', gender: 'women', colors: 'black,white,red', sizes: 'XS,S,M,L' },
+  { id: 1, name: 'Evening Dress', brand: 'Dorothy Perkins', price: 12.0, originalPrice: 15.0, discountPercent: 20, rating: 5.0, ratingCount: 10, imageUrl: '/assets/evening_dress_product.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'dresses', gender: 'women', colors: 'pink,black,red,white,blue', sizes: 'S,M,L' },
+  { id: 2, name: 'Sport Dress', brand: 'Sitlly', price: 19.0, originalPrice: 22.0, discountPercent: 15, rating: 5.0, ratingCount: 10, imageUrl: '/assets/sport_dress_product.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'dresses', gender: 'women', colors: 'grey,black,blue,red,white', sizes: 'XS,S,M' },
+  { id: 3, name: 'Wrap Dress', brand: 'H&M', price: 24.0, originalPrice: 38.0, discountPercent: 37, rating: 4.0, ratingCount: 22, imageUrl: '/assets/product_wrap_dress.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'dresses', gender: 'women', colors: 'blue,red,white,tan', sizes: 'S,M,L,XL' },
+  { id: 4, name: 'Striped Top', brand: 'Dorothy Perkins', price: 15.0, rating: 4.5, ratingCount: 5, imageUrl: '/assets/new_product_1.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'tops', gender: 'women', colors: 'red,black,white,blue', sizes: 'XS,S,M,L' },
   { id: 5, name: 'White T-Shirt', brand: 'Sitlly', price: 12.0, rating: 4.0, ratingCount: 3, imageUrl: '/assets/new_product_2.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'tops', gender: 'women', colors: 'white,grey', sizes: 'S,M,L' },
   { id: 6, name: 'Summer Blouse', brand: 'Zara', price: 22.0, rating: 4.5, ratingCount: 14, imageUrl: '/assets/product_summer_blouse.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'blouses', gender: 'women', colors: 'white,tan,red', sizes: 'XS,S,M' },
-  { id: 7, name: 'Maxi Skirt', brand: 'Mango', price: 28.0, rating: 4.0, ratingCount: 8, imageUrl: '/assets/product_maxi_skirt.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'skirts', gender: 'women', colors: 'black,tan,blue', sizes: 'S,M,L' },
-  { id: 8, name: 'Pleated Mini Skirt', brand: 'Zara', price: 18.0, rating: 4.3, ratingCount: 11, imageUrl: '/assets/cat_partywear.png', isNew: false, isSale: false, category: 'clothes', subcategory: 'skirts', gender: 'women', colors: 'black,red,white', sizes: 'XS,S,M' },
+  { id: 7, name: 'Maxi Skirt', brand: 'Mango', price: 28.0, rating: 4.0, ratingCount: 8, imageUrl: '/assets/product_maxi_skirt.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'skirts', gender: 'women', colors: 'pink,black,tan,blue,white', sizes: 'S,M,L' },
+  { id: 8, name: 'Pleated Mini Skirt', brand: 'Zara', price: 18.0, rating: 4.3, ratingCount: 11, imageUrl: '/assets/cat_partywear.png', isNew: false, isSale: false, category: 'clothes', subcategory: 'skirts', gender: 'women', colors: 'silver,black,red,white,tan,gold', sizes: 'XS,S,M' },
   { id: 9, name: 'Linen Pants', brand: 'H&M', price: 32.0, rating: 4.5, ratingCount: 19, imageUrl: '/assets/product_linen_pants.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'pants', gender: 'women', colors: 'tan,white,grey', sizes: 'M,L,XL' },
   { id: 10, name: 'Skinny Fit Jeans', brand: 'Zara', price: 34.0, originalPrice: 45.0, discountPercent: 24, rating: 4.2, ratingCount: 9, imageUrl: '/assets/cat_jeanswear.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'jeans', gender: 'women', colors: 'blue,black', sizes: 'S,M,L,XL' },
-  { id: 11, name: 'Knit Sweater', brand: 'Dorothy Perkins', price: 26.0, rating: 5.0, ratingCount: 12, imageUrl: '/assets/product_knit_sweater.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'sweaters', gender: 'women', colors: 'grey,black,red', sizes: 'S,M,L,XL' },
+  { id: 11, name: 'Knit Sweater', brand: 'Dorothy Perkins', price: 26.0, rating: 5.0, ratingCount: 12, imageUrl: '/assets/product_knit_sweater.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'sweaters', gender: 'women', colors: 'white,grey,black,red', sizes: 'S,M,L,XL' },
   { id: 12, name: 'Denim Jacket', brand: 'Mango', price: 29.0, originalPrice: 45.0, discountPercent: 35, rating: 4.5, ratingCount: 18, imageUrl: '/assets/product_denim_jacket.png', isNew: false, isSale: true, category: 'clothes', subcategory: 'outerwear', gender: 'women', colors: 'blue,grey,black', sizes: 'M,L,XL' },
   { id: 13, name: 'Denim Shorts', brand: 'H&M', price: 16.0, rating: 4.1, ratingCount: 7, imageUrl: '/assets/cat_beachwear.png', isNew: true, isSale: false, category: 'clothes', subcategory: 'shorts', gender: 'women', colors: 'blue,white', sizes: 'XS,S,M' },
   { id: 14, name: 'Platform Sneakers', brand: 'Nike', price: 59.0, originalPrice: 89.0, discountPercent: 34, rating: 5.0, ratingCount: 45, imageUrl: '/assets/product_sneakers.png', isNew: false, isSale: true, category: 'shoes', subcategory: 'sneakers', gender: 'women', colors: 'white,black,blue', sizes: 'S,M,L' },
@@ -143,6 +143,30 @@ export default function App() {
     setSelectedProductId(null);
     setProductDetailView('details');
     setActiveTab(tab);
+  };
+
+  const getColorSwatchValue = (color: string): string => {
+    if (!color) return '#CCCCCC';
+    const c = color.toLowerCase().trim();
+    const swatchMap: Record<string, string> = {
+      white: '#FFFFFF',
+      black: '#111111',
+      grey: '#808080',
+      gray: '#808080',
+      pink: '#FFB6C1',
+      silver: '#C0C0C0',
+      gold: '#FFD700',
+      tan: '#D2B48C',
+      brown: '#8B4513',
+      blue: '#1E88E5',
+      navy: '#000080',
+      red: '#E53935',
+      green: '#43A047',
+      yellow: '#FDD835',
+      purple: '#8E24AA',
+      orange: '#FB8C00'
+    };
+    return swatchMap[c] || c;
   };
 
 
@@ -1104,7 +1128,7 @@ export default function App() {
                   <div className="details-color-badge">
                     <span 
                       className="color-badge-dot" 
-                      style={{ backgroundColor: selectedColor === 'white' ? '#FFFFFF' : selectedColor === 'black' ? '#000000' : selectedColor }} 
+                      style={{ backgroundColor: getColorSwatchValue(selectedColor) }} 
                     />
                     <span className="color-badge-text">{selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1)}</span>
                   </div>
@@ -1135,7 +1159,7 @@ export default function App() {
                       <button
                         key={col}
                         className={`color-dot-choice ${selectedColor === col ? 'active' : ''}`}
-                        style={{ backgroundColor: col === 'white' ? '#FFFFFF' : col === 'black' ? '#000000' : col }}
+                        style={{ backgroundColor: getColorSwatchValue(col) }}
                         onClick={() => setSelectedColor(col)}
                         title={col}
                       />

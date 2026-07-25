@@ -49,7 +49,7 @@ export class ProductsService implements OnModuleInit {
         category: 'clothes',
         subcategory: 'dresses',
         gender: 'women',
-        colors: 'black,red,white',
+        colors: 'pink,black,red,white,blue',
         sizes: 'S,M,L',
       },
       {
@@ -66,7 +66,7 @@ export class ProductsService implements OnModuleInit {
         category: 'clothes',
         subcategory: 'dresses',
         gender: 'women',
-        colors: 'black,blue',
+        colors: 'grey,black,blue,red,white',
         sizes: 'XS,S,M',
       },
       {
@@ -83,7 +83,7 @@ export class ProductsService implements OnModuleInit {
         category: 'clothes',
         subcategory: 'dresses',
         gender: 'women',
-        colors: 'red,white,tan',
+        colors: 'blue,red,white,tan',
         sizes: 'S,M,L,XL',
       },
 
@@ -100,7 +100,7 @@ export class ProductsService implements OnModuleInit {
         category: 'clothes',
         subcategory: 'tops',
         gender: 'women',
-        colors: 'black,white,red',
+        colors: 'red,black,white,blue',
         sizes: 'XS,S,M,L',
       },
       {
@@ -147,7 +147,7 @@ export class ProductsService implements OnModuleInit {
         category: 'clothes',
         subcategory: 'skirts',
         gender: 'women',
-        colors: 'black,tan,blue',
+        colors: 'pink,black,tan,blue,white',
         sizes: 'S,M,L',
       },
       {
@@ -162,7 +162,7 @@ export class ProductsService implements OnModuleInit {
         category: 'clothes',
         subcategory: 'skirts',
         gender: 'women',
-        colors: 'black,red,white',
+        colors: 'silver,black,red,white,tan,gold',
         sizes: 'XS,S,M',
       },
 
@@ -245,7 +245,7 @@ export class ProductsService implements OnModuleInit {
         category: 'clothes',
         subcategory: 'sweaters',
         gender: 'women',
-        colors: 'grey,black,red',
+        colors: 'white,grey,black,red',
         sizes: 'S,M,L,XL',
       },
       {
