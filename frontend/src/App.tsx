@@ -434,6 +434,31 @@ export default function App() {
     } catch (e) {}
   }, [paymentCards]);
 
+  // Fetch addresses and payment cards from NestJS backend API on mount
+  useEffect(() => {
+    fetch('http://localhost:3000/api/addresses')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setAddresses(data);
+          const def = data.find((a: any) => a.isDefault) || data[0];
+          if (def) setSelectedAddressId(def.id);
+        }
+      })
+      .catch(err => console.log('Using local address storage:', err));
+
+    fetch('http://localhost:3000/api/payment-methods')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setPaymentCards(data);
+          const def = data.find((c: any) => c.isDefault) || data[0];
+          if (def) setSelectedCardId(def.id);
+        }
+      })
+      .catch(err => console.log('Using local payment card storage:', err));
+  }, []);
+
   const [selectedDeliveryId, setSelectedDeliveryId] = useState<string>('fedex');
   const [checkoutStep, setCheckoutStep] = useState<'bag' | 'checkout' | 'shipping_addresses' | 'add_shipping_address' | 'payment_methods' | 'add_payment_card' | 'success'>('bag');
 
@@ -3750,7 +3775,33 @@ export default function App() {
                         <button 
                           className="primary-checkout-btn"
                           style={{ marginTop: '24px' }}
-                          onClick={() => {
+                          onClick={async () => {
+                            const activeAddr = addresses.find(a => a.id === selectedAddressId) || addresses[0];
+                            const activeCard = paymentCards.find(c => c.id === selectedCardId) || paymentCards[0];
+                            const activeDelivery = DELIVERY_METHODS.find(d => d.id === selectedDeliveryId) || DELIVERY_METHODS[0];
+
+                            const payload = {
+                              userId: user?.email || undefined,
+                              items: cartItems,
+                              shippingAddress: activeAddr,
+                              paymentMethod: activeCard,
+                              deliveryMethod: activeDelivery,
+                              subtotal: orderTotal,
+                              discount: discountAmount,
+                              deliveryFee: deliveryFee,
+                              totalAmount: finalSummary
+                            };
+
+                            try {
+                              await fetch('http://localhost:3000/api/orders', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload)
+                              });
+                            } catch (err) {
+                              console.error('Failed to post order to backend:', err);
+                            }
+
                             setCartItems([]);
                             setAppliedPromo(null);
                             setCheckoutStep('success');
@@ -3841,14 +3892,13 @@ export default function App() {
 
                 <form 
                   className="add-address-form"
-                  onSubmit={(e) => {
+                  onSubmit={async (e) => {
                     e.preventDefault();
                     if (!newAddressForm.fullName || !newAddressForm.address || !newAddressForm.city) {
                       alert('Please fill in all required address fields.');
                       return;
                     }
-                    const newAddr: ShippingAddress = {
-                      id: `addr-${Date.now()}`,
+                    const newAddrPayload = {
                       fullName: newAddressForm.fullName,
                       address: newAddressForm.address,
                       city: newAddressForm.city,
@@ -3857,8 +3907,27 @@ export default function App() {
                       country: newAddressForm.country,
                       isDefault: false
                     };
-                    setAddresses([...addresses, newAddr]);
-                    setSelectedAddressId(newAddr.id);
+
+                    let savedAddr: ShippingAddress = {
+                      id: `addr-${Date.now()}`,
+                      ...newAddrPayload
+                    };
+
+                    try {
+                      const res = await fetch('http://localhost:3000/api/addresses', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newAddrPayload)
+                      });
+                      if (res.ok) {
+                        savedAddr = await res.json();
+                      }
+                    } catch (err) {
+                      console.error('Failed to post address to backend:', err);
+                    }
+
+                    setAddresses(prev => [...prev, savedAddr]);
+                    setSelectedAddressId(savedAddr.id);
                     setCheckoutStep('shipping_addresses');
                   }}
                 >
@@ -4039,24 +4108,43 @@ export default function App() {
 
                 <form 
                   className="add-card-form"
-                  onSubmit={(e) => {
+                  onSubmit={async (e) => {
                     e.preventDefault();
                     if (!newCardForm.cardHolderName || !newCardForm.cardNumber) {
                       alert('Please fill in cardholder name and card number.');
                       return;
                     }
                     const isVisa = newCardForm.cardNumber.startsWith('4');
-                    const newCard: PaymentCard = {
-                      id: `card-${Date.now()}`,
+                    const cardTypeVal: 'mastercard' | 'visa' = isVisa ? 'visa' : 'mastercard';
+                    const newCardPayload = {
                       cardNumber: newCardForm.cardNumber,
                       cardHolderName: newCardForm.cardHolderName,
                       expiryDate: newCardForm.expiryDate || '08/25',
                       cvv: newCardForm.cvv || '123',
-                      cardType: isVisa ? 'visa' : 'mastercard',
+                      cardType: cardTypeVal,
                       isDefault: newCardForm.isDefault
                     };
-                    setPaymentCards([...paymentCards, newCard]);
-                    setSelectedCardId(newCard.id);
+
+                    let savedCard: PaymentCard = {
+                      id: `card-${Date.now()}`,
+                      ...newCardPayload
+                    };
+
+                    try {
+                      const res = await fetch('http://localhost:3000/api/payment-methods', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(newCardPayload)
+                      });
+                      if (res.ok) {
+                        savedCard = await res.json();
+                      }
+                    } catch (err) {
+                      console.error('Failed to post payment card to backend:', err);
+                    }
+
+                    setPaymentCards(prev => [...prev, savedCard]);
+                    setSelectedCardId(savedCard.id);
                     setCheckoutStep('payment_methods');
                   }}
                 >
