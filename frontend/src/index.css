@@ -4416,9 +4416,459 @@ body {
   color: var(--white);
   border: none;
   border-radius: 25px;
-  padding: 14px 48px;
+  padding: 14px 40px;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(219, 48, 34, 0.4);
+  transition: transform 0.2s;
+}
+
+.continue-shopping-pill-btn:active {
+  transform: scale(0.96);
+}
+
+/* ==========================================================================
+   MILESTONE 6: PROFILE, ORDERS, SETTINGS & FAVORITES STYLES
+   ========================================================================== */
+
+/* 1. FAVORITES VIEW & TOOLBAR */
+.favorites-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 80px;
+}
+
+.favorites-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px 8px;
+}
+
+.favorites-main-title {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--primary);
+  margin: 0;
+}
+
+.favorites-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--background);
+}
+
+.toolbar-filter-btn,
+.toolbar-sort-btn,
+.toolbar-view-toggle {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 16px 20px;
+}
+
+@media (min-width: 768px) {
+  .favorites-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.favorites-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 20px;
+}
+
+/* Favorite Item Card - Grid */
+.fav-card-grid {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.fav-card-media {
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.fav-card-remove-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(4px);
+  border: none;
+  color: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 5;
+}
+
+.fav-card-bag-btn {
+  position: absolute;
+  bottom: -18px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #FFF;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(219, 48, 34, 0.4);
+  z-index: 5;
+}
+
+.fav-card-body {
+  padding: 14px 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fav-card-brand {
+  font-size: 11px;
+  color: var(--gray);
+  text-transform: uppercase;
+}
+
+.fav-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 2px 0;
+}
+
+.fav-card-meta {
+  font-size: 11px;
+  color: var(--gray);
+  display: flex;
+  gap: 8px;
+}
+
+.fav-card-price-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.fav-sold-out-banner {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255,255,255,0.9);
+  padding: 6px;
+  font-size: 11px;
+  color: var(--gray);
+  text-align: center;
+}
+
+/* Favorite Item Card - List */
+.fav-card-list {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  height: 120px;
+}
+
+.fav-list-media {
+  width: 110px;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.fav-list-content {
+  flex: 1;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 2. MY PROFILE VIEW */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 16px;
+  gap: 20px;
+  padding-bottom: 80px;
+}
+
+.profile-user-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.profile-avatar-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  box-shadow: var(--shadow-md);
+}
+
+.profile-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.profile-user-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.profile-user-email {
+  font-size: 13px;
+  color: var(--gray);
+}
+
+.profile-menu-list {
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.profile-menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--light-gray);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.profile-menu-item:last-child {
+  border-bottom: none;
+}
+
+.profile-menu-item:hover {
+  background-color: rgba(0,0,0,0.02);
+}
+
+.menu-item-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.menu-item-subtitle {
+  font-size: 11px;
+  color: var(--gray);
+  margin-top: 2px;
+}
+
+/* 3. MY ORDERS & ORDER DETAILS */
+.orders-filter-tabs {
+  display: flex;
+  gap: 12px;
+  padding: 0 16px 8px;
+}
+
+.order-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-card-num {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.order-card-date {
+  font-size: 13px;
+  color: var(--gray);
+}
+
+.order-tracking-text {
+  font-size: 13px;
+  color: var(--gray);
+}
+
+.order-card-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: var(--primary);
+}
+
+.order-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.order-status-badge {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.order-status-badge.delivered { color: #2AA952; }
+.order-status-badge.processing { color: #FFBA49; }
+.order-status-badge.cancelled { color: var(--accent); }
+
+.order-outline-btn {
+  border: 1.5px solid var(--primary);
+  background: transparent;
+  color: var(--primary);
+  border-radius: 20px;
+  padding: 8px 24px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Order Details View */
+.order-details-item-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  overflow: hidden;
+  height: 104px;
+}
+
+.order-details-item-img {
+  width: 100px;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
+.order-details-item-info {
+  flex: 1;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* 4. SETTINGS & TOGGLES */
+.settings-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.custom-switch-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.switch-label {
+  font-size: 14px;
+  color: var(--primary);
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 26px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider-round {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--light-gray);
+  transition: .3s;
+  border-radius: 34px;
+}
+
+.slider-round:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+
+input:checked + .slider-round {
+  background-color: #2AA952;
+}
+
+input:checked + .slider-round:before {
+  transform: translateX(20px);
 }

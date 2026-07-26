@@ -7,6 +7,7 @@ import {
   User, 
   Star,
   ChevronLeft,
+  ChevronRight,
   Sun,
   Moon,
   Check,
@@ -15,7 +16,11 @@ import {
   Plus,
   MoreVertical,
   CheckSquare,
-  Square
+  Square,
+  LayoutGrid,
+  List as ListIcon,
+  SlidersHorizontal,
+  ArrowUpDown
 } from 'lucide-react';
 
 interface Product {
@@ -344,7 +349,14 @@ export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [trendingSubcategory, setTrendingSubcategory] = useState<string>('All');
   const [summerSubcategory, setSummerSubcategory] = useState<string>('All');
-  const [favorites, setFavorites] = useState<number[]>([]);
+  const [favorites, setFavorites] = useState<number[]>(() => {
+    try {
+      const saved = localStorage.getItem('ecommerce_favorites');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return [1, 2, 4];
+  });
+
   const [isDesktop, setIsDesktop] = useState(false);
 
   // Milestone 5 State: Cart & Checkout Pipeline
@@ -461,6 +473,40 @@ export default function App() {
 
   const [selectedDeliveryId, setSelectedDeliveryId] = useState<string>('fedex');
   const [checkoutStep, setCheckoutStep] = useState<'bag' | 'checkout' | 'shipping_addresses' | 'add_shipping_address' | 'payment_methods' | 'add_payment_card' | 'success'>('bag');
+
+  // Favorites State & View Mode
+  const [favoritesViewMode, setFavoritesViewMode] = useState<'grid' | 'list'>('grid');
+  const [favCategory, setFavCategory] = useState<string>('Summer');
+  const [showAddFavModal, setShowAddFavModal] = useState<boolean>(false);
+  const [pendingFavProduct, setPendingFavProduct] = useState<Product | null>(null);
+  const [selectedFavSize, setSelectedFavSize] = useState<string>('L');
+
+  const openAddFavoriteModal = (product: Product, event?: React.MouseEvent) => {
+    if (event) event.stopPropagation();
+    setPendingFavProduct(product);
+    setSelectedFavSize('L');
+    setShowAddFavModal(true);
+  };
+
+  // Profile Stack State
+  const [profileStep, setProfileStep] = useState<'main' | 'orders' | 'order_details' | 'settings'>('main');
+  const [myOrdersTab, setMyOrdersTab] = useState<'delivered' | 'processing' | 'cancelled'>('delivered');
+  const [myOrders, setMyOrders] = useState<any[]>([]);
+  const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
+  const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
+  const [passwordForm, setPasswordForm] = useState({ oldPassword: '', newPassword: '', repeatPassword: '' });
+  const [settingsForm, setSettingsForm] = useState({ fullName: 'Matilda Brown', dateOfBirth: '12/12/1989' });
+  const [notificationSettings, setNotificationSettings] = useState({ sales: true, newArrivals: false, deliveryStatus: false });
+
+  // Fetch real orders from NestJS backend API
+  useEffect(() => {
+    fetch('http://localhost:3000/api/orders')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setMyOrders(data);
+      })
+      .catch(err => console.log('Backend orders fetch error:', err));
+  }, [checkoutStep, activeTab, profileStep]);
 
   const addToCart = (product: Product, color?: string, size?: string) => {
     const itemColor = color || (product.colors ? product.colors.split(',')[0].trim() : 'Black');
@@ -967,14 +1013,19 @@ export default function App() {
     setAuthView('login');
   };
 
-  const toggleFavorite = (productId: number, e: React.MouseEvent) => {
-    e.stopPropagation();
-    e.preventDefault();
-    if (favorites.includes(productId)) {
-      setFavorites(favorites.filter(id => id !== productId));
-    } else {
-      setFavorites([...favorites, productId]);
+  const toggleFavorite = (productId: number, e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
     }
+    setFavorites(prev => {
+      const exists = prev.includes(productId);
+      const updated = exists ? prev.filter(id => id !== productId) : [...prev, productId];
+      try {
+        localStorage.setItem('ecommerce_favorites', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
   };
 
   // Touch handlers for swipe (mobile/tablet only)
@@ -3430,9 +3481,15 @@ export default function App() {
                             {prod.isNew && !prod.isSale && (
                               <span className="new-badge-black">NEW</span>
                             )}
-                            <button 
+                             <button 
                               className={`favorite-circle-btn ${favorites.includes(prod.id) ? 'active' : ''}`}
-                              onClick={(e) => toggleFavorite(prod.id, e)}
+                              onClick={(e) => {
+                                if (favorites.includes(prod.id)) {
+                                  toggleFavorite(prod.id, e);
+                                } else {
+                                  openAddFavoriteModal(prod, e);
+                                }
+                              }}
                             >
                               <Heart className="heart-icon" />
                             </button>
@@ -4241,25 +4298,594 @@ export default function App() {
               </div>
             )}
           </div>
-        ) : (
-          /* Favorites Tab Placeholder / Standard View */
-          <div className="placeholder-tab">
-            <div className="placeholder-tab-icon">
-              <Heart size={48} color="var(--accent)" />
+        ) : activeTab === 'favorites' ? (
+          /* =========================================================
+             FAVORITES TAB (GRID / MODULES & LIST VIEWS)
+             ========================================================= */
+          <div className="favorites-container">
+            <header className="favorites-header-bar">
+              <h1 className="favorites-main-title">Favorites</h1>
+              <button className="header-icon-btn" onClick={() => navigateToTab('shop')}>
+                <Search size={22} color="var(--primary)" />
+              </button>
+            </header>
+
+            {/* Filter Pills */}
+            <div className="filter-pills-bar" style={{ padding: '8px 20px 12px' }}>
+              {['Summer', 'T-Shirts', 'Shirts', 'Dresses', 'Crop tops'].map(cat => (
+                <button
+                  key={cat}
+                  className={`filter-pill ${favCategory === cat ? 'active' : ''}`}
+                  onClick={() => setFavCategory(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
-            <h2 className="placeholder-tab-title">Favorites</h2>
-            <p className="placeholder-tab-desc">
-              {favorites.length === 0 
-                ? "You haven't added any favorite items yet. Tap the heart icon on any product to save it here!"
-                : `You have ${favorites.length} saved favorite product(s).`}
-            </p>
-            <button 
-              className="hero-button" 
-              style={{ marginTop: '24px' }}
-              onClick={() => navigateToTab('shop')}
-            >
-              Explore Catalog
-            </button>
+
+            {/* Toolbar */}
+            <div className="favorites-toolbar">
+              <button className="toolbar-filter-btn" onClick={() => setShowSortSheet(true)}>
+                <SlidersHorizontal size={16} />
+                <span>Filters</span>
+              </button>
+              <button className="toolbar-sort-btn" onClick={() => setShowSortSheet(true)}>
+                <ArrowUpDown size={16} />
+                <span>Price: lowest to high</span>
+              </button>
+              <button 
+                className="toolbar-view-toggle"
+                onClick={() => setFavoritesViewMode(prev => prev === 'grid' ? 'list' : 'grid')}
+                title={`Switch to ${favoritesViewMode === 'grid' ? 'List' : 'Grid'} View`}
+              >
+                {favoritesViewMode === 'grid' ? <ListIcon size={20} /> : <LayoutGrid size={20} />}
+              </button>
+            </div>
+
+            {/* Empty State */}
+            {favorites.length === 0 ? (
+              <div className="empty-cart-state" style={{ padding: '40px 20px' }}>
+                <div className="empty-cart-icon-bg">
+                  <Heart size={48} color="var(--accent)" />
+                </div>
+                <h3 className="empty-cart-title">No Favorites Yet</h3>
+                <p className="empty-cart-desc">Tap the heart icon on any product in our shop to save it here for later!</p>
+                <button className="hero-button" style={{ marginTop: '20px' }} onClick={() => navigateToTab('shop')}>
+                  Explore Catalog
+                </button>
+              </div>
+            ) : (
+              /* Items Display */
+              favoritesViewMode === 'grid' ? (
+                /* GRID / MODULES VIEW */
+                <div className="favorites-grid">
+                  {favorites.map(favId => {
+                    const prod: Product = products.find(p => p.id === favId) || {
+                      id: favId,
+                      name: 'Favorite Item',
+                      brand: 'Mango',
+                      category: 'Women',
+                      price: 46,
+                      originalPrice: 55,
+                      isNew: false,
+                      isSale: true,
+                      rating: 4.5,
+                      ratingCount: 12,
+                      imageUrl: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80'
+                    };
+                    const isSoldOut = prod.id === 3;
+
+                    return (
+                      <div key={prod.id} className="fav-card-grid">
+                        <div 
+                          className="fav-card-media" 
+                          style={{ backgroundImage: `url(${prod.imageUrl})` }}
+                        >
+                          <button 
+                            className="fav-card-remove-btn"
+                            onClick={() => toggleFavorite(prod.id)}
+                            title="Remove from favorites"
+                          >
+                            <X size={16} />
+                          </button>
+
+                          <button 
+                            className="fav-card-bag-btn"
+                            onClick={() => {
+                              addToCart(prod, 'Orange', 'S');
+                              navigateToTab('bag');
+                            }}
+                            title="Add to bag"
+                          >
+                            <ShoppingBag size={18} color="#FFF" />
+                          </button>
+
+                          {isSoldOut && (
+                            <div className="fav-sold-out-banner">
+                              Sorry, this item is currently sold out
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="fav-card-body">
+                          <div className="rating-stars" style={{ gap: '2px', fontSize: '11px' }}>
+                            {[...Array(5)].map((_, i) => (
+                              <Star key={i} size={12} fill={i < Math.floor(prod.rating) ? "var(--star-color)" : "none"} color="var(--star-color)" />
+                            ))}
+                            <span style={{ color: 'var(--gray)', marginLeft: '4px' }}>({prod.ratingCount})</span>
+                          </div>
+                          <span className="fav-card-brand">{prod.brand}</span>
+                          <h4 className="fav-card-title">{prod.name}</h4>
+                          <div className="fav-card-meta">
+                            <span>Color: Gray</span>
+                            <span>Size: L</span>
+                          </div>
+                          <div className="fav-card-price-row">
+                            <span>${prod.price}</span>
+                            {prod.originalPrice && (
+                              <span style={{ textDecoration: 'line-through', color: 'var(--gray)', fontSize: '12px' }}>
+                                ${prod.originalPrice}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                /* LIST VIEW */
+                <div className="favorites-list">
+                  {favorites.map(favId => {
+                    const prod: Product = products.find(p => p.id === favId) || {
+                      id: favId,
+                      name: 'Favorite Item',
+                      brand: 'LIME',
+                      category: 'Women',
+                      price: 32,
+                      isNew: false,
+                      isSale: false,
+                      rating: 4.8,
+                      ratingCount: 10,
+                      imageUrl: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=600&q=80'
+                    };
+
+                    return (
+                      <div key={prod.id} className="fav-card-list">
+                        <div 
+                          className="fav-list-media" 
+                          style={{ backgroundImage: `url(${prod.imageUrl})` }}
+                        >
+                          <button 
+                            className="fav-card-remove-btn"
+                            onClick={() => toggleFavorite(prod.id)}
+                            title="Remove"
+                          >
+                            <X size={16} />
+                          </button>
+
+                          <button 
+                            className="fav-card-bag-btn"
+                            onClick={() => {
+                              addToCart(prod, 'Blue', 'L');
+                              navigateToTab('bag');
+                            }}
+                            title="Add to bag"
+                          >
+                            <ShoppingBag size={18} color="#FFF" />
+                          </button>
+                        </div>
+
+                        <div className="fav-list-content">
+                          <div>
+                            <span className="fav-card-brand">{prod.brand}</span>
+                            <h4 className="fav-card-title">{prod.name}</h4>
+                            <div className="fav-card-meta">
+                              <span>Color: Blue</span>
+                              <span>Size: L</span>
+                            </div>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span className="fav-card-price-row" style={{ margin: 0 }}>${prod.price}</span>
+                            <div className="rating-stars" style={{ gap: '2px', fontSize: '11px' }}>
+                              {[...Array(5)].map((_, i) => (
+                                <Star key={i} size={12} fill={i < Math.floor(prod.rating) ? "var(--star-color)" : "none"} color="var(--star-color)" />
+                              ))}
+                              <span style={{ color: 'var(--gray)', marginLeft: '4px' }}>({prod.ratingCount})</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )
+            )}
+          </div>
+        ) : (
+          /* =========================================================
+             MY PROFILE STACK (MAIN, ORDERS, ORDER DETAILS, SETTINGS)
+             ========================================================= */
+          <div className="profile-wrapper" style={{ width: '100%' }}>
+            {/* 1. MY PROFILE MAIN SCREEN */}
+            {profileStep === 'main' && (
+              <div className="profile-container">
+                <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h1 className="favorites-main-title">My profile</h1>
+                  <button className="header-icon-btn" onClick={() => navigateToTab('shop')}>
+                    <Search size={22} color="var(--primary)" />
+                  </button>
+                </header>
+
+                <div className="profile-user-header">
+                  <div 
+                    className="profile-avatar-circle"
+                    style={{ backgroundImage: `url(https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80)` }}
+                  />
+                  <div className="profile-user-info">
+                    <h3 className="profile-user-name">{user?.name || 'Matilda Brown'}</h3>
+                    <span className="profile-user-email">{user?.email || 'matildabrown@mail.com'}</span>
+                  </div>
+                </div>
+
+                <div className="profile-menu-list">
+                  <div className="profile-menu-item" onClick={() => setProfileStep('orders')}>
+                    <div>
+                      <div className="menu-item-title">My orders</div>
+                      <div className="menu-item-subtitle">Already have {myOrders.length || 12} orders</div>
+                    </div>
+                    <ChevronRight size={20} color="var(--gray)" />
+                  </div>
+
+                  <div 
+                    className="profile-menu-item"
+                    onClick={() => {
+                      setCheckoutStep('shipping_addresses');
+                      navigateToTab('bag');
+                    }}
+                  >
+                    <div>
+                      <div className="menu-item-title">Shipping addresses</div>
+                      <div className="menu-item-subtitle">{addresses.length} addresses</div>
+                    </div>
+                    <ChevronRight size={20} color="var(--gray)" />
+                  </div>
+
+                  <div 
+                    className="profile-menu-item"
+                    onClick={() => {
+                      setCheckoutStep('payment_methods');
+                      navigateToTab('bag');
+                    }}
+                  >
+                    <div>
+                      <div className="menu-item-title">Payment methods</div>
+                      <div className="menu-item-subtitle">MasterCard, Visa</div>
+                    </div>
+                    <ChevronRight size={20} color="var(--gray)" />
+                  </div>
+
+                  <div className="profile-menu-item" onClick={() => setShowPromoSheet(true)}>
+                    <div>
+                      <div className="menu-item-title">Promocodes</div>
+                      <div className="menu-item-subtitle">You have special promocodes</div>
+                    </div>
+                    <ChevronRight size={20} color="var(--gray)" />
+                  </div>
+
+                  <div className="profile-menu-item">
+                    <div>
+                      <div className="menu-item-title">My reviews</div>
+                      <div className="menu-item-subtitle">Reviews for 4 items</div>
+                    </div>
+                    <ChevronRight size={20} color="var(--gray)" />
+                  </div>
+
+                  <div className="profile-menu-item" onClick={() => setProfileStep('settings')}>
+                    <div>
+                      <div className="menu-item-title">Settings</div>
+                      <div className="menu-item-subtitle">Notifications, password</div>
+                    </div>
+                    <ChevronRight size={20} color="var(--gray)" />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 2. MY ORDERS VIEW */}
+            {profileStep === 'orders' && (
+              <div className="profile-container">
+                <header className="checkout-header">
+                  <button className="header-icon-btn" onClick={() => setProfileStep('main')}>
+                    <ChevronLeft size={24} />
+                  </button>
+                  <span className="header-title-text" style={{ fontSize: '18px', fontWeight: 700 }}>My Orders</span>
+                  <button className="header-icon-btn" onClick={() => navigateToTab('shop')}>
+                    <Search size={22} color="var(--primary)" />
+                  </button>
+                </header>
+
+                <div className="orders-filter-tabs">
+                  {[
+                    { key: 'delivered', label: 'Delivered' },
+                    { key: 'processing', label: 'Processing' },
+                    { key: 'cancelled', label: 'Cancelled' }
+                  ].map(tab => (
+                    <button
+                      key={tab.key}
+                      className={`filter-pill ${myOrdersTab === tab.key ? 'active' : ''}`}
+                      onClick={() => setMyOrdersTab(tab.key as any)}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {[
+                    {
+                      id: 'ord-1947034',
+                      orderNumber: '№1947034',
+                      date: '05-12-2019',
+                      trackingNumber: 'IW3475453455',
+                      quantity: 3,
+                      totalAmount: 112,
+                      status: 'Delivered'
+                    },
+                    {
+                      id: 'ord-1947035',
+                      orderNumber: '№1947035',
+                      date: '06-12-2019',
+                      trackingNumber: 'IW3475453456',
+                      quantity: 2,
+                      totalAmount: 95,
+                      status: 'Delivered'
+                    }
+                  ].map(ord => (
+                    <div key={ord.id} className="order-card">
+                      <div className="order-card-header">
+                        <span className="order-card-num">Order {ord.orderNumber}</span>
+                        <span className="order-card-date">{ord.date}</span>
+                      </div>
+
+                      <div className="order-tracking-text">
+                        Tracking number: <strong style={{ color: 'var(--primary)' }}>{ord.trackingNumber}</strong>
+                      </div>
+
+                      <div className="order-card-meta">
+                        <span>Quantity: <strong>{ord.quantity}</strong></span>
+                        <span>Total Amount: <strong>${ord.totalAmount}</strong></span>
+                      </div>
+
+                      <div className="order-card-footer">
+                        <button 
+                          className="order-outline-btn"
+                          onClick={() => {
+                            setSelectedOrder(ord);
+                            setProfileStep('order_details');
+                          }}
+                        >
+                          Details
+                        </button>
+                        <span className={`order-status-badge ${ord.status.toLowerCase()}`}>
+                          {ord.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 3. ORDER DETAILS VIEW */}
+            {profileStep === 'order_details' && (
+              <div className="profile-container">
+                <header className="checkout-header">
+                  <button className="header-icon-btn" onClick={() => setProfileStep('orders')}>
+                    <ChevronLeft size={24} />
+                  </button>
+                  <span className="header-title-text" style={{ fontSize: '18px', fontWeight: 700 }}>Order Details</span>
+                  <button className="header-icon-btn" onClick={() => navigateToTab('shop')}>
+                    <Search size={22} color="var(--primary)" />
+                  </button>
+                </header>
+
+                <div className="order-card-header" style={{ margin: '8px 0' }}>
+                  <div>
+                    <h3 className="order-card-num" style={{ fontSize: '18px' }}>
+                      Order {selectedOrder?.orderNumber || '№1947034'}
+                    </h3>
+                    <div className="order-tracking-text" style={{ marginTop: '4px' }}>
+                      Tracking number: <strong>{selectedOrder?.trackingNumber || 'IW3475453455'}</strong>
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div className="order-card-date">{selectedOrder?.date || '05-12-2019'}</div>
+                    <span className={`order-status-badge ${(selectedOrder?.status || 'delivered').toLowerCase()}`} style={{ display: 'block', marginTop: '4px' }}>
+                      {selectedOrder?.status || 'Delivered'}
+                    </span>
+                  </div>
+                </div>
+
+                <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--primary)' }}>
+                  {selectedOrder?.quantity || 3} items
+                </span>
+
+                {/* Items */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {[
+                    { title: 'Pullover', brand: 'Mango', color: 'Gray', size: 'L', units: 1, price: 51, img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?auto=format&fit=crop&w=400&q=80' },
+                    { title: 'Plain T-Shirt', brand: 'Mango', color: 'Gray', size: 'L', units: 1, price: 30, img: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80' },
+                    { title: 'Sport Dress', brand: 'Mango', color: 'Black', size: 'M', units: 1, price: 43, img: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80' }
+                  ].map((item, idx) => (
+                    <div key={idx} className="order-details-item-card">
+                      <div className="order-details-item-img" style={{ backgroundImage: `url(${item.img})` }} />
+                      <div className="order-details-item-info">
+                        <div>
+                          <h4 style={{ fontSize: '15px', fontWeight: 700, margin: 0, color: 'var(--primary)' }}>{item.title}</h4>
+                          <span style={{ fontSize: '11px', color: 'var(--gray)' }}>{item.brand}</span>
+                          <div style={{ fontSize: '11px', color: 'var(--gray)', marginTop: '2px' }}>
+                            Color: {item.color}  Size: {item.size}
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: '11px', color: 'var(--gray)' }}>Units: {item.units}</span>
+                          <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--primary)' }}>${item.price}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Order Information Section */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' }}>
+                  <h4 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--primary)', margin: 0 }}>Order information</h4>
+                  
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: 'var(--gray)' }}>Shipping Address:</span>
+                      <span style={{ color: 'var(--primary)', fontWeight: 500, textAlign: 'right', maxWidth: '200px' }}>
+                        3 Newbridge Court, Chino Hills, CA 91709, United States
+                      </span>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ color: 'var(--gray)' }}>Payment method:</span>
+                      <span style={{ color: 'var(--primary)', fontWeight: 500 }}>MasterCard **** 3947</span>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: 'var(--gray)' }}>Delivery method:</span>
+                      <span style={{ color: 'var(--primary)', fontWeight: 500 }}>FedEx, 3 days, $15</span>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: 'var(--gray)' }}>Discount:</span>
+                      <span style={{ color: 'var(--primary)', fontWeight: 500 }}>10%, Personal promo code</span>
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px', fontWeight: 700, marginTop: '4px' }}>
+                      <span style={{ color: 'var(--gray)' }}>Total Amount:</span>
+                      <span style={{ color: 'var(--primary)' }}>$124</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '20px' }}>
+                  <button 
+                    className="order-outline-btn" 
+                    style={{ padding: '14px' }}
+                    onClick={() => {
+                      alert('All items from this order have been added to your bag!');
+                      navigateToTab('bag');
+                    }}
+                  >
+                    Reorder
+                  </button>
+
+                  <button 
+                    className="primary-checkout-btn" 
+                    style={{ padding: '14px' }}
+                    onClick={() => alert('Feedback submitted for this order!')}
+                  >
+                    Leave feedback
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* 4. SETTINGS VIEW */}
+            {profileStep === 'settings' && (
+              <div className="profile-container">
+                <header className="checkout-header">
+                  <button className="header-icon-btn" onClick={() => setProfileStep('main')}>
+                    <ChevronLeft size={24} />
+                  </button>
+                  <span className="header-title-text" style={{ fontSize: '18px', fontWeight: 700 }}>Settings</span>
+                  <button className="header-icon-btn" onClick={() => navigateToTab('shop')}>
+                    <Search size={22} color="var(--primary)" />
+                  </button>
+                </header>
+
+                <h3 className="settings-section-title">Personal Information</h3>
+
+                <div className="custom-floating-field">
+                  <label>Full name</label>
+                  <input 
+                    type="text"
+                    value={settingsForm.fullName}
+                    onChange={(e) => setSettingsForm({ ...settingsForm, fullName: e.target.value })}
+                  />
+                </div>
+
+                <div className="custom-floating-field">
+                  <label>Date of Birth</label>
+                  <input 
+                    type="text"
+                    value={settingsForm.dateOfBirth}
+                    onChange={(e) => setSettingsForm({ ...settingsForm, dateOfBirth: e.target.value })}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px' }}>
+                  <h3 className="settings-section-title" style={{ margin: 0 }}>Password</h3>
+                  <button 
+                    className="card-change-link" 
+                    onClick={() => setShowPasswordModal(true)}
+                  >
+                    Change
+                  </button>
+                </div>
+
+                <div className="custom-floating-field">
+                  <label>Password</label>
+                  <input 
+                    type="password"
+                    value="****************"
+                    readOnly
+                  />
+                </div>
+
+                <h3 className="settings-section-title" style={{ marginTop: '16px' }}>Notifications</h3>
+
+                <div className="custom-switch-row">
+                  <span className="switch-label">Sales</span>
+                  <label className="toggle-switch">
+                    <input 
+                      type="checkbox" 
+                      checked={notificationSettings.sales}
+                      onChange={(e) => setNotificationSettings({ ...notificationSettings, sales: e.target.checked })}
+                    />
+                    <span className="slider-round" />
+                  </label>
+                </div>
+
+                <div className="custom-switch-row">
+                  <span className="switch-label">New arrivals</span>
+                  <label className="toggle-switch">
+                    <input 
+                      type="checkbox" 
+                      checked={notificationSettings.newArrivals}
+                      onChange={(e) => setNotificationSettings({ ...notificationSettings, newArrivals: e.target.checked })}
+                    />
+                    <span className="slider-round" />
+                  </label>
+                </div>
+
+                <div className="custom-switch-row">
+                  <span className="switch-label">Delivery status changes</span>
+                  <label className="toggle-switch">
+                    <input 
+                      type="checkbox" 
+                      checked={notificationSettings.deliveryStatus}
+                      onChange={(e) => setNotificationSettings({ ...notificationSettings, deliveryStatus: e.target.checked })}
+                    />
+                    <span className="slider-round" />
+                  </label>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -4770,6 +5396,117 @@ export default function App() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========= PASSWORD CHANGE BOTTOM SHEET ========= */}
+      {showPasswordModal && (
+        <div className="sort-sheet-overlay" onClick={() => setShowPasswordModal(false)}>
+          <div className="sort-sheet-card" onClick={(e) => e.stopPropagation()}>
+            <div className="sort-sheet-handle" />
+            <h3 className="sort-sheet-title" style={{ textAlign: 'center', fontSize: '18px' }}>Password Change</h3>
+
+            <div className="custom-floating-field" style={{ marginTop: '16px' }}>
+              <label>Old Password</label>
+              <input 
+                type="password"
+                placeholder="Enter old password"
+                value={passwordForm.oldPassword}
+                onChange={(e) => setPasswordForm({ ...passwordForm, oldPassword: e.target.value })}
+              />
+            </div>
+
+            <div style={{ textAlign: 'right', marginTop: '4px' }}>
+              <button 
+                className="card-change-link" 
+                style={{ fontSize: '12px', color: 'var(--gray)' }}
+                onClick={() => alert('Password reset link sent to your email!')}
+              >
+                Forgot Password?
+              </button>
+            </div>
+
+            <div className="custom-floating-field" style={{ marginTop: '12px' }}>
+              <label>New Password</label>
+              <input 
+                type="password"
+                placeholder="Enter new password"
+                value={passwordForm.newPassword}
+                onChange={(e) => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
+              />
+            </div>
+
+            <div className="custom-floating-field" style={{ marginTop: '12px' }}>
+              <label>Repeat New Password</label>
+              <input 
+                type="password"
+                placeholder="Repeat new password"
+                value={passwordForm.repeatPassword}
+                onChange={(e) => setPasswordForm({ ...passwordForm, repeatPassword: e.target.value })}
+              />
+            </div>
+
+            <button 
+              className="primary-checkout-btn" 
+              style={{ marginTop: '24px' }}
+              onClick={() => {
+                if (!passwordForm.oldPassword || !passwordForm.newPassword) {
+                  alert('Please fill in all password fields.');
+                  return;
+                }
+                if (passwordForm.newPassword !== passwordForm.repeatPassword) {
+                  alert('New passwords do not match!');
+                  return;
+                }
+                alert('Password updated successfully!');
+                setShowPasswordModal(false);
+                setPasswordForm({ oldPassword: '', newPassword: '', repeatPassword: '' });
+              }}
+            >
+              SAVE PASSWORD
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ========= ADD TO FAVORITES SIZE BOTTOM SHEET ========= */}
+      {showAddFavModal && pendingFavProduct && (
+        <div className="size-sheet-overlay" onClick={() => setShowAddFavModal(false)}>
+          <div className="size-sheet-card" onClick={(e) => e.stopPropagation()}>
+            <div className="size-sheet-handle" />
+            <h3 className="size-sheet-title" style={{ textAlign: 'center' }}>Select size</h3>
+
+            <div className="size-options-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', marginTop: '20px' }}>
+              {['XS', 'S', 'M', 'L', 'XL'].map((size) => (
+                <button
+                  key={size}
+                  className={`size-btn ${selectedFavSize === size ? 'active' : ''}`}
+                  onClick={() => setSelectedFavSize(size)}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+
+            <div className="accordion-item" style={{ borderBottom: 'none', marginTop: '16px' }}>
+              <div className="accordion-header">
+                <span className="accordion-title">Size info</span>
+                <ChevronRight size={18} color="var(--gray)" />
+              </div>
+            </div>
+
+            <button
+              className="primary-checkout-btn"
+              style={{ marginTop: '24px' }}
+              onClick={() => {
+                toggleFavorite(pendingFavProduct.id);
+                setShowAddFavModal(false);
+                setPendingFavProduct(null);
+              }}
+            >
+              ADD TO FAVORITES
+            </button>
           </div>
         </div>
       )}

@@ -13,6 +13,8 @@ import { Address } from './addresses/address.entity';
 import { AddressesModule } from './addresses/addresses.module';
 import { PaymentMethod } from './payments/payment-method.entity';
 import { PaymentsModule } from './payments/payments.module';
+import { Favorite } from './favorites/favorite.entity';
+import { FavoritesModule } from './favorites/favorites.module';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
@@ -28,7 +30,7 @@ dotenv.config({ path: path.join(__dirname, '..', '.env') });
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [Product, User, Review, Order, Address, PaymentMethod],
+      entities: [Product, User, Review, Order, Address, PaymentMethod, Favorite],
       synchronize: true, // Auto-create tables in development
       ssl: {
         rejectUnauthorized: false, // Supabase SSL connection requirement
@@ -39,6 +41,7 @@ dotenv.config({ path: path.join(__dirname, '..', '.env') });
     OrdersModule,
     AddressesModule,
     PaymentsModule,
+    FavoritesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
