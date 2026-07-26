@@ -3874,7 +3874,7 @@ export default function App() {
                   }}
                   title="Add new address"
                 >
-                  <Plus size={24} color="#FFF" />
+                  <Plus size={24} color="currentColor" />
                 </button>
               </div>
             )}
@@ -4090,7 +4090,7 @@ export default function App() {
                   }}
                   title="Add new card"
                 >
-                  <Plus size={24} color="#FFF" />
+                  <Plus size={24} color="currentColor" />
                 </button>
               </div>
             )}
