@@ -7,6 +7,12 @@ import { Review } from './products/review.entity';
 import { ProductsModule } from './products/products.module';
 import { User } from './auth/user.entity';
 import { AuthModule } from './auth/auth.module';
+import { Order } from './orders/order.entity';
+import { OrdersModule } from './orders/orders.module';
+import { Address } from './addresses/address.entity';
+import { AddressesModule } from './addresses/addresses.module';
+import { PaymentMethod } from './payments/payment-method.entity';
+import { PaymentsModule } from './payments/payments.module';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
@@ -22,7 +28,7 @@ dotenv.config({ path: path.join(__dirname, '..', '.env') });
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [Product, User, Review],
+      entities: [Product, User, Review, Order, Address, PaymentMethod],
       synchronize: true, // Auto-create tables in development
       ssl: {
         rejectUnauthorized: false, // Supabase SSL connection requirement
@@ -30,6 +36,9 @@ dotenv.config({ path: path.join(__dirname, '..', '.env') });
     }),
     ProductsModule,
     AuthModule,
+    OrdersModule,
+    AddressesModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
