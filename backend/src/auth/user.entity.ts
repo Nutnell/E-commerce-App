@@ -17,6 +17,9 @@ export class User {
   @Column({ nullable: true })
   resetPasswordToken: string;
 
+  @Column({ default: 'customer' })
+  role: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

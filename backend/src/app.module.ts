@@ -15,6 +15,7 @@ import { PaymentMethod } from './payments/payment-method.entity';
 import { PaymentsModule } from './payments/payments.module';
 import { Favorite } from './favorites/favorite.entity';
 import { FavoritesModule } from './favorites/favorites.module';
+import { AdminModule } from './admin/admin.module';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
@@ -42,9 +43,9 @@ dotenv.config({ path: path.join(__dirname, '..', '.env') });
     AddressesModule,
     PaymentsModule,
     FavoritesModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
-

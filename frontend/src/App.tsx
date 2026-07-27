@@ -20,7 +20,13 @@ import {
   LayoutGrid,
   List as ListIcon,
   SlidersHorizontal,
-  ArrowUpDown
+  ArrowUpDown,
+  DollarSign,
+  Package,
+  AlertTriangle,
+  Edit,
+  Trash2,
+  Shield
 } from 'lucide-react';
 
 interface Product {
@@ -206,7 +212,7 @@ const MOCK_PRODUCTS: Product[] = [
   // ==========================================
   { id: 80, name: 'Summer Fedora Sun Hat', brand: 'H&M', price: 18.0, originalPrice: 24.0, discountPercent: 25, rating: 4.6, ratingCount: 15, imageUrl: '/assets/cat_accessories_hats.png', isNew: false, isSale: true, category: 'accessories', subcategory: 'hats', gender: 'women', colors: 'tan,white', sizes: 'M' },
   { id: 81, name: 'Seamless Activewear Set', brand: 'Nike', price: 42.0, rating: 4.8, ratingCount: 29, imageUrl: '/assets/cat_activewear.png', isNew: true, isSale: false, category: 'activewear', subcategory: 'activewear', gender: 'women', colors: 'blue,grey,black', sizes: 'S,M,L' },
-  { id: 82, name: 'Resort Beachwear Cover-up', brand: 'Zara', price: 29.0, originalPrice: 39.0, discountPercent: 25, rating: 4.7, ratingCount: 18, imageUrl: '/assets/cat_beachwear.png', isNew: false, isSale: true, category: 'beachwear', subcategory: 'beachwear', gender: 'women', colors: 'white,tan', sizes: 'S,M,L' },
+  { id: 82, name: 'Resort Beachwear Cover-up', brand: 'Zara', price: 29.0, originalPrice: 39.0, discountPercent: 25, rating: 4.7, ratingCount: 18, imageUrl: '/assets/cat_beachwear.png', isNew: false, isSale: true, category: 'beachwear', subcategory: 'beachwear', gender: 'women', colors: 'white,tan,black,red', sizes: 'S,M,L' },
   { id: 83, name: 'Cozy Knit Cardigan', brand: 'Mango', price: 38.0, rating: 4.9, ratingCount: 22, imageUrl: '/assets/cat_cardigans.png', isNew: true, isSale: false, category: 'sweaters', subcategory: 'sweaters', gender: 'women', colors: 'tan,grey,white', sizes: 'S,M,L' },
   { id: 84, name: 'Cargo Streetwear Trousers', brand: 'Jack & Jones', price: 48.0, rating: 4.6, ratingCount: 20, imageUrl: '/assets/cat_cargo.png', isNew: true, isSale: false, category: 'pants', subcategory: 'pants', gender: 'men', colors: 'tan,black,green', sizes: 'M,L,XL' },
   { id: 85, name: 'Classic Jeanswear Jacket', brand: 'Levi\'s', price: 65.0, rating: 4.9, ratingCount: 34, imageUrl: '/assets/product_denim_jacket.png', isNew: true, isSale: false, category: 'jackets', subcategory: 'jeans', gender: 'women', colors: 'blue,grey,black', sizes: 'S,M,L' },
@@ -218,8 +224,9 @@ const MOCK_PRODUCTS: Product[] = [
   { id: 91, name: 'Athletic Sportswear Top', brand: 'adidas', price: 28.0, rating: 4.6, ratingCount: 19, imageUrl: '/assets/cat_sportswear.png', isNew: true, isSale: false, category: 'activewear', subcategory: 'sportswear', gender: 'women', colors: 'black,white,red', sizes: 'S,M,L' },
   { id: 92, name: 'Tropical Swimwear Suit', brand: 'Zara', price: 32.0, originalPrice: 45.0, discountPercent: 28, rating: 4.8, ratingCount: 27, imageUrl: '/assets/cat_swimwear.png', isNew: false, isSale: true, category: 'swimwear', subcategory: 'swimwear', gender: 'women', colors: 'blue,red,white', sizes: 'S,M,L' },
   { id: 93, name: 'Urban Streetwear Hoodie', brand: 'Nike', price: 54.0, rating: 4.8, ratingCount: 38, imageUrl: '/assets/cat_urbanwear.png', isNew: true, isSale: false, category: 'hoodies', subcategory: 'urbanwear', gender: 'men', colors: 'grey,black,tan', sizes: 'M,L,XL' },
-  { id: 94, name: 'Vintage Leather Jacket', brand: 'Mango', price: 95.0, rating: 4.9, ratingCount: 31, imageUrl: '/assets/cat_vintage.png', isNew: true, isSale: false, category: 'jackets', subcategory: 'vintage', gender: 'women', colors: 'brown,black', sizes: 'S,M,L' },
-  { id: 95, name: 'Noir Signature Trench Coat', brand: 'Zara', price: 110.0, rating: 5.0, ratingCount: 18, imageUrl: '/assets/black_collection_banner.png', isNew: true, isSale: false, category: 'outerwear', subcategory: 'outerwear', gender: 'women', colors: 'black', sizes: 'S,M,L' },
+  { id: 94, name: 'Vintage Denim Jacket', brand: 'Levi\'s', price: 72.0, rating: 4.7, ratingCount: 21, imageUrl: '/assets/cat_vintage.png', isNew: true, isSale: false, category: 'jackets', subcategory: 'vintage', gender: 'women', colors: 'brown,black', sizes: 'S,M,L' },
+  { id: 95, name: 'High-Waist Pleated Mini Skirt', brand: 'Mango', price: 35.0, rating: 4.8, ratingCount: 24, imageUrl: '/assets/women_pleated_mini_skirt.png', isNew: true, isSale: false, category: 'skirts', subcategory: 'skirts', gender: 'women', colors: 'silver,black,red,white,gold,tan', sizes: 'XS,S,M,L' },
+  { id: 96, name: 'Noir Signature Trench Coat', brand: 'Zara', price: 110.0, rating: 5.0, ratingCount: 18, imageUrl: '/assets/black_collection_banner.png', isNew: true, isSale: false, category: 'outerwear', subcategory: 'outerwear', gender: 'women', colors: 'black', sizes: 'S,M,L' },
 ];
 const SLIDE_LABELS = ['Trending', 'Summer Sale', 'Collection'];
 
@@ -490,6 +497,42 @@ export default function App() {
 
   // Profile Stack State
   const [profileStep, setProfileStep] = useState<'main' | 'orders' | 'order_details' | 'settings'>('main');
+  // Store Owner / Admin Dashboard & RBAC State
+  const [userRole, setUserRole] = useState<'customer' | 'admin'>('customer');
+  const [adminTab, setAdminTab] = useState<'inventory' | 'orders' | 'analytics'>('inventory');
+  const [adminSearch, setAdminSearch] = useState<string>('');
+  const [showProductModal, setShowProductModal] = useState<boolean>(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [productForm, setProductForm] = useState({
+    name: '',
+    brand: '',
+    price: 39,
+    category: 'sweaters',
+    gender: 'women',
+    imageUrl: '/assets/cat_cardigans.png',
+    colors: 'black,white',
+    sizes: 'S,M,L'
+  });
+  const [adminAnalytics, setAdminAnalytics] = useState({
+    totalRevenue: 14250,
+    totalOrders: 128,
+    totalProducts: 82,
+    lowStockItems: 3
+  });
+
+  // Fetch admin analytics KPI
+  useEffect(() => {
+    if (userRole === 'admin') {
+      fetch('http://localhost:3000/api/admin/analytics')
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.totalRevenue !== undefined) {
+            setAdminAnalytics(data);
+          }
+        })
+    }
+  }, [userRole, products.length]);
+
   const [myOrdersTab, setMyOrdersTab] = useState<'delivered' | 'processing' | 'cancelled'>('delivered');
   const [myOrders, setMyOrders] = useState<any[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
@@ -4502,6 +4545,300 @@ export default function App() {
               )
             )}
           </div>
+        ) : userRole === 'admin' ? (
+          /* =========================================================
+             STORE OWNER / ADMIN DASHBOARD PORTAL
+             ========================================================= */
+          <div className="admin-dashboard-container">
+            {/* Admin Header */}
+            <div className="admin-header-bar">
+              <div className="admin-title-group">
+                <Shield size={28} color="var(--accent)" />
+                <div>
+                  <h1 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--primary)' }}>Store Owner Portal</h1>
+                  <span className="admin-role-badge">ADMIN ACCESS ACTIVE</span>
+                </div>
+              </div>
+
+              <button className="role-switch-btn" onClick={() => setUserRole('customer')}>
+                <User size={16} /> Switch to Customer View
+              </button>
+            </div>
+
+            {/* KPI Cards Grid */}
+            <div className="admin-kpi-grid">
+              <div className="admin-kpi-card">
+                <div className="kpi-icon-wrapper revenue">
+                  <DollarSign size={24} />
+                </div>
+                <div className="kpi-content">
+                  <span className="kpi-label">Total Sales Revenue</span>
+                  <span className="kpi-value">${adminAnalytics.totalRevenue.toLocaleString()}</span>
+                  <span className="kpi-subtext">+12.4% this month</span>
+                </div>
+              </div>
+
+              <div className="admin-kpi-card">
+                <div className="kpi-icon-wrapper orders">
+                  <ShoppingBag size={24} />
+                </div>
+                <div className="kpi-content">
+                  <span className="kpi-label">Total Orders</span>
+                  <span className="kpi-value">{adminAnalytics.totalOrders}</span>
+                  <span className="kpi-subtext">12 pending shipping</span>
+                </div>
+              </div>
+
+              <div className="admin-kpi-card">
+                <div className="kpi-icon-wrapper products">
+                  <Package size={24} />
+                </div>
+                <div className="kpi-content">
+                  <span className="kpi-label">Catalog Products</span>
+                  <span className="kpi-value">{products.length}</span>
+                  <span className="kpi-subtext">Active items</span>
+                </div>
+              </div>
+
+              <div className="admin-kpi-card">
+                <div className="kpi-icon-wrapper stock">
+                  <AlertTriangle size={24} />
+                </div>
+                <div className="kpi-content">
+                  <span className="kpi-label">Low Stock Alerts</span>
+                  <span className="kpi-value">{adminAnalytics.lowStockItems}</span>
+                  <span className="kpi-subtext" style={{ color: '#F59E0B' }}>Action required</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Admin Tabs */}
+            <div className="admin-tabs-bar">
+              <button 
+                className={`admin-tab-btn ${adminTab === 'inventory' ? 'active' : ''}`}
+                onClick={() => setAdminTab('inventory')}
+              >
+                Inventory Management ({products.length})
+              </button>
+              <button 
+                className={`admin-tab-btn ${adminTab === 'orders' ? 'active' : ''}`}
+                onClick={() => setAdminTab('orders')}
+              >
+                Order Fulfillment
+              </button>
+              <button 
+                className={`admin-tab-btn ${adminTab === 'analytics' ? 'active' : ''}`}
+                onClick={() => setAdminTab('analytics')}
+              >
+                Sales Analytics
+              </button>
+            </div>
+
+            {/* 1. INVENTORY MANAGEMENT TAB */}
+            {adminTab === 'inventory' && (
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', gap: '12px' }}>
+                  <input 
+                    type="text" 
+                    placeholder="Search products by name..." 
+                    className="shop-search-input"
+                    style={{ maxWidth: '360px' }}
+                    value={adminSearch}
+                    onChange={(e) => setAdminSearch(e.target.value)}
+                  />
+                  <button 
+                    className="primary-checkout-btn"
+                    style={{ padding: '10px 24px', borderRadius: '20px' }}
+                    onClick={() => {
+                      setEditingProduct(null);
+                      setProductForm({
+                        name: '',
+                        brand: 'Zara',
+                        price: 45,
+                        category: 'sweaters',
+                        gender: 'women',
+                        imageUrl: '/assets/cat_cardigans.png',
+                        colors: 'black,white',
+                        sizes: 'S,M,L'
+                      });
+                      setShowProductModal(true);
+                    }}
+                  >
+                    + Add New Product
+                  </button>
+                </div>
+
+                <div className="admin-table-wrapper">
+                  <table className="admin-data-table">
+                    <thead>
+                      <tr>
+                        <th>Product</th>
+                        <th>Brand</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Rating</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {products
+                        .filter(p => p.name.toLowerCase().includes(adminSearch.toLowerCase()))
+                        .map(p => (
+                          <tr key={p.id}>
+                            <td style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                              <img src={p.imageUrl} alt={p.name} className="admin-table-img" />
+                              <span style={{ fontWeight: 600 }}>{p.name}</span>
+                            </td>
+                            <td>{p.brand}</td>
+                            <td><span style={{ textTransform: 'capitalize' }}>{p.category}</span></td>
+                            <td style={{ fontWeight: 700 }}>${p.price.toFixed(2)}</td>
+                            <td>
+                              <span style={{ color: p.ratingCount < 5 ? '#F59E0B' : '#2AA952', fontWeight: 600 }}>
+                                {p.ratingCount < 5 ? 'Low Stock (4)' : 'In Stock (45)'}
+                              </span>
+                            </td>
+                            <td>★ {p.rating.toFixed(1)}</td>
+                            <td>
+                              <div style={{ display: 'flex', gap: '8px' }}>
+                                <button 
+                                  className="action-icon-btn edit"
+                                  onClick={() => {
+                                    setEditingProduct(p);
+                                    setProductForm({
+                                      name: p.name,
+                                      brand: p.brand,
+                                      price: p.price,
+                                      category: p.category,
+                                      gender: p.gender || 'women',
+                                      imageUrl: p.imageUrl,
+                                      colors: p.colors || 'black,white',
+                                      sizes: p.sizes || 'S,M,L'
+                                    });
+                                    setShowProductModal(true);
+                                  }}
+                                >
+                                  <Edit size={16} />
+                                </button>
+                                <button 
+                                  className="action-icon-btn delete"
+                                  onClick={() => {
+                                    if (confirm(`Delete ${p.name}?`)) {
+                                      setProducts(prev => prev.filter(x => x.id !== p.id));
+                                      fetch(`http://localhost:3000/api/admin/products/${p.id}`, { method: 'DELETE' }).catch(() => {});
+                                    }
+                                  }}
+                                >
+                                  <Trash2 size={16} />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* 2. ORDER FULFILLMENT TAB */}
+            {adminTab === 'orders' && (
+              <div className="admin-table-wrapper">
+                <table className="admin-data-table">
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Customer</th>
+                      <th>Items</th>
+                      <th>Total Amount</th>
+                      <th>Date</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { id: '1947034', customer: 'Matilda Brown', items: 3, total: 112.00, date: '05-12-2023', status: 'Processing' },
+                      { id: '1947033', customer: 'John Doe', items: 1, total: 45.50, date: '04-12-2023', status: 'Delivered' },
+                      { id: '1947032', customer: 'Sarah Jenkins', items: 2, total: 89.00, date: '02-12-2023', status: 'Processing' },
+                      { id: '1947031', customer: 'Alex Rivera', items: 4, total: 178.00, date: '01-12-2023', status: 'Cancelled' },
+                    ].map(ord => (
+                      <tr key={ord.id}>
+                        <td style={{ fontWeight: 700 }}>№{ord.id}</td>
+                        <td>{ord.customer}</td>
+                        <td>{ord.items} items</td>
+                        <td style={{ fontWeight: 700 }}>${ord.total.toFixed(2)}</td>
+                        <td>{ord.date}</td>
+                        <td>
+                          <select className="status-select-dropdown" defaultValue={ord.status}>
+                            <option value="Processing">Processing</option>
+                            <option value="Shipped">Shipped</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Cancelled">Cancelled</option>
+                          </select>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {/* 3. SALES ANALYTICS TAB */}
+            {adminTab === 'analytics' && (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                <div className="admin-table-wrapper" style={{ padding: '20px' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '16px' }}>Category Revenue Breakdown</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 600 }}>
+                        <span>Dresses & Skirts</span>
+                        <span>$5,420 (38%)</span>
+                      </div>
+                      <div style={{ height: '8px', background: 'var(--light-gray)', borderRadius: '4px', marginTop: '6px', overflow: 'hidden' }}>
+                        <div style={{ width: '38%', height: '100%', background: 'var(--accent)' }} />
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 600 }}>
+                        <span>Jackets & Outerwear</span>
+                        <span>$4,180 (29%)</span>
+                      </div>
+                      <div style={{ height: '8px', background: 'var(--light-gray)', borderRadius: '4px', marginTop: '6px', overflow: 'hidden' }}>
+                        <div style={{ width: '29%', height: '100%', background: '#3B82F6' }} />
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 600 }}>
+                        <span>Footwear & Shoes</span>
+                        <span>$2,850 (20%)</span>
+                      </div>
+                      <div style={{ height: '8px', background: 'var(--light-gray)', borderRadius: '4px', marginTop: '6px', overflow: 'hidden' }}>
+                        <div style={{ width: '20%', height: '100%', background: '#2AA952' }} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="admin-table-wrapper" style={{ padding: '20px' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: 700, marginBottom: '16px' }}>Store Performance KPIs</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '13px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: 'var(--gray)' }}>Average Order Value:</span>
+                      <span style={{ fontWeight: 700 }}>$84.50</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: 'var(--gray)' }}>Customer Return Rate:</span>
+                      <span style={{ fontWeight: 700 }}>4.2%</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: 'var(--gray)' }}>Cart Conversion Rate:</span>
+                      <span style={{ fontWeight: 700 }}>3.8%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         ) : (
           /* =========================================================
              MY PROFILE STACK (MAIN, ORDERS, ORDER DETAILS, SETTINGS)
@@ -4512,8 +4849,12 @@ export default function App() {
               <div className="profile-container">
                 <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <h1 className="favorites-main-title">My profile</h1>
-                  <button className="header-icon-btn" onClick={() => navigateToTab('shop')}>
-                    <Search size={22} color="var(--primary)" />
+                  <button 
+                    className="role-switch-btn"
+                    style={{ background: 'var(--accent)', color: '#FFF', border: 'none' }}
+                    onClick={() => setUserRole('admin')}
+                  >
+                    <Shield size={16} /> Store Manager Portal
                   </button>
                 </header>
 
@@ -5507,6 +5848,134 @@ export default function App() {
             >
               ADD TO FAVORITES
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* ========= ADMIN ADD / EDIT PRODUCT MODAL ========= */}
+      {showProductModal && (
+        <div className="sort-sheet-overlay" onClick={() => setShowProductModal(false)}>
+          <div className="sort-sheet-card" style={{ padding: '24px' }} onClick={(e) => e.stopPropagation()}>
+            <div className="sort-sheet-handle" />
+            <h2 className="sort-sheet-title" style={{ marginBottom: '20px' }}>
+              {editingProduct ? 'Edit Catalog Product' : 'Add New Product'}
+            </h2>
+
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              if (editingProduct) {
+                // Edit existing product
+                setProducts(prev => prev.map(p => p.id === editingProduct.id ? { ...p, ...productForm } : p));
+                fetch(`http://localhost:3000/api/admin/products/${editingProduct.id}`, {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(productForm)
+                }).catch(() => {});
+              } else {
+                // Add new product
+                const newId = Math.max(...products.map(p => p.id), 0) + 1;
+                const newP: Product = {
+                  id: newId,
+                  name: productForm.name || 'New Catalog Product',
+                  brand: productForm.brand || 'Zara',
+                  price: Number(productForm.price) || 45,
+                  rating: 4.8,
+                  ratingCount: 12,
+                  imageUrl: productForm.imageUrl || '/assets/cat_cardigans.png',
+                  category: productForm.category || 'sweaters',
+                  subcategory: 'sweaters',
+                  gender: productForm.gender || 'women',
+                  colors: productForm.colors || 'black,white',
+                  sizes: productForm.sizes || 'S,M,L',
+                  isNew: true,
+                  isSale: false
+                };
+                setProducts(prev => [newP, ...prev]);
+                fetch('http://localhost:3000/api/admin/products', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(newP)
+                }).catch(() => {});
+              }
+              setShowProductModal(false);
+            }}>
+              <div className="custom-floating-field">
+                <label>Product Name</label>
+                <input 
+                  type="text" 
+                  required
+                  placeholder="e.g. Cozy Knit Cardigan"
+                  value={productForm.name} 
+                  onChange={(e) => setProductForm({ ...productForm, name: e.target.value })}
+                />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div className="custom-floating-field">
+                  <label>Brand</label>
+                  <input 
+                    type="text" 
+                    placeholder="Zara, Nike, H&M"
+                    value={productForm.brand} 
+                    onChange={(e) => setProductForm({ ...productForm, brand: e.target.value })}
+                  />
+                </div>
+                <div className="custom-floating-field">
+                  <label>Price ($)</label>
+                  <input 
+                    type="number" 
+                    step="0.01"
+                    required
+                    value={productForm.price} 
+                    onChange={(e) => setProductForm({ ...productForm, price: Number(e.target.value) })}
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div className="custom-floating-field">
+                  <label>Category</label>
+                  <select 
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--light-gray)' }}
+                    value={productForm.category}
+                    onChange={(e) => setProductForm({ ...productForm, category: e.target.value })}
+                  >
+                    <option value="dresses">Dresses</option>
+                    <option value="sweaters">Sweaters</option>
+                    <option value="jackets">Jackets</option>
+                    <option value="pants">Pants</option>
+                    <option value="shoes">Shoes</option>
+                    <option value="accessories">Accessories</option>
+                  </select>
+                </div>
+                <div className="custom-floating-field">
+                  <label>Gender</label>
+                  <select 
+                    style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid var(--light-gray)' }}
+                    value={productForm.gender}
+                    onChange={(e) => setProductForm({ ...productForm, gender: e.target.value })}
+                  >
+                    <option value="women">Women</option>
+                    <option value="men">Men</option>
+                    <option value="kids">Kids</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="custom-floating-field">
+                <label>Image Asset URL</label>
+                <input 
+                  type="text" 
+                  placeholder="/assets/cat_cardigans.png"
+                  value={productForm.imageUrl} 
+                  onChange={(e) => setProductForm({ ...productForm, imageUrl: e.target.value })}
+                />
+              </div>
+
+              <button className="primary-checkout-btn" type="submit" style={{ marginTop: '20px' }}>
+                {editingProduct ? 'UPDATE PRODUCT' : 'CREATE PRODUCT'}
+              </button>
+            </form>
           </div>
         </div>
       )}
