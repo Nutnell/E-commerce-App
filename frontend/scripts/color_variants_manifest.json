@@ -138,34 +138,34 @@
     "outputFileName": "product_maxi_skirt_white.png"
   },
   {
-    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "sourceImage": "/assets/cat_partywear.png",
     "baseColor": "silver",
     "variantColor": "black",
-    "outputFileName": "women_pleated_mini_skirt_black.png"
+    "outputFileName": "cat_partywear_black.png"
   },
   {
-    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "sourceImage": "/assets/cat_partywear.png",
     "baseColor": "silver",
     "variantColor": "red",
-    "outputFileName": "women_pleated_mini_skirt_red.png"
+    "outputFileName": "cat_partywear_red.png"
   },
   {
-    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "sourceImage": "/assets/cat_partywear.png",
     "baseColor": "silver",
     "variantColor": "white",
-    "outputFileName": "women_pleated_mini_skirt_white.png"
+    "outputFileName": "cat_partywear_white.png"
   },
   {
-    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "sourceImage": "/assets/cat_partywear.png",
     "baseColor": "silver",
     "variantColor": "tan",
-    "outputFileName": "women_pleated_mini_skirt_tan.png"
+    "outputFileName": "cat_partywear_tan.png"
   },
   {
-    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "sourceImage": "/assets/cat_partywear.png",
     "baseColor": "silver",
     "variantColor": "gold",
-    "outputFileName": "women_pleated_mini_skirt_gold.png"
+    "outputFileName": "cat_partywear_gold.png"
   },
   {
     "sourceImage": "/assets/product_linen_pants.png",
@@ -186,28 +186,16 @@
     "outputFileName": "cat_officestyle_tan.png"
   },
   {
-    "sourceImage": "/assets/cat_officestyle.png",
-    "baseColor": "black",
-    "variantColor": "grey",
-    "outputFileName": "cat_officestyle_grey.png"
-  },
-  {
-    "sourceImage": "/assets/women_skinny_jeans.png",
+    "sourceImage": "/assets/cat_jeanswear.png",
     "baseColor": "blue",
     "variantColor": "black",
-    "outputFileName": "women_skinny_jeans_black.png"
+    "outputFileName": "cat_jeanswear_black.png"
   },
   {
     "sourceImage": "/assets/cat_jeanswear.png",
     "baseColor": "blue",
     "variantColor": "grey",
     "outputFileName": "cat_jeanswear_grey.png"
-  },
-  {
-    "sourceImage": "/assets/cat_jeanswear.png",
-    "baseColor": "blue",
-    "variantColor": "black",
-    "outputFileName": "cat_jeanswear_black.png"
   },
   {
     "sourceImage": "/assets/product_knit_sweater.png",
@@ -274,6 +262,18 @@
     "baseColor": "tan",
     "variantColor": "white",
     "outputFileName": "cat_beachwear_white.png"
+  },
+  {
+    "sourceImage": "/assets/cat_beachwear.png",
+    "baseColor": "tan",
+    "variantColor": "black",
+    "outputFileName": "cat_beachwear_black.png"
+  },
+  {
+    "sourceImage": "/assets/cat_beachwear.png",
+    "baseColor": "tan",
+    "variantColor": "red",
+    "outputFileName": "cat_beachwear_red.png"
   },
   {
     "sourceImage": "/assets/product_sneakers.png",
@@ -732,18 +732,6 @@
     "outputFileName": "cat_loungewear_white.png"
   },
   {
-    "sourceImage": "/assets/cat_partywear.png",
-    "baseColor": "gold",
-    "variantColor": "red",
-    "outputFileName": "cat_partywear_red.png"
-  },
-  {
-    "sourceImage": "/assets/cat_partywear.png",
-    "baseColor": "gold",
-    "variantColor": "black",
-    "outputFileName": "cat_partywear_black.png"
-  },
-  {
     "sourceImage": "/assets/cat_sleepwear.png",
     "baseColor": "pink",
     "variantColor": "white",
@@ -796,5 +784,35 @@
     "baseColor": "brown",
     "variantColor": "black",
     "outputFileName": "cat_vintage_black.png"
+  },
+  {
+    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "baseColor": "silver",
+    "variantColor": "black",
+    "outputFileName": "women_pleated_mini_skirt_black.png"
+  },
+  {
+    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "baseColor": "silver",
+    "variantColor": "red",
+    "outputFileName": "women_pleated_mini_skirt_red.png"
+  },
+  {
+    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "baseColor": "silver",
+    "variantColor": "white",
+    "outputFileName": "women_pleated_mini_skirt_white.png"
+  },
+  {
+    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "baseColor": "silver",
+    "variantColor": "gold",
+    "outputFileName": "women_pleated_mini_skirt_gold.png"
+  },
+  {
+    "sourceImage": "/assets/women_pleated_mini_skirt.png",
+    "baseColor": "silver",
+    "variantColor": "tan",
+    "outputFileName": "women_pleated_mini_skirt_tan.png"
   }
 ]

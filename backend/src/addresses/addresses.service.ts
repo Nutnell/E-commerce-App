@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Address } from './address.entity';
@@ -41,15 +41,24 @@ export class AddressesService {
     if (!address) {
       throw new NotFoundException(`Address with ID "${id}" not found`);
     }
+    // Security Fix #5: Verify the address belongs to the requesting user
+    if (userId && address.userId !== userId) {
+      throw new ForbiddenException('You do not have access to this address');
+    }
     address.isDefault = true;
     return await this.addressRepository.save(address);
   }
 
-  async remove(id: string): Promise<{ success: boolean }> {
-    const res = await this.addressRepository.delete(id);
-    if (res.affected === 0) {
+  // Security Fix #5: Verify ownership before deleting
+  async remove(id: string, userId?: string): Promise<{ success: boolean }> {
+    const address = await this.addressRepository.findOne({ where: { id } });
+    if (!address) {
       throw new NotFoundException(`Address with ID "${id}" not found`);
     }
+    if (userId && address.userId !== userId) {
+      throw new ForbiddenException('You do not have access to this address');
+    }
+    await this.addressRepository.delete(id);
     return { success: true };
   }
 }
