@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Favorite } from './favorite.entity';
@@ -39,11 +39,16 @@ export class FavoritesService {
     });
   }
 
-  async remove(id: string): Promise<{ success: boolean }> {
-    const res = await this.favoriteRepository.delete(id);
-    if (res.affected === 0) {
+  // Security Fix #5: Verify ownership before deleting
+  async remove(id: string, userId?: string): Promise<{ success: boolean }> {
+    const favorite = await this.favoriteRepository.findOne({ where: { id } });
+    if (!favorite) {
       throw new NotFoundException(`Favorite item with ID "${id}" not found`);
     }
+    if (userId && favorite.userId !== userId) {
+      throw new ForbiddenException('You do not have access to this favorite');
+    }
+    await this.favoriteRepository.delete(id);
     return { success: true };
   }
 }

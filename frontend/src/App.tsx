@@ -29,6 +29,9 @@ import {
   Shield
 } from 'lucide-react';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
+
 interface Product {
   id: number;
   name: string;
@@ -523,7 +526,9 @@ export default function App() {
   // Fetch admin analytics KPI
   useEffect(() => {
     if (userRole === 'admin') {
-      fetch('http://localhost:3000/api/admin/analytics')
+      fetch(`${API_BASE}/api/admin/analytics`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
         .then(res => res.json())
         .then(data => {
           if (data && data.totalRevenue !== undefined) {
@@ -4725,7 +4730,10 @@ export default function App() {
                                   onClick={() => {
                                     if (confirm(`Delete ${p.name}?`)) {
                                       setProducts(prev => prev.filter(x => x.id !== p.id));
-                                      fetch(`http://localhost:3000/api/admin/products/${p.id}`, { method: 'DELETE' }).catch(() => {});
+                                      fetch(`${API_BASE}/api/admin/products/${p.id}`, {
+                                        method: 'DELETE',
+                                        headers: { Authorization: `Bearer ${token}` }
+                                      }).catch(() => {});
                                     }
                                   }}
                                 >
@@ -5866,9 +5874,12 @@ export default function App() {
               if (editingProduct) {
                 // Edit existing product
                 setProducts(prev => prev.map(p => p.id === editingProduct.id ? { ...p, ...productForm } : p));
-                fetch(`http://localhost:3000/api/admin/products/${editingProduct.id}`, {
+                fetch(`${API_BASE}/api/admin/products/${editingProduct.id}`, {
                   method: 'PUT',
-                  headers: { 'Content-Type': 'application/json' },
+                  headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                  },
                   body: JSON.stringify(productForm)
                 }).catch(() => {});
               } else {
@@ -5891,9 +5902,12 @@ export default function App() {
                   isSale: false
                 };
                 setProducts(prev => [newP, ...prev]);
-                fetch('http://localhost:3000/api/admin/products', {
+                fetch(`${API_BASE}/api/admin/products`, {
                   method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
+                  headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                  },
                   body: JSON.stringify(newP)
                 }).catch(() => {});
               }

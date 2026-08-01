@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Product } from './products/product.entity';
@@ -24,6 +25,11 @@ dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 @Module({
   imports: [
+    // Security: Rate limiting — max 60 requests per minute per IP
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 60,
+    }]),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DATABASE_HOST,
@@ -32,9 +38,11 @@ dotenv.config({ path: path.join(__dirname, '..', '.env') });
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
       entities: [Product, User, Review, Order, Address, PaymentMethod, Favorite],
-      synchronize: true, // Auto-create tables in development
+      // Security Fix #11: synchronize disabled in production to prevent accidental schema changes
+      synchronize: process.env.NODE_ENV !== 'production',
       ssl: {
-        rejectUnauthorized: false, // Supabase SSL connection requirement
+        // Security Fix #10: SSL certificate verification enabled in production
+        rejectUnauthorized: process.env.NODE_ENV === 'production',
       },
     }),
     ProductsModule,

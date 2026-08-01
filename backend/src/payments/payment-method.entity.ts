@@ -8,8 +8,16 @@ export class PaymentMethod {
   @Column({ nullable: true })
   userId: string;
 
+  // PCI-DSS Compliance: Stored strictly as masked string (e.g., "•••• •••• •••• 4242"), never full PAN
   @Column()
   cardNumber: string;
+
+  @Column({ nullable: true })
+  lastFourDigits: string;
+
+  // Tokenized payment reference ID from payment processor (e.g. Stripe/Square token)
+  @Column({ nullable: true })
+  cardTokenRef: string;
 
   @Column()
   cardHolderName: string;

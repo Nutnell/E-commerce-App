@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -5,10 +6,10 @@ from typing import List
 
 app = FastAPI(title="E-Commerce AI Service", version="1.0.0")
 
-# CORS
+# Security Fix #6: CORS restricted to specific frontend origin instead of wildcard
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[os.environ.get("FRONTEND_URL", "http://localhost:5173")],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
