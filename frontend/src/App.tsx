@@ -26,7 +26,8 @@ import {
   AlertTriangle,
   Edit,
   Trash2,
-  Shield
+  Shield,
+  LogOut
 } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -500,6 +501,7 @@ export default function App() {
 
   // Profile Stack State
   const [profileStep, setProfileStep] = useState<'main' | 'orders' | 'order_details' | 'settings'>('main');
+  const [showDeleteAccountConfirm, setShowDeleteAccountConfirm] = useState(false);
   // Store Owner / Admin Dashboard & RBAC State
   const [userRole, setUserRole] = useState<'customer' | 'admin'>('customer');
   const [adminTab, setAdminTab] = useState<'inventory' | 'orders' | 'analytics'>('inventory');
@@ -709,7 +711,10 @@ export default function App() {
   }, [selectedProductId, products]);
   // Authentication State
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
-  const [user, setUser] = useState<{ id: string; name: string; email: string } | null>(null);
+  const [user, setUser] = useState<{ id: string; name: string; email: string } | null>(() => {
+    const savedToken = localStorage.getItem('token');
+    return savedToken ? null : { id: 'demo-1', name: 'Matilda Brown', email: 'matildabrown@mail.com' };
+  });
   const [authView, setAuthView] = useState<'login' | 'signup' | 'forgot_password'>('login');
 
   // Google OAuth 2.0 simulation
@@ -2715,125 +2720,11 @@ export default function App() {
               </div>
             </div>
           </div>
-        ) : activeTab === 'profile' ? (
+        ) : activeTab === 'profile' && !user ? (
           /* Profile / Authentication View Stack */
           <div className="auth-wrapper">
-            {user ? (
-              /* Logged In View */
-              <div className="placeholder-tab" style={{ gap: '24px', padding: '24px 0', alignItems: 'center' }}>
-                <div className="profile-card">
-                  <div className="profile-avatar">
-                    {user.name.charAt(0).toUpperCase()}
-                  </div>
-                  <div className="profile-info">
-                    <span className="profile-name">{user.name}</span>
-                    <span className="profile-email">{user.email}</span>
-                  </div>
-                </div>
-
-                <div style={{
-                  width: '100%',
-                  maxWidth: '400px',
-                  background: 'var(--white)',
-                  borderRadius: 'var(--radius-md)',
-                  padding: '20px',
-                  boxShadow: 'var(--shadow-md)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '16px',
-                  textAlign: 'left'
-                }}>
-                  <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--primary)', marginBottom: '8px' }}>
-                    Settings
-                  </h3>
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingBottom: '12px',
-                    borderBottom: '1px solid var(--light-gray)'
-                  }}>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--primary)' }}>Dark Mode</span>
-                      <span style={{ fontSize: '11px', color: 'var(--gray)', marginTop: '2px' }}>
-                        {localStorage.getItem('theme') ? 'Manual override active' : 'Following system default'}
-                      </span>
-                    </div>
-                    <button 
-                      onClick={toggleTheme}
-                      style={{
-                        background: theme === 'dark' ? 'var(--accent)' : 'var(--light-gray)',
-                        border: 'none',
-                        borderRadius: '24px',
-                        width: '56px',
-                        height: '30px',
-                        padding: '3px',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: theme === 'dark' ? 'flex-end' : 'flex-start',
-                        transition: 'all 0.3s ease'
-                      }}
-                    >
-                      <div style={{
-                        width: '24px',
-                        height: '24px',
-                        borderRadius: '50%',
-                        background: 'white',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}>
-                        {theme === 'dark' ? <Moon size={14} color="var(--accent)" /> : <Sun size={14} color="#FFBA49" />}
-                      </div>
-                    </button>
-                  </div>
-                  
-                  {!localStorage.getItem('theme') ? (
-                    <p style={{ fontSize: '11px', color: 'var(--gray)', fontStyle: 'italic' }}>
-                      App is automatically matching your operating system color theme. Toggle above to override manually.
-                    </p>
-                  ) : (
-                    <button
-                      onClick={() => {
-                        localStorage.removeItem('theme');
-                        setTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-                      }}
-                      style={{
-                        background: 'transparent',
-                        border: '1px solid var(--accent)',
-                        color: 'var(--accent)',
-                        padding: '8px 12px',
-                        borderRadius: 'var(--radius-sm)',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        alignSelf: 'flex-start',
-                        transition: 'all 0.2s ease'
-                      }}
-                      onMouseOver={(e) => {
-                        e.currentTarget.style.background = 'rgba(219, 48, 34, 0.08)';
-                      }}
-                      onMouseOut={(e) => {
-                        e.currentTarget.style.background = 'transparent';
-                      }}
-                    >
-                      Reset to System Default
-                    </button>
-                  )}
-                </div>
-
-                <button 
-                  className="profile-logout-btn"
-                  onClick={handleLogout}
-                >
-                  LOG OUT
-                </button>
-              </div>
-            ) : (
-              /* Auth Pages */
-              <div style={{ width: '100%' }}>
+            {/* Auth Pages */}
+            <div style={{ width: '100%' }}>
                 {authView === 'login' && (
                   <div>
                     <div className="auth-header">
@@ -3084,7 +2975,6 @@ export default function App() {
                   </div>
                 )}
               </div>
-            )}
           </div>
         ) : activeTab === 'shop' ? (
           /* Shop / Catalog tab view */
@@ -4550,7 +4440,7 @@ export default function App() {
               )
             )}
           </div>
-        ) : userRole === 'admin' ? (
+        ) : activeTab === 'profile' && user && userRole === 'admin' ? (
           /* =========================================================
              STORE OWNER / ADMIN DASHBOARD PORTAL
              ========================================================= */
@@ -4847,7 +4737,7 @@ export default function App() {
               </div>
             )}
           </div>
-        ) : (
+        ) : activeTab === 'profile' && user ? (
           /* =========================================================
              MY PROFILE STACK (MAIN, ORDERS, ORDER DETAILS, SETTINGS)
              ========================================================= */
@@ -4937,7 +4827,99 @@ export default function App() {
                     </div>
                     <ChevronRight size={20} color="var(--gray)" />
                   </div>
+
+                  {/* Separator */}
+                  <div style={{ height: '1px', background: 'var(--light-gray)', margin: '8px 0' }} />
+
+                  {/* Log Out */}
+                  <div 
+                    className="profile-menu-item" 
+                    onClick={handleLogout}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <LogOut size={20} color="var(--accent)" />
+                      <div className="menu-item-title" style={{ color: 'var(--accent)' }}>Log out</div>
+                    </div>
+                  </div>
+
+                  {/* Delete Account */}
+                  <div 
+                    className="profile-menu-item" 
+                    onClick={() => setShowDeleteAccountConfirm(true)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <Trash2 size={20} color="#FF3B30" />
+                      <div className="menu-item-title" style={{ color: '#FF3B30' }}>Delete account</div>
+                    </div>
+                  </div>
                 </div>
+
+                {/* Delete Account Confirmation Modal */}
+                {showDeleteAccountConfirm && (
+                  <div 
+                    className="modal-overlay" 
+                    style={{
+                      position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                      background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      zIndex: 9999
+                    }}
+                    onClick={() => setShowDeleteAccountConfirm(false)}
+                  >
+                    <div 
+                      style={{
+                        background: 'var(--white)', borderRadius: 'var(--radius-lg)',
+                        padding: '32px', maxWidth: '400px', width: '90%',
+                        boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+                        textAlign: 'center'
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div style={{
+                        width: '56px', height: '56px', borderRadius: '50%',
+                        background: 'rgba(255, 59, 48, 0.1)', display: 'flex',
+                        alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px'
+                      }}>
+                        <Trash2 size={28} color="#FF3B30" />
+                      </div>
+                      <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--primary)', marginBottom: '8px' }}>
+                        Delete Account?
+                      </h3>
+                      <p style={{ fontSize: '14px', color: 'var(--gray)', lineHeight: 1.5, marginBottom: '24px' }}>
+                        This action is permanent and cannot be undone. All your data, orders, and favorites will be permanently removed.
+                      </p>
+                      <div style={{ display: 'flex', gap: '12px' }}>
+                        <button
+                          onClick={() => setShowDeleteAccountConfirm(false)}
+                          style={{
+                            flex: 1, padding: '14px', borderRadius: 'var(--radius-full)',
+                            border: '1px solid var(--light-gray)', background: 'transparent',
+                            fontSize: '14px', fontWeight: 600, color: 'var(--primary)',
+                            cursor: 'pointer', transition: 'all 0.2s ease'
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={() => {
+                            setShowDeleteAccountConfirm(false);
+                            handleLogout();
+                          }}
+                          style={{
+                            flex: 1, padding: '14px', borderRadius: 'var(--radius-full)',
+                            border: 'none', background: '#FF3B30', color: '#FFF',
+                            fontSize: '14px', fontWeight: 600, cursor: 'pointer',
+                            transition: 'all 0.2s ease'
+                          }}
+                        >
+                          Delete Account
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -5236,7 +5218,7 @@ export default function App() {
               </div>
             )}
           </div>
-        )}
+        ) : null}
       </div>
 
       {/* ========= BOTTOM NAVIGATION (Mobile Only) ========= */}
