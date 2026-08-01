@@ -1,7 +1,10 @@
-import { Controller, Get, Post, Param, Body, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './product.entity';
 import { Review } from './review.entity';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Roles } from '../auth/roles.decorator';
+import { RolesGuard } from '../auth/roles.guard';
 
 @Controller('api/products')
 export class ProductsController {
@@ -23,6 +26,8 @@ export class ProductsController {
   }
 
   @Post('reseed')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('admin')
   async reseed(): Promise<{ message: string }> {
     await this.productsService.reseedDatabase();
     return { message: 'Catalog re-seeded successfully' };

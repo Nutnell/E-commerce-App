@@ -16,7 +16,7 @@ export class RolesGuard implements CanActivate {
     }
     const { user } = context.switchToHttp().getRequest();
     if (!user) {
-      return true; // Fallback for dev mode
+      return false; // Fail closed: never allow access without authentication context
     }
     return requiredRoles.some((role) => user.role?.toLowerCase() === role.toLowerCase());
   }
