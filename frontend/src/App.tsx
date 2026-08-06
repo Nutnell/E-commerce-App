@@ -29,6 +29,7 @@ import {
   Shield,
   LogOut
 } from 'lucide-react';
+import LandingPage from './pages/LandingPage';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -2230,6 +2231,8 @@ export default function App() {
         {selectedProductId !== null ? (
           renderProductDetailView()
         ) : activeTab === 'home' ? (
+          <LandingPage onNavigate={(page) => setActiveTab(page as any)} />
+        ) : activeTab === 'home_legacy' ? (
           <div 
             ref={sliderRef}
             className="home-slider" 
