@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import LandingPage from './LandingPage';
 import { 
   Home as HomeIcon, 
   Search, 
@@ -355,6 +356,7 @@ const DELIVERY_METHODS = [
 ];
 
 export default function App() {
+  const [showLanding, setShowLanding] = useState(true);
   const [products, setProducts] = useState<Product[]>(MOCK_PRODUCTS);
   const [activeTab, setActiveTab] = useState<'home' | 'shop' | 'bag' | 'favorites' | 'profile'>('home');
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -1214,6 +1216,11 @@ export default function App() {
         `}</style>
       </div>
     );
+  }
+
+  // Show landing page if showLanding is true (before auth gate)
+  if (showLanding) {
+    return <LandingPage onEnterStore={() => setShowLanding(false)} />;
   }
 
   if (!user) {
